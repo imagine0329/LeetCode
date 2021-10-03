@@ -1,31 +1,32 @@
 class Solution {
 public:
-    bool isPalindrome(int x) {
-        string str = to_string(x);
-        stack<char> s;
-        int startPoint;
+    int reverseInteger(int x)
+    {
+        int reversed = 0;
         
-        for(int i=0 ;i<str.length()/2; i++)
+        while(x != 0)
         {
-            s.push(str[i]);
-        }
-        
-        if(str.length() % 2 == 0)
-            startPoint = str.length() / 2;
-        else
-            startPoint = (str.length()/2) + 1;
-        
-        for(int i=startPoint; i<str.size(); i++)
-        {
-            if(s.empty())
-                return true;
+            int pop = x % 10;
+            x /= 10;
             
-            if(s.top() != str[i])
-                return false;
-            else
-                s.pop();
+            if(reversed > INT_MAX / 10 || (reversed == INT_MAX / 10 && reversed % 10 > 7))
+                return -1;
+            if(reversed < INT_MIN / 10 || (reversed == INT_MIN / 10 && reversed % 10 < -8))
+                return -1;
+            
+            reversed = (reversed * 10) + pop;
         }
         
-        return true;
+        return reversed;
+    }
+    
+    bool isPalindrome(int x) {
+        if(x < 0)
+            return false;
+        
+        if(x == reverseInteger(x))
+            return true;
+        else
+            return false;
     }
 };
