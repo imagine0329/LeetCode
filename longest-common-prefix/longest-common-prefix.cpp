@@ -5,14 +5,14 @@ public:
         
         for(int i=0; i<strs[0].size(); i++)
         {
-            int k = 1;
-            for(; k<strs.size() && i<strs[k].size(); k++)
+            int j = 1;
+            for(; j<strs.size() && i<strs[j].size(); j++)
             {
-                if(strs[k][i] != strs[0][i])
+                if(strs[j][i] != strs[0][i])
                     return ans;
             }
             
-            if(k == strs.size())
+            if(j == strs.size())
                 ans += strs[0][i];
         }
         
