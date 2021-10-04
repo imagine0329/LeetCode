@@ -12,32 +12,45 @@
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        //ListNode* node = (ListNode*)malloc(sizeof(ListNode));
-        ListNode* node = new ListNode();
-        ListNode* temp = node;
+        if(l1 == nullptr || l2 == nullptr)
+            return l1? l1 : l2;
         
-        while(l1 != NULL && l2 != NULL)
+        ListNode *head, *tail;
+        if(l1->val <= l2->val)
         {
-            if(l1->val >= l2->val)
+            head = l1;
+            l1 = l1->next;
+        }
+        else
+        {
+            head = l2;
+            l2 = l2->next;
+        }
+        
+        tail = head;
+        
+        while(l1 != nullptr && l2 != nullptr)
+        {
+            if(l1->val <= l2->val)
             {
-                node->next = l2;
-                l2 = l2->next;
+                tail->next = l1;
+                l1 = l1->next;
             }
             else
             {
-                node->next = l1;
-                l1 = l1->next;
+                tail->next = l2;
+                l2 = l2->next;
             }
             
-            node = node->next;
+            tail = tail->next;
         }
         
-        if(l1 == NULL)
-            node->next = l2;
-        else if(l2 == NULL)
-            node->next = l1;
+        if(l1 != nullptr)
+            tail->next = l1;
         
-        temp = temp->next;
-        return temp;
+        if(l2 != nullptr)
+            tail->next = l2;
+        
+        return head;
     }
 };
