@@ -1,49 +1,31 @@
 class Solution {
 public:
-    bool isValid(string s) {
-        stack<char> contain;
-        int i=0;
+    bool isValid(string str) {
+        stack<char> s;
+        map<char, char> m = {
+            {')', '('},
+            {']', '['},
+            {'}', '{'}
+        };
         
-        while(i<s.length())
+        for(int i=0; i<str.length(); i++)
         {
-            char ch = s.at(i++);
-            switch(ch)
+            if(str[i] == ')' || str[i] == ']' || str[i] == '}')
             {
-                case '(':
-                case '{':
-                case '[':
-                    contain.push(ch);
-                    break;
-                    
-                case ')':
-                    if(contain.empty() || contain.top() != '(')
-                        return false;
-                    
-                    contain.pop();
-                    break;
-                    
-                case '}':
-                    if(contain.empty() || contain.top() != '{')
-                        return false;
-                    
-                    contain.pop();
-                    break;
-                    
-                case ']':
-                    if(contain.empty() || contain.top() != '[')
-                        return false;
-                    
-                    contain.pop();
-                    break;
-                    
-                default:
-                    break;
+                if(s.empty())   return false;
+                if(str[i] == ')' && s.top() != '(') return false;
+                if(str[i] == ']' && s.top() != '[') return false;
+                if(str[i] == '}' && s.top() != '{') return false;
+                
+                s.pop();
             }
+            else
+                s.push(str[i]);
         }
         
-        if(contain.empty())
+        if(s.empty())
             return true;
-        else
-            return false;
+        
+        return false;
     }
 };
