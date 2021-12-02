@@ -1,3 +1,4 @@
+/*  1st
 class Vector2D {
 private:
     queue<int> q;
@@ -21,7 +22,39 @@ public:
     bool hasNext() {
         return !q.empty();
     }
+};*/
+
+/*  2nd*/
+class Vector2D {
+private:
+    vector<vector<int>>::iterator start, end;
+    vector<int>::iterator inner;
+    
+public:
+    Vector2D(vector<vector<int>>& vec) {
+        start = vec.begin();
+        end = vec.end();
+        if(start != end)
+            inner = start->begin();
+    }
+    
+    int next() {
+        hasNext();
+        return *inner++;
+    }
+    
+    bool hasNext() {
+        while(start != end && inner == start->end())
+        {
+            ++start;
+            if(start != end)
+                inner = start->begin();
+        }
+        
+        return start != end;
+    }
 };
+
 
 /**
  * Your Vector2D object will be instantiated and called as such:
