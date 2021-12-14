@@ -11,24 +11,33 @@
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
-        /*  approach #1
-            Time complexity: O(n)
-        */
-        stack<int> s;
-        ListNode* temp = head;
-        while(temp)
+        ListNode* node = head;
+        
+        int length = 0;
+        while(node)
         {
-            s.push(temp->val);
-            temp = temp->next;
+            node = node->next;
+            length++;
         }
         
-        while(head)
+        stack<int> s;
+        node = head;
+        for(int i=0; i<length/2; i++)
         {
-            if(s.top() != head->val)
+            s.push(node->val);
+            node = node->next;
+        }
+        
+        if(length % 2)
+            node = node->next;
+        
+        while(node)
+        {
+            if(s.top() != node->val)
                 return false;
             
+            node = node->next;
             s.pop();
-            head = head->next;
         }
         
         return true;
