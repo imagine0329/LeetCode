@@ -1,45 +1,49 @@
 class Solution {
 public:
-    int getDecimal(char c)
-    {
-        switch(c)
-        {
-            case 'I':
-                return 1;
-            case 'V':
-                return 5;
-            case 'X':
-                return 10;
-            case 'L':
-                return 50;
-            case 'C':
-                return 100;
-            case 'D':
-                return 500;
-            case 'M':
-                return 1000;
-            default:
-                return -1;
-        }
-    }
-    
     int romanToInt(string s) {
         int ans = 0;
-        int prev = 0;
-        
-        for(int i = s.length()-1; i>=0; i--)
+        for(int i=0; i<s.length(); i++)
         {
-            int curr = getDecimal(s[i]);
-            
-            if(curr == -1)
-                return -1;
-            
-            if(prev > curr)
-                ans -= curr;
-            else
-                ans += curr;
-            
-            prev = curr;
+            char c = s[i];
+            switch(c)
+            {
+                case 'I':
+                    if(s[i+1] == 'V' || s[i+1] == 'X')
+                        ans -= 1;
+                    else ans += 1;
+                    break;
+                    
+                case 'X':
+                    if(s[i+1] == 'L' || s[i+1] == 'C')
+                        ans -= 10;
+                    else ans += 10;
+                    break;
+                    
+                case 'C':
+                    if(s[i+1] == 'D' || s[i+1] == 'M')
+                        ans -= 100;
+                    else ans += 100;
+                    break;
+                    
+                case 'V':
+                    ans += 5;
+                    break;
+                    
+                case 'L':
+                    ans += 50;
+                    break;
+                    
+                case 'D':
+                    ans += 500;
+                    break;
+                    
+                case 'M':
+                    ans += 1000;
+                    break;
+                    
+                default:
+                    break;
+            }
         }
         
         return ans;
