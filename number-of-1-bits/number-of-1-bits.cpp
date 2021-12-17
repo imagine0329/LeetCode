@@ -1,13 +1,15 @@
 class Solution {
 public:
     int hammingWeight(uint32_t n) {
+        uint32_t checker = 1;
+        
         int count = 0;
-        while(n)
+        for(int i=0; i<32; i++)
         {
-            if(n & 1)
+            if(n & checker)
                 count++;
             
-            n = n >> 1;
+            checker <<= 1;
         }
         
         return count;
