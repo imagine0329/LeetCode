@@ -1,39 +1,40 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
+        if(nums.size() < 2)
+            return {};
         sort(nums.begin(), nums.end());
         vector<vector<int>> ans;
         
-        for(int i=0; i<nums.size() && nums[i] <= 0; i++)
+        for(int i=0; i<nums.size()-2; i++)
         {
-            if(i == 0 || nums[i-1] != nums[i])
-                findTwoSum(nums, i+1, ans);
-        }    
+            if(i != 0 && nums[i] == nums[i-1])
+                continue;
+            
+            twoSum(ans, nums, i);
+        }
         
         return ans;
     }
     
-    void findTwoSum(vector<int>& nums, int start, vector<vector<int>>& ans)
+    void twoSum(vector<vector<int>>& ans, vector<int>& nums, int i)
     {
-        int left = start, right = nums.size()-1;
-        int num = 0 - nums[start-1];
+        int target = 0 - nums[i];
+        int left = i + 1, right = nums.size() - 1;
         
         while(left < right)
         {
-            int twoSum = nums[left] + nums[right];
-            
-            if(twoSum < num)
-                left++;
-            else if(twoSum > num)
-                right--;
-            else
+            int sum = nums[left] + nums[right];
+            if(sum == target)
             {
-                ans.push_back({nums[start-1], nums[left++], nums[right--]});
+                ans.push_back({nums[i], nums[left++], nums[right--]});
                 while(left < right && nums[left] == nums[left-1])
                     left++;
             }
+            else if(sum < target)
+                left++;
+            else
+                right--;
         }
-        
-        return;
     }
 };
