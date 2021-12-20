@@ -6,9 +6,9 @@ public:
         
         for(int i=0; i<=nums.size(); i++)
         {
-            int curr = (i != nums.size()) ? nums[i] : upper + 1;
+            int curr = i < nums.size() ? nums[i] : upper + 1;
             if(prev + 1 != curr)
-                ans.push_back(formatRange(prev + 1, curr - 1));
+                ans.push_back(formString(prev, curr));
             
             prev = curr;
         }
@@ -16,11 +16,15 @@ public:
         return ans;
     }
     
-    string formatRange(int lower, int upper)
+    string formString(int i, int j)
     {
-        if(lower == upper)
-            return to_string(lower);
+        int start = i + 1;
+        int end = j - 1;
+        if(start == end)
+            return to_string(start);
         
-        return to_string(lower) + "->" + to_string(upper);
+        return to_string(start) + "->" + to_string(end);
     }
 };
+
+
