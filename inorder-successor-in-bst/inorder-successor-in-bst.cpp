@@ -8,35 +8,22 @@
  * };
  */
 
-/*  1st Approach*/
 class Solution {
-private:
-    vector<TreeNode*> v;
-    
 public:
     TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
-        inorder(root);
-        for(vector<TreeNode*>::iterator it = v.begin(); it!=v.end(); it++)
+        TreeNode* successor = nullptr;
+        
+        while(root)
         {
-            if((*it) == p)
+            if(root->val <= p->val)
+                root = root->right;
+            else
             {
-                if(++it == v.end())
-                    return nullptr;
-                
-                return *(it);
-            }    
+                successor = root;
+                root = root->left;
+            }
         }
         
-        return nullptr;
-    }
-    
-    void inorder(TreeNode* root)
-    {
-        if(root == nullptr)
-            return;
-        
-        inorder(root->left);
-        v.push_back(root);
-        inorder(root->right);
+        return successor;
     }
 };
