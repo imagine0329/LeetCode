@@ -2,30 +2,29 @@ class Solution {
 public:
     vector<vector<int>> permute(vector<int>& nums) {
         vector<vector<int>> ans;
-        vector<int> perm;
+        vector<int> v;
         
-        backtracking(ans, perm, nums, 0);
+        backtracking(ans, v, nums, 0);
         
         return ans;
     }
     
-    void backtracking(vector<vector<int>>& ans, vector<int>& perm, vector<int>& nums, int index)
+    void backtracking(vector<vector<int>>& ans, vector<int>& v, vector<int>& nums, int i)
     {
-        if(index == nums.size())
+        if(i >= nums.size())
         {
-            ans.push_back(perm);
+            ans.push_back(v);
             return;
         }
         
-        vector<int> temp = nums;
-        
-        for(int i=index; i<nums.size(); i++)
+        for(int k = i; k < nums.size(); k++)
         {
-            perm.push_back(nums[i]);
-            swap(nums[index], nums[i]);
-            backtracking(ans, perm, nums, index+1);
-            swap(nums[index], nums[i]);
-            perm.pop_back();
+            v.push_back(nums[k]);
+            swap(nums[i], nums[k]);
+            backtracking(ans, v, nums, i+1);
+            swap(nums[i], nums[k]);
+            v.pop_back();
         }
     }
+    
 };
