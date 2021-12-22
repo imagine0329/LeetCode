@@ -4,30 +4,30 @@ public:
         vector<string> ans;
         string str;
         
-        backtracking(ans, str, n, 0, 0);
+        backtracking(ans, str, 0, 0, n);
         
         return ans;
     }
     
-    void backtracking(vector<string>& ans, string& str, int n, int open, int close)
+    void backtracking(vector<string>& ans, string& str, int left, int right, int n)
     {
-        if(str.length() == n*2)
+        if(str.length() == 2*n)
         {
             ans.push_back(str);
             return;
         }
         
-        if(open < n)
+        if(left < n)
         {
-            str += "(";
-            backtracking(ans, str, n, open+1, close);
+            str += '(';
+            backtracking(ans, str, left+1, right, n);
             str.pop_back();
         }
         
-        if(close < open)
+        if(right < n && left > right)
         {
-            str += ")";
-            backtracking(ans, str, n, open, close+1);
+            str += ')';
+            backtracking(ans, str, left, right+1, n);
             str.pop_back();
         }
     }
