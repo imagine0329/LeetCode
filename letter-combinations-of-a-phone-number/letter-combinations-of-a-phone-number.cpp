@@ -1,14 +1,8 @@
 class Solution {
 private:
-    unordered_map<char, vector<char>> m = { {'2', {'a', 'b', 'c'}},
-                                            {'3', {'d', 'e', 'f'}},
-                                            {'4', {'g', 'h', 'i'}},
-                                            {'5', {'j', 'k', 'l'}},
-                                            {'6', {'m', 'n', 'o'}},
-                                            {'7', {'p', 'q', 'r', 's'}},
-                                            {'8', {'t', 'u', 'v'}},
-                                            {'9', {'w', 'x', 'y', 'z'}},
-                                          };
+    unordered_map<char, string> m{ {'2', "abc"}, {'3', "def"}, {'4', "ghi"},
+                                 {'5', "jkl"}, {'6', "mno"}, {'7', "pqrs"},
+                                 {'8', "tuv"}, {'9', "wxyz"}};
     
 public:
     vector<string> letterCombinations(string digits) {
@@ -21,7 +15,7 @@ public:
         return ans;
     }
     
-    void backtracking(vector<string>& ans, string& str, string digits, int idx)
+    void backtracking(vector<string>& ans, string& str, string digits, int i)
     {
         if(str.length() == digits.length())
         {
@@ -29,10 +23,10 @@ public:
             return;
         }
         
-        for(int i=0; i<m[digits[idx]].size(); i++)
+        for(int k = 0; k<m[digits[i]].length(); k++)
         {
-            str += m[digits[idx]][i];
-            backtracking(ans, str, digits, idx+1);
+            str += m[digits[i]][k];
+            backtracking(ans, str, digits, i+1);
             str.pop_back();
         }
     }
