@@ -4,12 +4,13 @@ public:
         sort(intervals.begin(), intervals.end());
         
         vector<vector<int>> merged;
-        for(auto interval : intervals)
+        
+        for(auto i : intervals)
         {
-            if(merged.empty() || merged.back()[1] < interval[0])
-                merged.push_back(interval);
+            if(merged.empty() || merged.back()[1] < i[0])
+                merged.push_back(i);
             else
-                merged.back()[1] = max(merged.back()[1], interval[1]);
+                merged.back()[1] = max(merged.back()[1], i[1]);
         }
         
         return merged;
