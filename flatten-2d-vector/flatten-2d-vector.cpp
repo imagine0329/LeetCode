@@ -1,57 +1,37 @@
-/*  1st
 class Vector2D {
 private:
-    queue<int> q;
-    
-public:
-    Vector2D(vector<vector<int>>& vec) {
-        for(auto v : vec)
-        {
-            for(auto i : v)
-                q.push(i);
-        }
-    }
-    
-    int next() {
-        int ans = q.front();
-        q.pop();
-        
-        return ans;
-    }
-    
-    bool hasNext() {
-        return !q.empty();
-    }
-};*/
+    vector<vector<int>> v; 
+    vector<vector<int>>::iterator begin, end;
+    vector<int>::iterator curr;
 
-/*  2nd*/
-class Vector2D {
-private:
-    vector<vector<int>>::iterator start, end;
-    vector<int>::iterator inner;
-    
+
 public:
     Vector2D(vector<vector<int>>& vec) {
-        start = vec.begin();
-        end = vec.end();
-        if(start != end)
-            inner = start->begin();
+        v = vec;
+        begin = v.begin();
+        end = v.end();
+        
+        if(begin != end)
+            curr = begin->begin();
     }
     
     int next() {
         hasNext();
-        return *inner++;
+        return *curr++;
     }
     
     bool hasNext() {
-        while(start != end && inner == start->end())
+        while(begin != end && curr == begin->end())
         {
-            ++start;
-            if(start != end)
-                inner = start->begin();
+            begin++;
+            if(begin != end)
+                curr = begin->begin();
         }
         
-        return start != end;
+        if(begin != end)
+            return true;
+        else
+            return false;
     }
 };
 
