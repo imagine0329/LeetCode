@@ -1,30 +1,25 @@
 class Solution {
 public:
-    bool isHappy(int n) {
-        
-        int sum = n;
-        unordered_set<int> s;
-        
-        while(sum != 1)
-        {
-            if(s.find(sum) != s.end())
-                return false;
-            
-            s.insert(sum);
-            sum = 0;
-            while(n != 0)
-            {
-                int x = n % 10;
-                n = n / 10;
-                sum += x*x;
-            }
-            
-            n = sum;
+    int getNext(int n)
+    {
+        int ans = 0;
+        while(n != 0){
+            ans += pow(n % 10, 2);
+            n /= 10;
         }
         
-        if(sum == 1)
-            return true;
-        else
-            return false;
+        return ans;
+    }
+    
+    bool isHappy(int n) {
+        int slow = n, fast = getNext(getNext(n));
+        
+        while(slow != fast)
+        {
+            slow = getNext(slow);
+            fast = getNext(getNext(fast));
+        }
+        
+        return slow == 1;
     }
 };
