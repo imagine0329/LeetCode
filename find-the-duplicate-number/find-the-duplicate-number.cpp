@@ -1,53 +1,20 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        /*  Binary Search*/
-        auto small_or_equal = [&](int cur)
+        unordered_set<int> s;
+        
+        int ans;
+        for(auto n : nums)
         {
-            int count = 0;
-            for(auto &num : nums)
+            if(s.find(n) != s.end())
             {
-                if(num <= cur)
-                    count++;
+                ans = n;
+                break;
             }
             
-            return count;
-        };
-        
-        int low = 1, high = nums.size();
-        int duplicate;
-        
-        while(low <= high)
-        {
-            int cur = low + (high - low)/2;
-            if(small_or_equal(cur) > cur)
-            {
-                duplicate = cur;
-                high = cur - 1;
-            }
-            else
-                low = cur + 1;
+            s.insert(n);
         }
         
-        return duplicate;
-        
-        
-        /*  Floyd's Cylcle Detection
-        int tortoise = nums[0];
-        int hare = nums[0];
-        
-        do{
-            tortoise = nums[tortoise];
-            hare = nums[nums[hare]];
-        }while(tortoise != hare);
-        
-        tortoise = nums[0];
-        while(tortoise != hare)
-        {
-            tortoise = nums[tortoise];
-            hare = nums[hare];
-        }
-        
-        return tortoise;*/
+        return ans;
     }
 };
