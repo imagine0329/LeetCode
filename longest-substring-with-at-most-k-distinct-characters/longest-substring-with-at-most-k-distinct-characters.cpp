@@ -1,31 +1,38 @@
+
 class Solution {
 public:
     int lengthOfLongestSubstringKDistinct(string s, int k) {
-        int size = s.length();
-        if(size * k == 0)
+        if(s.length() * k == 0)
             return 0;
         
-        int left = 0, right = 0, max_length = 1;
-        map<char, int> m;
+        unordered_map<char, int> m;
         
-        while(right < size)
+        int left = 0, right = 0;
+        int longest = 1;
+        while(right < s.length())
         {
-            m[s[right]] = right;
-            right++;
+            int c = s[right];
+            m[c] = right++;
             
-            if(m.size() == k + 1)
+            if(m.size() > k)
             {
-                int lowest_index = INT_MAX;
+                int leftmost = INT_MAX;
+                int ch;
                 for(auto n : m)
-                    lowest_index = min(lowest_index, n.second);
-                
-                m.erase(s[lowest_index]);
-                left = lowest_index + 1;
+                {
+                    if(leftmost > n.second)
+                    {
+                        leftmost = n.second;
+                        ch = n.first;
+                    }
+                }
+                m.erase(ch);
+                left = leftmost + 1;
             }
             
-            max_length = max(max_length, right - left);
+            longest = max(longest, right - left);
         }
         
-        return max_length;
+        return longest;
     }
 };
