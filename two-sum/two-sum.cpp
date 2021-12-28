@@ -5,9 +5,8 @@ public:
         
         for(int i=0; i<nums.size(); i++)
         {
-            int remain = target - nums[i];
-            if(m.find(remain) != m.end())
-                return {m[remain], i};
+            if(m.find(target - nums[i]) != m.end())
+                return {m[target-nums[i]], i};
             
             m[nums[i]] = i;
         }
