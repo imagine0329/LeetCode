@@ -3,48 +3,20 @@ public:
     //  INT_MAX = 2147483647
     //  INT_MIN = -2147483648
     int reverse(int x) {
-        
-        int reversed = 0;
+        int ans = 0;
         while(x != 0)
         {
-            int n = x % 10;
+            int r = x % 10;
             x /= 10;
             
-            if(reversed < INT_MIN / 10) return 0;
-            if((reversed == INT_MIN / 10) && (reversed%10)+n < INT_MIN&10)  return 0;
-            if(reversed > INT_MAX / 10) return 0;
-            if((reversed == INT_MAX / 10) && (reversed%10)+n > INT_MAX%10)  return 0;
-            
-            reversed = (reversed*10) + n;
-        }
-        
-        return reversed;
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        /*
-        int reversed = 0;
-        
-        while(x != 0)
-        {
-            int pop = x % 10;
-            x /= 10;
-            
-            // overflow check
-            if(reversed > INT_MAX / 10 || (reversed == INT_MAX / 10 && reversed % 10 > 7))
+            if(ans > INT_MAX/10 || (ans == INT_MAX/10 && r > 7))
                 return 0;
-            if(reversed < INT_MIN / 10 || (reversed == INT_MIN / 10 && reversed % 10 < -8))
+            if(ans < INT_MIN/10 || (ans == INT_MIN/10 && r < -8))
                 return 0;
             
-            reversed = (reversed * 10) + pop;
+            ans = (ans * 10) + r;
         }
         
-        return reversed;*/
+        return ans;
     }
 };
