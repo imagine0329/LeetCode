@@ -2,34 +2,22 @@ class Solution {
 public:
     int myAtoi(string s) {
         int sign = 1;
+        int i = s.find_first_not_of(' ');
+        if(i == -1)
+            return 0;
         
-        int i = 0;
-        while(i < s.length() && s[i] == ' ')
-            i++;
+        if(s[i] == '-' || s[i] == '+')
+            sign = s[i++] == '+' ? 1 : -1;
         
-        if(s[i] == '+' || s[i] == '-')
+        int ans = 0;
+        while(isdigit(s[i]))
         {
-            if(s[i++] == '-')
-                sign = -1;
-            
-            if(s[i] == '-')
-                return 0;
+            if(ans > INT_MAX/10 || (ans == INT_MAX/10 && s[i] - '0' > 7))
+                return sign == 1 ? INT_MAX : INT_MIN;
+                
+            ans = (ans * 10) + (s[i++] - '0');
         }
         
-        int base = 0;
-        for(; i<s.length() && isdigit(s[i]); i++)
-        {
-            if(base > INT_MAX/10 || (base == INT_MAX/10 && s[i]-'0' > INT_MAX%10))
-            {
-                if(sign == 1)   return INT_MAX;
-                else return INT_MIN;
-            }
-            
-            base = (base*10) + (s[i] - '0');
-        }
-        
-        return base*sign;
+        return ans * sign;
     }
-    
-    
 };
