@@ -10,23 +10,23 @@ public:
         string str;
         
         if(digits.length() > 0)
-            backtracking(ans, str, digits, 0);
+            backtracking(digits, ans, str, 0);
         
         return ans;
     }
     
-    void backtracking(vector<string>& ans, string& str, string digits, int i)
+    void backtracking(string digits, vector<string>& ans, string& str, int i)
     {
-        if(str.length() == digits.length())
+        if(i == digits.length())
         {
             ans.push_back(str);
             return;
         }
         
-        for(int k = 0; k<m[digits[i]].length(); k++)
+        for(int j=0; j<m[digits[i]].size(); j++)
         {
-            str += m[digits[i]][k];
-            backtracking(ans, str, digits, i+1);
+            str += m[digits[i]][j];
+            backtracking(digits, ans, str, i+1);
             str.pop_back();
         }
     }
