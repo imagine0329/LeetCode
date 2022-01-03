@@ -1,7 +1,7 @@
 class Trie {
 private:
-    Trie* children[26] = {};
-    bool isEndOfWord = false;
+    Trie* next[26] = {};
+    bool isEnd = false;
     
 public:
     Trie() {
@@ -9,43 +9,39 @@ public:
     }
     
     void insert(string word) {
-        Trie* node = this;
-        
-        for(int i=0; i<word.length(); i++)
+        Trie* cur = this;
+        for(auto c : word)
         {
-            int index = word[i] - 'a';
-            if(!node->children[index])
-                node->children[index] = new Trie();
-            
-            node = node->children[index];
+            c -= 'a';
+            if(cur->next[c] == nullptr)
+                cur->next[c] = new Trie();
+            cur = cur->next[c];
         }
         
-        node->isEndOfWord = true;
+        cur->isEnd = true;
     }
     
     bool search(string word) {
-        Trie* node = this;
-        for(int i=0; i<word.length(); i++)
+        Trie* cur = this;
+        for(auto c : word)
         {
-            int index = word[i] - 'a';
-            if(!node->children[index])
+            c -= 'a';
+            if(cur->next[c] == nullptr)
                 return false;
-            
-            node = node->children[index];
+            cur = cur->next[c];
         }
         
-        return node->isEndOfWord;
+        return cur->isEnd;
     }
     
     bool startsWith(string prefix) {
-        Trie* node = this;
-        for(int i=0; i<prefix.length(); i++)
+        Trie* cur = this;
+        for(auto c : prefix)
         {
-            int index = prefix[i] - 'a';
-            if(!node->children[index])
+            c -= 'a';
+            if(cur->next[c] == nullptr)
                 return false;
-            
-            node = node->children[index];
+            cur = cur->next[c];
         }
         
         return true;
