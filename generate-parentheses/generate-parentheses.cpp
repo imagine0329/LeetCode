@@ -4,14 +4,14 @@ public:
         vector<string> ans;
         string str;
         
-        backtracking(ans, str, 0, 0, n);
+        backtracking(ans, str, n, 0, 0);
         
         return ans;
     }
     
-    void backtracking(vector<string>& ans, string& str, int left, int right, int n)
+    void backtracking(vector<string>& ans, string& str, int n, int left, int right)
     {
-        if(str.length() == 2*n)
+        if(str.length() == n*2)
         {
             ans.push_back(str);
             return;
@@ -20,14 +20,14 @@ public:
         if(left < n)
         {
             str += '(';
-            backtracking(ans, str, left+1, right, n);
+            backtracking(ans, str, n, left+1, right);
             str.pop_back();
         }
         
-        if(right < n && left > right)
+        if(right < left)
         {
             str += ')';
-            backtracking(ans, str, left, right+1, n);
+            backtracking(ans, str, n, left, right+1);
             str.pop_back();
         }
     }
