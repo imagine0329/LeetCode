@@ -4,13 +4,13 @@ public:
         vector<vector<int>> ans;
         vector<int> nums;
         
-        backtracking(candidates, target, 0, 0, ans, nums);
+        backtracking(candidates, target, 0, ans, nums);
         
         return ans;
     }
     
-    void backtracking(vector<int>& candidates, int target, int sum, int start, vector<vector<int>>& ans, vector<int>& nums) {
-        if(sum == target)
+    void backtracking(vector<int>& candidates, int sum, int start, vector<vector<int>>& ans, vector<int>& nums) {
+        if(sum == 0)
         {
             ans.push_back(nums);
             return;
@@ -18,14 +18,12 @@ public:
         
         for(int i=start; i<candidates.size(); i++)
         {
-            if(sum + candidates[i] > target)
+            if(sum - candidates[i] < 0)
                 continue;
             
-            sum += candidates[i];
             nums.push_back(candidates[i]);
-            backtracking(candidates, target, sum, i, ans, nums);
+            backtracking(candidates, sum-candidates[i], i, ans, nums);
             nums.pop_back();
-            sum -= candidates[i];
         }
     }
 };
