@@ -6,7 +6,7 @@ public:
             return 1.0;
         
         double half = fastPow(x, n/2);
-        if(n & 1)
+        if(n % 2)
             return half * half * x;
         else
             return half * half;
