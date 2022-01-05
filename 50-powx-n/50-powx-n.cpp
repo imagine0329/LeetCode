@@ -18,7 +18,7 @@ public:
         if(N < 0)
         {
             x = 1/x;
-            N = -N;
+            //N = -N;
         }
         
         return fastPow(x, N);
