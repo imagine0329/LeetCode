@@ -19,7 +19,7 @@ public:
         unordered_set<int> s;
         for(int i=start; i<nums.size(); i++)
         {
-            if(s.find(nums[i]) != s.end())
+            if(s.count(nums[i]) == 1)
                 continue;
             
             s.insert(nums[i]);
