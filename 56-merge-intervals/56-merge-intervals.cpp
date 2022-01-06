@@ -4,20 +4,15 @@ public:
         sort(intervals.begin(), intervals.end());
         
         vector<vector<int>> ans;
+        ans.push_back(intervals[0]);
         
-        for(auto i : intervals)
+        for(int i=1; i<intervals.size(); i++)
         {
-            if(ans.size() == 0)
-            {
-                ans.push_back(i);
-                continue;
-            }    
-            
             auto last = ans.back();
-            if(last[1] >= i[0])
-                ans.back()[1] = max(last[1], i[1]);
+            if(last[1] >= intervals[i][0])
+                ans.back()[1] = max(last[1], intervals[i][1]);
             else
-                ans.push_back(i);
+                ans.push_back(intervals[i]);
         }
         
         return ans;
