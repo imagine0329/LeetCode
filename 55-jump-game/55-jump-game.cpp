@@ -1,35 +1,23 @@
 class Solution {
-private:
-    vector<int> memo;
-    
 public:
     bool canJump(vector<int>& nums) {
-        memo = vector<int>(nums.size(), -1);
-        
-        memo[nums.size()-1] = 1;
-        jump(nums, 0);
-        
-        return memo[0] == 1 ? true : false;
-    }
-    
-    int jump(vector<int>& nums, int i)
-    {
-        if(memo[i] != -1)
-            return memo[i];
-        
         int n = nums.size();
-        int furthest = min(nums[i] + i, n-1);
-        for(int k=furthest; k>i; k--)
+        vector<bool> dp(n, false);
+        
+        dp[n-1] = true;
+        for(int i=n-2; i>=0; i--)
         {
-            if(jump(nums, k) == 1)
+            int furthest = min(nums[i]+i, n-1);
+            for(int k=furthest; k>i; k--)
             {
-                memo[i] = true;
-                return memo[i];
+                if(dp[k])
+                {
+                    dp[i] = dp[k];
+                    break;
+                }
             }
         }
         
-        memo[i] = 0;
-        return memo[i];
+        return dp[0];
     }
-    
 };
