@@ -1,17 +1,36 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        int maxSum = INT_MIN;
+        return helper(nums, 0, nums.size()-1);
+    }
+    
+    int helper(vector<int>& nums, int left, int right)
+    {
+        if(left > right)
+            return INT_MIN;
         
-        int sum = 0;
-        for(auto n : nums)
+        int mid = left + (right - left)/2;
+        int bestLeft = 0, bestRight = 0, sum = 0;
+        
+        for(int i=mid-1; i>=left; i--)
         {
-            sum += n;
-            sum = max(sum, n);
-            maxSum = max(sum, maxSum);
+            sum += nums[i];
+            bestLeft = max(sum, bestLeft);
         }
         
-        return maxSum;
+        sum = 0;
+        for(int i=mid+1; i<=right; i++)
+        {
+            sum += nums[i];
+            bestRight = max(sum, bestRight);
+        }
+        
+        int combined = bestLeft + bestRight + nums[mid];
+        
+        int leftHalf = helper(nums, left, mid-1);
+        int rightHalf = helper(nums, mid+1, right);
+        
+        return max(combined, max(leftHalf, rightHalf));
     }
     
 };
