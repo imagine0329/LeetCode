@@ -2,18 +2,9 @@ class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
         vector<int> ans = digits;
-        int carry = 0;
+        int carry = 1;
         
-        ans.back() += 1;
-        if(ans.back() / 10)
-        {
-            carry = 1;
-            ans.back() %= ans.back();
-        }
-        else
-            return ans;
-        
-        for(int i=ans.size()-2; i>=0; i--)
+        for(int i=ans.size()-1; i>=0; i--)
         {
             int x = ans[i] + carry;
             carry = x / 10;
