@@ -1,23 +1,26 @@
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> v1, v2;
-        v1.push_back({});
-        v2.push_back({});
+        vector<int> v;
+        vector<vector<int>> ans;
+        ans.push_back({});
         
-        for(auto n : nums)
+        backtracking(nums, ans, v, 0);
+        
+        return ans;
+    }
+    
+    void backtracking(vector<int>& nums, vector<vector<int>>& ans, vector<int>& v, int start)
+    {
+        if(start == nums.size())
+            return;
+        
+        for(int i=start; i<nums.size(); i++)
         {
-            for(auto v : v1)
-            {
-                vector<int> temp;
-                temp = v;
-                temp.push_back(n);
-                v2.push_back(temp);
-            }
-            
-            v1 = v2;
+            v.push_back(nums[i]);
+            ans.push_back(v);
+            backtracking(nums, ans, v, i+1);
+            v.pop_back();
         }
-        
-        return v2;
     }
 };
