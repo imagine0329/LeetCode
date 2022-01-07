@@ -18,13 +18,13 @@ public:
                     subset.push_back(nums[j]);
                     hashcode += to_string(nums[j]) + ',';
                 }
-                
-                if(seen.find(hashcode) == seen.end())
+            }
+            
+            if(seen.find(hashcode) == seen.end())
                 {
                     ans.push_back(subset);
                     seen.insert(hashcode);
                 }
-            }
         }
         
         return ans;
