@@ -13,9 +13,6 @@ public:
     
     void backtracking(vector<int>& nums, vector<vector<int>>& ans, vector<int>& subset, int start)
     {
-        if(start == nums.size())
-            return;
-        
         for(int i=start; i<nums.size(); i++)
         {
             if(i != start && nums[i] == nums[i-1])
