@@ -12,9 +12,6 @@ public:
     
     void backtracking(vector<int>& nums, vector<vector<int>>& ans, vector<int>& v, int start)
     {
-        if(start == nums.size())
-            return;
-        
         for(int i=start; i<nums.size(); i++)
         {
             v.push_back(nums[i]);
