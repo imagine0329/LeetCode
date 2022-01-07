@@ -2,34 +2,18 @@ class Solution {
 public:
     string addBinary(string a, string b) {
         string ret;
-        int carry = 0;
+        int c = 0, i = a.length()-1, j = b.length()-1;
         
-        int i = a.length()-1, j = b.length()-1;
-        while(i >= 0 || j >= 0)
+        while(i >= 0 || j >= 0 || c == 1)
         {
-            int x = 0, y = 0;
-            if(i >= 0)
-                x = a[i--] - '0';
-            if(j >= 0)
-                y = b[j--] - '0';
-            
-            int sum = x + y + carry;
-            if(sum & 2)
-            {
-                carry = 1;
-                ret += sum - 2 + '0';
-            }
-            else
-            {
-                carry = 0;
-                ret += sum + '0';
-            }
+            c += i >= 0 ? a[i--] - '0' : 0;
+            c += j >= 0 ? b[j--] - '0' : 0;
+            ret += (c % 2) + '0';
+            c /= 2;
         }
         
-        if(carry)
-            ret += "1";
-        
         reverse(ret.begin(), ret.end());
+        
         return ret;
     }
 };
