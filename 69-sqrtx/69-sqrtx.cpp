@@ -4,8 +4,14 @@ public:
         if(x < 2)
             return x;
         
-        int n = exp(0.5*log(x)) + 1;
-        return (long)n * n > x ? n-1 : n;
+        double x0 = x;
+        double x1 = (x0 + x/x0) / 2.0;
+        while(abs(x0-x1) >= 1){
+            x0 = x1;
+            x1 = (x0 + x/x0) / 2.0;
+        }
+        
+        return (int)x1;
     }
     
 };
