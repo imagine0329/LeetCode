@@ -12,20 +12,33 @@
 class Solution {
 public:
     bool isSameTree(TreeNode* p, TreeNode* q) {
-        return traverse(p, q);
-    }
-    
-    bool traverse(TreeNode* p, TreeNode* q)
-    {
-        if(p == nullptr && q == nullptr)
-            return true;
+        stack<TreeNode*> s1, s2;
         
-        if(p == nullptr || q == nullptr)
-            return false;
+        s1.push(p);
+        s2.push(q);
         
-        if(p->val != q->val)
-            return false;
+        while(!s1.empty() && !s2.empty())
+        {
+            p = s1.top();
+            s1.pop();
+            q = s2.top();
+            s2.pop();
+            
+            if(!p && !q)
+                continue;
+            
+            if((p && !q) || (!p && q))
+                return false;
+            
+            if(p->val != q->val)
+                return false;
+            
+            s1.push(p->right);
+            s2.push(q->right);
+            s1.push(p->left);
+            s2.push(q->left);
+        }
         
-        return traverse(p->left, q->left) && traverse(p->right, q->right);
+        return s1.empty() && s2.empty();
     }
 };
