@@ -12,20 +12,37 @@
 class Solution {
 public:
     bool isSymmetric(TreeNode* root) {
-        return traverse(root->left, root->right);
-    }
-    
-    bool traverse(TreeNode* p, TreeNode* q)
-    {
-        if(!p && !q)
+        if(root == nullptr)
             return true;
         
-        if(p == nullptr || q == nullptr)
-            return false;
+        TreeNode* left = root->left;
+        TreeNode* right = root->right;
         
-        if(p->val != q->val)
-            return false;
+        queue<TreeNode*> l, r;
+        l.push(left);
+        r.push(right);
         
-        return traverse(p->left, q->right) && traverse(p->right, q->left);
+        while(!l.empty() && !r.empty())
+        {
+            left = l.front();
+            l.pop();
+            right = r.front();
+            r.pop();
+            
+            if(!left && !right)
+                continue;
+            
+            if(left == nullptr || right == nullptr)
+                return false;
+            if(left->val != right->val)
+                return false;
+            
+            l.push(left->left);
+            l.push(left->right);
+            r.push(right->right);
+            r.push(right->left);
+        }
+        
+        return l.empty() && r.empty();
     }
 };
