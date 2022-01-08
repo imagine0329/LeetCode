@@ -12,33 +12,32 @@
 class Solution {
 public:
     bool isSameTree(TreeNode* p, TreeNode* q) {
-        stack<TreeNode*> s1, s2;
+        queue<TreeNode*> q1, q2;
         
-        s1.push(p);
-        s2.push(q);
+        q1.push(p);
+        q2.push(q);
         
-        while(!s1.empty() && !s2.empty())
+        while(!q1.empty() && !q2.empty())
         {
-            p = s1.top();
-            s1.pop();
-            q = s2.top();
-            s2.pop();
+            p = q1.front();
+            q1.pop();
+            q = q2.front();
+            q2.pop();
             
             if(!p && !q)
                 continue;
             
-            if((p && !q) || (!p && q))
+            if(p == nullptr || q == nullptr)
                 return false;
-            
             if(p->val != q->val)
                 return false;
             
-            s1.push(p->right);
-            s2.push(q->right);
-            s1.push(p->left);
-            s2.push(q->left);
+            q1.push(p->left);
+            q2.push(q->left);
+            q1.push(p->right);
+            q2.push(q->right);
         }
         
-        return s1.empty() && s2.empty();
+        return q1.empty() && q2.empty();
     }
 };
