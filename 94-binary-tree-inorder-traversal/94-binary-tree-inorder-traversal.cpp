@@ -15,16 +15,13 @@ public:
         vector<int> ans;
         stack<TreeNode*> s;
         
-        while(1)
+        while(root || !s.empty())
         {
             while(root)
             {
                 s.push(root);
                 root = root->left;
             }
-            
-            if(s.empty())
-                break;
             
             root = s.top();
             s.pop();
