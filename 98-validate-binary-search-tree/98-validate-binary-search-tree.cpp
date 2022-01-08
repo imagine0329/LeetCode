@@ -11,26 +11,46 @@
  */
 
 class Solution {
-public:
-    bool isValidBST(TreeNode* root) {
-        return inorder(root, nullptr, nullptr);
+private:
+    stack<TreeNode*> s, lower_limit, upper_limit;
+    
+    void update(TreeNode* root, TreeNode* lower, TreeNode* upper)
+    {
+        s.push(root);
+        lower_limit.push(lower);
+        upper_limit.push(upper);
     }
     
-    bool inorder(TreeNode* root, TreeNode* lower, TreeNode* upper)
-    {
-        if(root == nullptr)
-            return true;
+public:
+    bool isValidBST(TreeNode* root) {
+        TreeNode *lower = nullptr, *upper = nullptr;
         
-        bool left = inorder(root->left, lower, root);
+        while(root || !s.empty())
+        {
+            while(root)
+            {
+                update(root, lower, upper);
+                upper = root;
+                root = root->left;
+            }
+            
+            root = s.top();
+            s.pop();
+            lower = lower_limit.top();
+            lower_limit.pop();
+            upper = upper_limit.top();
+            upper_limit.pop();
+            
+            if(lower && root->val <= lower->val)
+                return false;
+            if(upper && root->val >= upper->val)
+                return false;
+            
+            lower = root;
+            root = root->right;
+        }
         
-        if(lower && root->val <= lower->val)
-            return false;
-        if(upper && root->val >= upper->val)
-            return false;
-        
-        bool right = inorder(root->right, root, upper);
-        
-        return left && right;
+        return true;
     }
 };
 
