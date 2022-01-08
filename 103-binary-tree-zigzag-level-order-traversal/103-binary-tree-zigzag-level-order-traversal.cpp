@@ -16,43 +16,36 @@ public:
             return {};
         
         vector<vector<int>> ans;
-        stack<TreeNode*> s1, s2;
+        deque<TreeNode*> dq;
+        bool isZig = true;
         
-        s1.push(root);
+        dq.push_back(root);
         
-        while(!s1.empty() || !s2.empty())
-        {
+        while(!dq.empty()) {
             vector<int> level;
-            while(!s1.empty())
+            int size = dq.size();
+            while(size--)
             {
-                root = s1.top();
-                s1.pop();
-                level.push_back(root->val);
-                if(root->left)
-                    s2.push(root->left);
-                if(root->right)
-                    s2.push(root->right);
+                if(isZig)
+                {
+                    root = dq.back();
+                    dq.pop_back();
+                    level.push_back(root->val);
+                    if(root->left)  dq.push_front(root->left);
+                    if(root->right) dq.push_front(root->right);
+                }
+                else
+                {
+                    root = dq.front();
+                    dq.pop_front();
+                    level.push_back(root->val);
+                    if(root->right) dq.push_back(root->right);
+                    if(root->left)  dq.push_back(root->left);
+                }
             }
             
-            if(level.size() > 0)
-            {
-                ans.push_back(level);
-                level.clear();
-            }
-            
-            while(!s2.empty())
-            {
-                root = s2.top();
-                s2.pop();
-                level.push_back(root->val);
-                if(root->right)
-                    s1.push(root->right);
-                if(root->left)
-                    s1.push(root->left);
-            }
-            
-            if(level.size() > 0)
-                ans.push_back(level);
+            ans.push_back(level);
+            isZig = !isZig;
         }
         
         return ans;
