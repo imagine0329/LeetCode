@@ -11,20 +11,47 @@
  */
 
 class Solution {
-public:
-    bool isValidBST(TreeNode* root) {
-        return traverse(root, nullptr, nullptr);
+private:
+    stack<TreeNode*> s, lower_limit, upper_limit;
+    
+    void update(TreeNode* root, TreeNode* lower, TreeNode* upper)
+    {
+        s.push(root);
+        lower_limit.push(lower);
+        upper_limit.push(upper);
     }
     
-    bool traverse(TreeNode* root, TreeNode* min, TreeNode* max)
-    {
-        if(root == nullptr)
-            return true;
+    
+public:
+    bool isValidBST(TreeNode* root) {
         
-        if((min && root->val <= min->val) || (max && root->val >= max->val))
-            return false;
+        TreeNode *lower = nullptr, *upper = nullptr;
         
-        return traverse(root->left, min, root) && traverse(root->right, root, max);
+        update(root, lower, upper);
+        
+        while(!s.empty())
+        {
+            root = s.top();
+            s.pop();
+            lower = lower_limit.top();
+            lower_limit.pop();
+            upper = upper_limit.top();
+            upper_limit.pop();
+            
+            if(root == nullptr)
+                continue;
+            
+            if(lower && root->val <= lower->val)
+                return false;
+            
+            if(upper && root->val >= upper->val)
+                return false;
+            
+            update(root->right, root, upper);
+            update(root->left, lower, root);
+        }
+        
+        return true;
     }
 };
 
