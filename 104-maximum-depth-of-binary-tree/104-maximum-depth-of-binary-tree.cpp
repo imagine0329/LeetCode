@@ -10,14 +10,37 @@
  * };
  */
 class Solution {
+private:
+    queue<pair<TreeNode*, int>> q;
+    int max_depth;
+    
+    int next()
+    {
+        if(q.size() == 0)
+            return max_depth;
+        
+        auto node = q.front().first;
+        auto level = q.front().second + 1;
+        q.pop();
+        
+        max_depth = max(max_depth, level);
+        
+        if(node->left)
+            q.push(make_pair(node->left, level));
+        if(node->right)
+            q.push(make_pair(node->right, level));
+        
+        return next();
+    }
+    
 public:
     int maxDepth(TreeNode* root) {
         if(root == nullptr)
             return 0;
         
-        int left = maxDepth(root->left);
-        int right = maxDepth(root->right);
+        max_depth = 0;
+        q.push(make_pair(root, 0));
         
-        return max(left, right) + 1;
+        return next();
     }
 };
