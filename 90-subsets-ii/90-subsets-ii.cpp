@@ -1,33 +1,29 @@
 class Solution {
 public:
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        int n = nums.size();
-        int p = 1 << n;
-        vector<vector<int>> ans;
-        unordered_set<string> seen;
+        vector<vector<int>> ret;
+        vector<vector<int>> subsets;
         sort(nums.begin(), nums.end());
         
-        for(int i=0; i<p; i++)
+        ret.push_back({});
+        for(int i=0; i<nums.size(); i++)
         {
-            string hashcode;
-            vector<int> subset;
-            for(int j=0; j<n; j++)
-            {
-                if((i >> j) & 1)
-                {
-                    subset.push_back(nums[j]);
-                    hashcode += to_string(nums[j]) + ',';
-                }
-            }
+            vector<vector<int>> temp;
+            if(i != 0 && nums[i] == nums[i-1])
+                temp = subsets;
+            else
+                temp = ret;
             
-            if(seen.find(hashcode) == seen.end())
-                {
-                    ans.push_back(subset);
-                    seen.insert(hashcode);
-                }
+            subsets.clear();
+            for(auto s : temp)
+            {
+                s.push_back(nums[i]);
+                subsets.push_back(s);
+                ret.push_back(s);
+            }
         }
         
-        return ans;
+        return ret;
     }
     
 };
