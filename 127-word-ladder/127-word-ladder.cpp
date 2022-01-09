@@ -1,40 +1,44 @@
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> dict(wordList.begin(), wordList.end());
-        queue<string> q;
+        unordered_map<string, vector<string>> dict;
+        unordered_set<string> visited;
+        queue<pair<string, int>> q;
         
-        q.push(beginWord);
+        for(auto s : wordList) {
+            for(int i=0; i<beginWord.length(); i++) {
+                string word = s;
+                word[i] = '*';
+                dict[word].push_back(s);
+            }
+        }
         
-        int step = 1;
+        q.push({beginWord, 1});
+        visited.insert(beginWord);
+        
         while(!q.empty())
         {
-            int n = q.size();
-            while(n--)
+            auto word = q.front().first;
+            auto level = q.front().second;
+            q.pop();
+            
+            for(int i=0; i<beginWord.length(); i++)
             {
-                string word = q.front();
-                q.pop();
+                string newWord = word;
+                newWord[i] = '*';
                 
-                if(word == endWord)
-                    return step;
-                
-                for(int i=0; i<word.length(); i++)
+                for(auto s : dict[newWord])
                 {
-                    char c = word[i];
-                    for(int j=0; j<26; j++)
+                    if(s == endWord)
+                        return level + 1;
+                    
+                    if(visited.find(s) == visited.end())
                     {
-                        word[i] = 'a' + j;
-                        if(dict.find(word) != dict.end())
-                        {
-                            q.push(word);
-                            dict.erase(word);
-                        }
+                        visited.insert(s);
+                        q.push({s, level+1});
                     }
-                    word[i] = c;
                 }
             }
-            
-            step++;
         }
         
         return 0;
