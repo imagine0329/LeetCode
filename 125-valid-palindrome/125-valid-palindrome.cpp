@@ -5,16 +5,10 @@ public:
         
         while(left < right)
         {
-            if(!isalpha(s[left]) && !isdigit(s[left]))
-            {
+            while(left < right && !isalnum(s[left]))
                 left++;
-                continue;
-            }
-            if(!isalpha(s[right]) && !isdigit(s[right]))
-            {
+            while(left < right && !isalnum(s[right]))
                 right--;
-                continue;
-            }
             
             if(tolower(s[left++]) != tolower(s[right--]))
                 return false;
