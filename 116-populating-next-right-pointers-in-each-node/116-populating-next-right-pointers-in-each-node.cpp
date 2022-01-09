@@ -19,19 +19,29 @@ public:
 class Solution {
 public:
     Node* connect(Node* root) {
-        traverse(root);
+        if(root == nullptr)
+            return root;
+        
+        Node* node = root;
+        Node* leftmost = root;
+        
+        while(node->left)
+        {
+            node->left->next = node->right;
+            
+            if(node->next)
+            {
+                node->right->next = node->next->left;
+                node = node->next;
+            }
+            else
+            {
+                node = leftmost->left;
+                leftmost = node;
+            }
+        }
+        
         return root;
-    }
-    
-    void traverse(Node* root)
-    {
-        if(root == nullptr || root->left == nullptr || root->right == nullptr)
-            return;
         
-        root->left->next = root->right;
-        root->right->next = root->next ? root->next->left : nullptr;
-        
-        traverse(root->left);
-        traverse(root->right);
     }
 };
