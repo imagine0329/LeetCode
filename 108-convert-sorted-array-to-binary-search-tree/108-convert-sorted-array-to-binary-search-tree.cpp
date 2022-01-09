@@ -21,6 +21,9 @@ public:
             return nullptr;
         
         int mid = (left + right) / 2;
+        if((left + right) & 1)
+            mid++;
+        
         TreeNode* root = new TreeNode(nums[mid]);
         
         root->left = createTree(nums, left, mid-1);
