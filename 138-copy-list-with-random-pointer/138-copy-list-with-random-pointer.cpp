@@ -15,42 +15,37 @@ public:
 */
 
 class Solution {
+private:
+    unordered_map<Node*, Node*> m;
+    
+    Node* getClonedNode(Node* node)
+    {
+        if(node == nullptr)
+            return nullptr;
+        
+        if(m.find(node) != m.end())
+            return m[node];
+        
+        m[node] = new Node(node->val);
+        
+        return m[node];
+    }
+    
 public:
     Node* copyRandomList(Node* head) {
-        Node* newHead = nullptr;
-        Node* old = head;
-        Node* copied = nullptr;
+        if(head == nullptr)
+            return nullptr;
         
-        while(old)
-        {
-            Node* node = new Node(old->val);
-            if(newHead == nullptr)
-                newHead = node;
-            
-            node->next = old->next;
-            old->next = node;
-            old = node->next;
-        }
+        Node* newHead = new Node(head->val);
+        Node* node = newHead;
+        m[head] = newHead;
         
-        old = head;
-        copied = newHead;
-        while(copied)
+        while(head)
         {
-            copied->random = old->random ? old->random->next : nullptr;
-            copied = copied->next ? copied->next->next : nullptr;
-            old = old->next ? old->next->next : nullptr;
-        }
-        
-        old = head;
-        copied = newHead;
-        while(old)
-        {
-            Node* copiedNext = copied->next;
-            copied->next = copied->next ? copied->next->next : nullptr;
-            old->next = copiedNext;
-            
-            old = old->next;
-            copied = copied->next;
+            node->next = getClonedNode(head->next);
+            node->random = getClonedNode(head->random);
+            node = node->next;
+            head = head->next;
         }
         
         return newHead;
