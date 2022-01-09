@@ -15,23 +15,41 @@ public:
 */
 
 class Solution {
-private:
-    unordered_map<Node*, Node*> m;
-    
 public:
     Node* copyRandomList(Node* head) {
         if(head == nullptr)
             return nullptr;
         
-        if(m.find(head) != m.end())
-            return m[head];
+        Node* newHead = nullptr;
+        Node* old = head;
+        Node* copied = nullptr;
         
-        Node* node = new Node(head->val);
-        m[head] = node;
+        while(old)
+        {
+            copied = new Node(old->val);
+            copied->next = old->next;
+            old->next = copied;
+            old = copied->next;
+        }
         
-        node->next = copyRandomList(head->next);
-        node->random = copyRandomList(head->random);
+        old = head;
+        while(old)
+        {
+            old->next->random = old->random ? old->random->next : nullptr;
+            old = old->next->next;
+        }
         
-        return node;
+        old = head;
+        newHead = head->next;
+        copied = head->next;
+        while(old)
+        {
+            old->next = old->next->next;
+            copied->next = copied->next ? copied->next->next : nullptr;
+            old = old->next;
+            copied = copied->next;
+        }
+        
+        return newHead;
     }
 };
