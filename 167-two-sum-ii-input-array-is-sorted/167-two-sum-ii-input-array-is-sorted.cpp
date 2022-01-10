@@ -1,19 +1,33 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& numbers, int target) {
-        int left = 0, right = numbers.size()-1;
+        int idx1, idx2;
         
-        while(left < right)
+        for(idx1 = 0; idx1 < numbers.size()-1; idx1++)
         {
-            int sum = numbers[left] + numbers[right];
-            if(sum == target)
-                break;
-            else if(sum < target)
-                left++;
-            else
-                right--;
+            idx2 = search(numbers, target-numbers[idx1], idx1+1);
+            if(idx2 != -1)
+                return {idx1+1, idx2+1};
         }
         
-        return {left+1, right+1};
+        return {-1, -1};
+    }
+    
+    int search(vector<int>& numbers, int target, int start)
+    {
+        int left = start, right = numbers.size()-1;
+        
+        while(left <= right)
+        {
+            int mid = left + (right-left)/2;
+            if(target == numbers[mid])
+                return mid;
+            else if(target < numbers[mid])
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+        
+        return -1;
     }
 };
