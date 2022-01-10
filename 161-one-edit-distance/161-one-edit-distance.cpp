@@ -9,28 +9,18 @@ public:
             return false;
         
         int ps = 0, pt = 0;
-        bool foundDiff = false;
         
-        while(ps < n && pt < m)
+        for(int i=0; i<n; i++)
         {
-            if(s[ps] != t[pt])
-            {
-                if(foundDiff)
-                    return false;
-                foundDiff = true;
-                
-                if(n == m)
-                    ps++;
-                
-                pt++;
-            }    
-            else
-            {
-                ps++;
-                pt++;
-            }
+            if(s[i] == t[i])
+                continue;
+            
+            if(n == m)
+                return s.substr(i+1) == t.substr(i+1);
+            
+            return s.substr(i) == t.substr(i+1);
         }
         
-        return true;
+        return n+1 == m;
     }
 };
