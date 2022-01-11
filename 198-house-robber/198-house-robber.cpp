@@ -1,24 +1,15 @@
 class Solution {
-private:
-    vector<int> memo;
-    
 public:
     int rob(vector<int>& nums) {
-        if(nums.size() < 2)
-            return nums[0];
+        int n = nums.size();
+        vector<int> dp(n + 1, -1);
         
-        memo = vector<int>(nums.size(), -1);
-        return dp(nums, 0);
-    }
-    
-    int dp(vector<int>& nums, int i)
-    {
-        if(i >= nums.size())
-            return 0;
+        dp[n] = 0;
+        dp[n-1] = nums[n-1];
         
-        if(memo[i] != -1)
-            return memo[i];
+        for(int i=n-2; i>=0; i--)
+            dp[i] = max(dp[i+1], dp[i+2] + nums[i]);
         
-        return memo[i] = max(dp(nums, i+1), dp(nums, i+2) + nums[i]);
+        return dp[0];
     }
 };
