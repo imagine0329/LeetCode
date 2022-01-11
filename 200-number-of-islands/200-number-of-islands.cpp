@@ -21,15 +21,13 @@ public:
     
     void dfs(vector<vector<char>>& grid, int row, int col)
     {
-        if(row == grid.size() || row < 0 || col == grid[0].size() || col < 0)
-            return;
-        
-        if(grid[row][col] == '0')
-            return;
+        int m = grid.size(), n = grid[0].size();
         
         grid[row][col] = '0';
-        vector<int> offset = {-1, 0, 1, 0, -1};
-        for(int i=0; i<4; i++)
-            dfs(grid, row+offset[i], col+offset[i+1]);
+        
+        if(row-1 >= 0 && grid[row-1][col] == '1')   dfs(grid, row-1, col);
+        if(row+1 < m && grid[row+1][col] == '1')    dfs(grid, row+1, col);
+        if(col-1 >= 0 && grid[row][col-1] == '1')   dfs(grid, row, col-1);
+        if(col+1 < n && grid[row][col+1] == '1')    dfs(grid, row, col+1);
     }
 };
