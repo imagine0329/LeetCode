@@ -12,24 +12,26 @@
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
-        unordered_map<int, vector<int>> m;
+        vector<int> ans;
+        queue<TreeNode*> q;
+        q.push(root);
         
-        dfs(root, m, 0);
+        while(root && !q.empty())
+        {
+            int n = q.size();
+            while(n--)
+            {
+                root = q.front();
+                q.pop();
+                if(root->left)
+                    q.push(root->left);
+                if(root->right)
+                    q.push(root->right);
+            }
+            
+            ans.push_back(root->val);
+        }
         
-        vector<int> ret;
-        for(int i=0; i<m.size(); i++)
-            ret.push_back(m[i].back());
-        
-        return ret;
-    }
-    
-    void dfs(TreeNode* root, unordered_map<int, vector<int>>& m, int level)
-    {
-        if(root == nullptr)
-            return;
-        
-        m[level].push_back(root->val);
-        dfs(root->left, m, level+1);
-        dfs(root->right, m, level+1);
+        return ans;
     }
 };
