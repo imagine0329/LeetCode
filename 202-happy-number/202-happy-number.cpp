@@ -1,26 +1,28 @@
 class Solution {
-public:
-    bool isHappy(int n) {
-        unordered_set<int> seen;
-        
-        int x = n, res = n;
-        
-        while(res != 1)
+private:
+    int getNext(int n)
+    {
+        int ret = 0;
+        while(n)
         {
-            x = res;
-            res = 0;
-            while(x)
-            {
-                res += pow(x % 10, 2);
-                x /= 10;
-            }
-            
-            if(seen.find(res) != seen.end())
-                return false;
-            
-            seen.insert(res);
+            int x = n % 10;
+            n /= 10;
+            ret += x * x;
         }
         
-        return true;
+        return ret;
+    }
+    
+public:
+    bool isHappy(int n) {
+        int slow = n, fast = getNext(getNext(n));
+        
+        while(fast != 1 && slow != fast)
+        {
+            slow = getNext(slow);
+            fast = getNext(getNext(fast));
+        }
+        
+        return fast == 1;
     }
 };
