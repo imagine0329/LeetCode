@@ -1,7 +1,7 @@
 class Solution {
 public:
     int calculate(string s) {
-        int curr = 0;
+        int curr = 0, prev = 0, res = 0;
         char op = '+';
         stack<int> st;
         
@@ -11,29 +11,21 @@ public:
                curr = (curr * 10) + (c - '0');
             
             if(!isdigit(c) && !iswspace(c) || i == s.length() - 1) {
-                if(op == '+')       
-                    st.push(curr);
-                else if(op == '-')  
-                    st.push(-curr);
-                else {
-                    int prev = st.top();
-                    st.pop();
-                    if(op == '*')
-                        st.push(prev * curr);
-                    else
-                        st.push(prev / curr);
+                if(op == '+' || op == '-') {
+                    res += prev;
+                    prev = op == '+' ? curr : -curr;
                 }
+                else if(op == '*')
+                    prev = prev * curr;
+                else
+                    prev = prev / curr;
                 
                 op = c;
                 curr = 0;
             }
         }
         
-        int res = 0;
-        while(!st.empty()) {
-            res += st.top();
-            st.pop();
-        }
+        res += prev;
         
         return res;
     }
