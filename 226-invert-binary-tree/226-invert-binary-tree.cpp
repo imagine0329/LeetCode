@@ -16,24 +16,20 @@ public:
             return nullptr;
         
         queue<TreeNode*> q;
-        TreeNode* node = root;
-        q.push(node);
+        q.push(root);
         
         while(!q.empty()) {
-            int n = q.size();
-            while(n--) {
-                node = q.front();
-                q.pop();
-                
-                TreeNode* temp = node->left;
-                node->left = node->right;
-                node->right = temp;
-                
-                if(node->left)
-                    q.push(node->left);
-                if(node->right)
-                    q.push(node->right);
-            }
+            TreeNode* node = q.front();
+            q.pop();
+
+            TreeNode* temp = node->left;
+            node->left = node->right;
+            node->right = temp;
+
+            if(node->left)
+                q.push(node->left);
+            if(node->right)
+                q.push(node->right);
         }
         
         return root;
