@@ -10,18 +10,37 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == nullptr)
-            return nullptr;
+        if(!root || root == p || root == q) return root;
         
-        if(root == p || root == q)
-            return root;
+        unordered_map<TreeNode*, TreeNode*> parent;
+        stack<TreeNode*> s;
         
-        TreeNode* left = lowestCommonAncestor(root->left, p, q);
-        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        parent[root] = nullptr;
+        s.push(root);
         
-        if(left && right)
-            return root;
+        while(parent.find(p) == parent.end() || parent.find(q) == parent.end()) {
+            TreeNode* node = s.top();
+            s.pop();
+            
+            if(node->left) {
+                s.push(node->left);
+                parent[node->left] = node;
+            }
+            if(node->right) {
+                s.push(node->right);
+                parent[node->right] = node;
+            }
+        }
         
-        return left ? left : right;
+        unordered_set<TreeNode*> ancestor;
+        while(p) {
+            ancestor.insert(p);
+            p = parent[p];
+        }
+        
+        while(ancestor.find(q) == ancestor.end())
+            q = parent[q];
+        
+        return q;
     }
 };
