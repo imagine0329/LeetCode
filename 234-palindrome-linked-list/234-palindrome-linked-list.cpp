@@ -9,23 +9,47 @@
  * };
  */
 class Solution {
-private: 
-    ListNode* front;
-    
-    bool checkNode(ListNode* current)
-    {
-        if(current) {
-            if(!checkNode(current->next)) return false;
-            if(current->val != front->val) return false;
-            front = front->next;
-        }
-        
-        return true;
-    }
-    
 public:
     bool isPalindrome(ListNode* head) {
-        front = head;
-        return checkNode(head);
+        ListNode* firstHalfEnd = endOfFirstHalf(head);
+        ListNode* secondHalfStart = reverseList(firstHalfEnd->next);
+        
+        ListNode *p1 = head, *p2 = secondHalfStart;
+        bool result = true;
+        while(result && p2) {
+            if(p1->val != p2->val)
+                result = false;
+            p1 = p1->next;
+            p2 = p2->next;
+        }
+        
+        firstHalfEnd->next = reverseList(secondHalfStart);
+        
+        return result;
+    }
+    
+private:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        
+        while(curr) {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+    
+    ListNode* endOfFirstHalf(ListNode* head) {
+        ListNode *fast = head, *slow = head;
+        while(fast->next && fast->next->next) {
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        
+        return slow;
     }
 };
