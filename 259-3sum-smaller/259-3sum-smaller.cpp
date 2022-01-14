@@ -7,26 +7,30 @@ public:
         
         sort(nums.begin(), nums.end());
         
-        int triplet = 0;
-        for(int i=0; i<n-2; i++)
-            triplet += twoSum(nums, target-nums[i], i+1);
-        
-        return triplet;
-    }
-    
-    int twoSum(vector<int>& nums, int target, int start) {
-        int left = start, right = nums.size()-1;
         int num = 0;
-        while(left < right) {
-            if(target - nums[left] - nums[right] > 0) {
-                num += right - left;
-                left++;
+        for(int i=0; i<n-2; i++) {
+            for(int j=i+1; j<n-1; j++) {
+                int k = binarySearch(nums, target-nums[i]-nums[j], j);
+                num += k - j;
             }
-            else
-                right--;
         }
         
         return num;
+    }
+    
+    int binarySearch(vector<int>& nums, int target, int start) {
+        int left = start, right = nums.size() - 1;
+        
+        while(left < right) {
+            int mid = (left + right + 1)/2;
+            
+            if(target - nums[mid] <= 0)
+                right = mid - 1;
+            else
+                left = mid;
+        }
+        
+        return left;
     }
     
 };
