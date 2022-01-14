@@ -1,19 +1,13 @@
 class Solution {
 public:
     bool canPermutePalindrome(string s) {
-        int count = 0;
-        
-        for(int i=0; i<128 && count <= 1; i++) {
-            int n = 0;
-            for(int j=0; j<s.length(); j++) {
-                if(s[j] == i)
-                    n++;
-            }
-            
-            count += n % 2;
+        unordered_set<char> odd;
+        for(auto c : s) {
+            if(odd.insert(c).second == false)
+                odd.erase(c);
         }
         
-        return count <= 1;
+        return odd.size() <= 1;
     }
 };
 
