@@ -9,11 +9,7 @@ public:
             else odd--;
         }
         
-        int n = s.length();
-        if(((n & 1) && odd == 1) || (((n & 1) == 0) && odd == 0))
-            return true;
-        else
-            return false;
+        return odd <= 1;
     }
 };
 
