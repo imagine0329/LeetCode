@@ -17,24 +17,20 @@ private:
 public:
     int countUnivalSubtrees(TreeNode* root) {
         num = 0;
-        dfs(root);
+        dfs(root, 0);
         
         return num;
     }
     
-    bool dfs(TreeNode* root) {
+    bool dfs(TreeNode* root, int val) {
         if(root == nullptr)
             return true;
         
-        bool isUni = false;
-        isUni = !(!dfs(root->left) | !dfs(root->right));
+        if(!dfs(root->left, root->val) | !dfs(root->right, root->val))
+            return false;
 
-        if(isUni && (root->left == nullptr || root->left->val == root->val) && 
-          (root->right == nullptr || root->right->val == root->val)) {
-            num++;
-            return true;
-        }
+        num++;
         
-        return false;
+        return root->val == val;
     }
 };
