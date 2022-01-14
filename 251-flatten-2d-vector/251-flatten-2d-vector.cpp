@@ -1,29 +1,26 @@
 class Vector2D {
 private:
-    vector<vector<int>>::iterator begin, end;
-    vector<int>::iterator curr;
+    int inner = 0, outer = 0;
+    vector<vector<int>> vec;
     
 public:
     Vector2D(vector<vector<int>>& vec) {
-        begin = vec.begin();
-        end = vec.end();
-        if(begin != end)
-            curr = begin->begin();
+        this->vec = vec;
     }
     
     int next() {
         hasNext();
-        return *curr++;
+        return vec[outer][inner++];
     }
     
     bool hasNext() {
-        while(begin != end && curr == begin->end()) {
-            begin++;
-            if(begin != end)
-                curr = begin->begin();
+        while(outer != vec.size() && inner >= vec[outer].size()) {
+            outer++;
+            if(outer != vec.size())
+                inner = 0;
         }
         
-        return begin != end;
+        return outer != vec.size();
     }
 };
 
