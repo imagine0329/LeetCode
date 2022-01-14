@@ -1,25 +1,18 @@
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
-        vector<int> start, end;
+        priority_queue<int, vector<int>, greater<int>> allocator;
         
-        for(auto i : intervals) {
-            start.push_back(i[0]);
-            end.push_back(i[1]);
-        }
+        sort(intervals.begin(), intervals.end());
+        allocator.push(intervals[0][1]);
         
-        sort(start.begin(), start.end());
-        sort(end.begin(), end.end());
-        
-        int room = 0;
-        for(int i=0, j=0; i<intervals.size(); i++) {
-            if(start[i] < end[j])
-                room++;
-            else
-                j++;
+        for(int i=1; i<intervals.size(); i++) {
+            if(intervals[i][0] >= allocator.top())
+                allocator.pop();
             
+            allocator.push(intervals[i][1]);
         }
         
-        return room;
+        return allocator.size();
     }
 };
