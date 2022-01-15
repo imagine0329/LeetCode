@@ -23,9 +23,9 @@ public:
             if(abs(target - root->val) < abs(target - closest))
                 closest = root->val;
             
-            if(root->left)
+            if(root->val > target && root->left)
                 s.push(root->left);
-            if(root->right)
+            if(root->val < target && root->right)
                 s.push(root->right);
         }
         
