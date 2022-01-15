@@ -12,17 +12,23 @@
 class Solution {
 public:
     int closestValue(TreeNode* root, double target) {
-        int curr = root->val;
-        int sub = root->val;
+        int closest = root->val;
+        stack<TreeNode*> s;
         
-        if(target < root->val && root->left)
-            sub = closestValue(root->left, target);
-        else if(target > root->val && root->right)
-            sub = closestValue(root->right, target);
+        s.push(root);
         
-        if(abs(curr - target) < abs(sub - target))
-            return curr;
-        else
-            return sub;
+        while(!s.empty()) {
+            root = s.top();
+            s.pop();
+            if(abs(target - root->val) < abs(target - closest))
+                closest = root->val;
+            
+            if(root->left)
+                s.push(root->left);
+            if(root->right)
+                s.push(root->right);
+        }
+        
+        return closest;
     }
 };
