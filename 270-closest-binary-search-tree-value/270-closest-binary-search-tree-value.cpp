@@ -15,18 +15,19 @@ public:
         int closest = root->val;
         stack<TreeNode*> s;
         
-        s.push(root);
-        
-        while(!s.empty()) {
+        while(!s.empty() || root) {
+            while(root) {
+                s.push(root);
+                root = root->left;
+            }
+            
             root = s.top();
             s.pop();
+            
             if(abs(target - root->val) < abs(target - closest))
                 closest = root->val;
             
-            if(root->val > target && root->left)
-                s.push(root->left);
-            if(root->val < target && root->right)
-                s.push(root->right);
+            root = root->right;
         }
         
         return closest;
