@@ -1,20 +1,13 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        int duplicate = -1;
-        
-        for(auto n : nums) {
-            int cur = abs(n);
-            if(nums[cur] < 0) {
-                duplicate = cur;
-                break;
-            }
-            nums[cur] *= -1;
+        int cur = 0;
+        while(cur != nums[cur]) {
+            int next = nums[cur];
+            nums[cur] = cur;
+            cur = next;
         }
         
-        for(auto n : nums)
-            n = abs(n);
-        
-        return duplicate;
+        return cur;
     }
 };
