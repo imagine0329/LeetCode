@@ -13,29 +13,17 @@
 class Solution {
 public:
     int longestConsecutive(TreeNode* root) {
-        int longest = 0;
-        dfs(root, 1, longest);
-        
-        return longest;
+        return dfs(root, nullptr, 1);
     }
     
-    void dfs(TreeNode* root, int len, int& longest) {
+    int dfs(TreeNode* root, TreeNode* parent, int length) {
         if(root == nullptr)
-            return;
+            return length;
         
-        longest = max(longest, len);
-        int left_l, right_l;
-        if(root->left && root->left->val == root->val + 1)
-            left_l = len + 1;
-        else
-            left_l = 1;
+        length = parent && parent->val + 1 == root->val ? length + 1 : 1;
+        int left = dfs(root->left, root, length);
+        int right = dfs(root->right, root, length);
         
-        if(root->right && root->right->val == root->val + 1)
-            right_l = len + 1;
-        else
-            right_l = 1;
-            
-        dfs(root->left, left_l, longest);
-        dfs(root->right, right_l, longest);
+        return max(length, max(left, right));
     }
 };
