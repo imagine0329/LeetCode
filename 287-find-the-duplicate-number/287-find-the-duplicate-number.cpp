@@ -1,13 +1,9 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        int cur = 0;
-        while(cur != nums[cur]) {
-            int next = nums[cur];
-            nums[cur] = cur;
-            cur = next;
-        }
+        while(nums[0] != nums[nums[0]])
+            swap(nums[0], nums[nums[0]]);
         
-        return cur;
+        return nums[0];
     }
 };
