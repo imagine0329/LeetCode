@@ -1,9 +1,29 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        while(nums[0] != nums[nums[0]])
-            swap(nums[0], nums[nums[0]]);
+        auto small_or_equal = [&](int cur) {
+            int count = 0;
+            for(auto &n : nums) {
+                if(n <= cur)
+                    count++;
+            }
+            
+            return count;
+        };
         
-        return nums[0];
+        int low = 1, high = nums.size();
+        int duplicate = -1;
+        while(low <= high) {
+            int cur = (low + high) / 2;
+            
+            if(small_or_equal(cur) > cur) {
+                duplicate = cur;
+                high = cur - 1;
+            }
+            else
+                low = cur + 1;
+        }
+        
+        return duplicate;
     }
 };
