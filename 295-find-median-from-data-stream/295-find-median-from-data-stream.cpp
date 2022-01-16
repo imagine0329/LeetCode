@@ -13,17 +13,14 @@ public:
         max_q.push(min_q.top());
         min_q.pop();
         
-        if(min_q.size() + 1< max_q.size()) {
+        if(min_q.size() < max_q.size()) {
             min_q.push(max_q.top());
             max_q.pop();
         }
     }
     
     double findMedian() {
-        if(min_q.size() == max_q.size())
-            return (min_q.top() + max_q.top()) * 0.5;
-        else
-            return min_q.size() > max_q.size() ? min_q.top() : max_q.top();
+        return min_q.size() > max_q.size() ? min_q.top() : (min_q.top() + max_q.top()) * 0.5;
     }
 };
 
