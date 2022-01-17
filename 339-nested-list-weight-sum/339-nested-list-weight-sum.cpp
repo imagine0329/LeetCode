@@ -31,18 +31,28 @@
 class Solution {
 public:
     int depthSum(vector<NestedInteger>& nestedList) {
-        int sum = 0;
-        dfs(nestedList, sum, 1);
+        int sum = 0, depth = 1;
+        queue<NestedInteger> q;
+        
+        for(auto nest : nestedList)
+            q.push(nest);
+        
+        while(!q.empty()) {
+            int n = q.size();
+            while(n--) {
+                NestedInteger nested = q.front();
+                q.pop();
+                if(nested.isInteger())
+                    sum += nested.getInteger() * depth;
+                else {
+                    for(auto nest : nested.getList())
+                        q.push(nest);
+                }
+            }
+            
+            depth++;
+        }
         
         return sum;
-    }
-    
-    void dfs(vector<NestedInteger>& list, int& sum, int depth) {
-        for(auto l : list) {
-            if(l.isInteger())
-                sum += l.getInteger() * depth;
-            else
-                dfs(l.getList(), sum, depth + 1);
-        }
     }
 };
