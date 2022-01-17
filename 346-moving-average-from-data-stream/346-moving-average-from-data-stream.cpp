@@ -14,7 +14,7 @@ public:
     
     double next(int val) {
         count = ((count + 1) > size) ? size : ++count;
-        int x = count;
+        
         int tail = (head + 1) % size;
         sum += val - list[tail];
         head = tail;
