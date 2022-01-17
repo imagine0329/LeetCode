@@ -1,23 +1,25 @@
 class MovingAverage {
 private:
-    int size, sum;
-    queue<int> q;
+    int size, sum, count, head;
+    vector<int> list;
     
 public:
     MovingAverage(int size) {
         this->size = size;
         sum = 0;
+        count = 0;
+        head = 0;
+        list = vector<int>(size, 0);
     }
     
     double next(int val) {
-        sum += val;
-        q.push(val);
-        if(q.size() > size) {
-            sum -= q.front();
-            q.pop();
-        }
-        
-        return (double)sum / q.size();
+        count = ((count + 1) > size) ? size : ++count;
+        int x = count;
+        int tail = (head + 1) % size;
+        sum += val - list[tail];
+        head = tail;
+        list[head] = val;
+        return (double)sum / count;
     }
 };
 
