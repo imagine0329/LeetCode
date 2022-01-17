@@ -1,25 +1,8 @@
 class Solution {
 public:
     bool isPowerOfThree(int n) {
-        string converted = convertBase(n);
-        
-        if(converted.front() == '1') {
-            string temp = converted.substr(1, converted.length()-1);
-            if(temp.size() == 0 || stoll(temp) == 0)
-                return true;
-        }
-        
-        return false;
-    }
-    
-    string convertBase(int n) {
-        string str;
-        
-        while(n) {
-            str = to_string(n % 3) + move(str);
-            n /= 3;
-        }
-        
-        return str;
+        double i = log10(n) / log10(3);
+        double mod = fmod(i, 1);
+        return mod == 0;
     }
 };
