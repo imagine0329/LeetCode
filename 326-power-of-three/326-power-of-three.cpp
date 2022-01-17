@@ -16,7 +16,7 @@ public:
         string str;
         
         while(n) {
-            str = to_string(n % 3) + str;
+            str = to_string(n % 3) + move(str);
             n /= 3;
         }
         
