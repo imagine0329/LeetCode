@@ -9,35 +9,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-bool compare(const pair<int, int>& a, const pair<int, int>& b) {
-    return a.first < b.first;
-}
-
 class Solution {
 public:
     vector<vector<int>> verticalOrder(TreeNode* root) {
-        vector<vector<int>> ret;
-        map<int, vector<pair<int, int>>> m;
+        map<int, vector<int>> m;
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 0});
         
-        dfs(root, 0, 0, m);
-        for(auto& n : m) {
-            vector<int> v;
-            sort(n.second.begin(), n.second.end(), compare);
-            for(auto& s : n.second) {
-                v.push_back(s.second);
+        while(!q.empty() && root) {
+            int n = q.size();
+            while(n--) {
+                root = q.front().first;
+                int col = q.front().second;
+                q.pop();
+                
+                m[col].push_back(root->val);
+                
+                if(root->left)
+                    q.push({root->left, col - 1});
+                if(root->right)
+                    q.push({root->right, col + 1});
             }
-            ret.push_back(v);
         }
         
-        return ret;
-    }
-    
-    void dfs(TreeNode* root, int col, int row, map<int, vector<pair<int, int>>>& m) {
-        if(root == nullptr)
-            return;
+        vector<vector<int>> ret;
+        for(auto n : m)
+            ret.push_back(n.second);
         
-        m[col].push_back({row, root->val});
-        dfs(root->left, col - 1, row + 1, m);
-        dfs(root->right, col + 1, row + 1, m);
+        return ret;
     }
 };
