@@ -1,7 +1,16 @@
 class Solution {
 public:
     void reverseString(vector<char>& s) {
-        for(int i = 0; i < s.size()/2; i++)
-            swap(s[i], s[s.size()-1-i]);
+        return helper(s, 0, s.size()-1);
+    }
+    
+    void helper(vector<char>& s, int left, int right) {
+        if(left >= right)
+            return;
+        
+        char temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+        helper(s, ++left, --right);
     }
 };
