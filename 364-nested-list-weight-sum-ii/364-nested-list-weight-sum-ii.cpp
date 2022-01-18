@@ -29,33 +29,31 @@
  */
 class Solution {
 private:
-    int getMaxDepth(vector<NestedInteger>& nestedList) {
-        int depth = 1;
-        for(auto n : nestedList) {
-            if(!n.isInteger())
-                depth = max(depth, getMaxDepth(n.getList()) + 1);
-        }
-        
-        return depth;
-    }
+    int sumOfElements;
+    int sumOfProducts;
     
-    int dfs(vector<NestedInteger>& nestedList, const int& max_depth, int depth) {
-        int sum = 0;
-        for(auto n : nestedList) {
-            if(n.isInteger())
-                sum += n.getInteger() * (max_depth - depth + 1);
-            else
-                sum += dfs(n.getList(), max_depth, depth + 1);
-        }
+    void dfs(vector<NestedInteger>& nestedList, int& max_depth, int depth) {
+        max_depth = max(max_depth, depth);
         
-        return sum;
+        for(auto n : nestedList) {
+            if(n.isInteger()) {
+                sumOfElements += n.getInteger();
+                sumOfProducts += n.getInteger() * depth;
+            }
+            else
+                dfs(n.getList(), max_depth, depth + 1);
+        }
     }
     
 public:
     int depthSumInverse(vector<NestedInteger>& nestedList) {
-        int max_depth = getMaxDepth(nestedList);
+        int max_depth = INT_MIN;
+        sumOfElements = 0;
+        sumOfProducts = 0;
         
-        return dfs(nestedList, max_depth, 1);
+        dfs(nestedList, max_depth, 1);
+        
+        return (max_depth + 1) * sumOfElements - sumOfProducts;
     }
     
 };
