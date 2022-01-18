@@ -39,23 +39,23 @@ private:
         return depth;
     }
     
-    void dfs(vector<NestedInteger>& nestedList, const int& max_depth, int& sum, int depth) {
+    int dfs(vector<NestedInteger>& nestedList, const int& max_depth, int depth) {
+        int sum = 0;
         for(auto n : nestedList) {
             if(n.isInteger())
                 sum += n.getInteger() * (max_depth - depth + 1);
             else
-                dfs(n.getList(), max_depth, sum, depth + 1);
+                sum += dfs(n.getList(), max_depth, depth + 1);
         }
+        
+        return sum;
     }
     
 public:
     int depthSumInverse(vector<NestedInteger>& nestedList) {
         int max_depth = getMaxDepth(nestedList);
-        int sum = 0;
         
-        dfs(nestedList, max_depth, sum, 1);
-        
-        return sum;
+        return dfs(nestedList, max_depth, 1);
     }
     
 };
