@@ -1,23 +1,16 @@
 class Solution {
 public:
     int firstUniqChar(string s) {
-        unordered_set<char> seen;
-        unordered_map<char, int> m;
+        vector<int> v(26, 0);
+        
+        for(auto c : s)
+            v[c - 'a']++;
         
         for(int i = 0; i < s.length(); i++) {
-            char c = s[i];
-            if(seen.find(c) != seen.end())
-                m.erase(c);
-            else {
-                seen.insert(c);
-                m[c] = i;
-            }
+            if(v[s[i] - 'a'] == 1)
+                return i;
         }
         
-        int idx = INT_MAX;
-        for(auto e : m)
-            idx = min(idx, e.second);
-        
-        return idx == INT_MAX ? -1 : idx;
+        return -1;
     }
 };
