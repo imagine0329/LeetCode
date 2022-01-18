@@ -9,8 +9,7 @@ public:
                 ans[u[1] + 1] -= u[2];
         }
         
-        for(int i = 1; i < length; i++)
-            ans[i] += ans[i - 1];
+        partial_sum(ans.begin(), ans.end(), ans.begin());
         
         return ans;
     }
