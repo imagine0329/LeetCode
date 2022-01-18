@@ -1,25 +1,32 @@
 class HitCounter {
 private:
-    queue<int> hits;
+    queue<pair<int, int>> hits;
+    int total;
     
     void removeStamp(int timestamp) {
-        while(!hits.empty() && hits.front() <= timestamp - 300)
+        while(!hits.empty() && hits.front().first <= timestamp - 300) {
+            total -= hits.front().second;
             hits.pop();
+        }
     }
     
 public:
     HitCounter() {
-        
+        this->total = 0;
     }
     
     void hit(int timestamp) {
-        hits.push(timestamp);
-        removeStamp(timestamp);
+        if(hits.empty() || hits.back().first != timestamp)
+            hits.push({timestamp, 1});
+        else
+            hits.back().second++;
+        
+        this->total++;
     }
     
     int getHits(int timestamp) {
         removeStamp(timestamp);
-        return hits.size();
+        return this->total;
     }
 };
 
