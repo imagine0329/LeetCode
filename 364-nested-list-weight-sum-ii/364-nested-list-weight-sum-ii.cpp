@@ -28,30 +28,35 @@
  * };
  */
 class Solution {
-private:
-    int sumOfElements;
-    int sumOfProducts;
-    
-    void dfs(vector<NestedInteger>& nestedList, int& max_depth, int depth) {
-        max_depth = max(max_depth, depth);
-        
-        for(auto n : nestedList) {
-            if(n.isInteger()) {
-                sumOfElements += n.getInteger();
-                sumOfProducts += n.getInteger() * depth;
-            }
-            else
-                dfs(n.getList(), max_depth, depth + 1);
-        }
-    }
-    
 public:
     int depthSumInverse(vector<NestedInteger>& nestedList) {
         int max_depth = INT_MIN;
-        sumOfElements = 0;
-        sumOfProducts = 0;
+        int sumOfElements = 0, sumOfProducts = 0;
+        queue<NestedInteger> q;
+        int depth = 1;
         
-        dfs(nestedList, max_depth, 1);
+        for(auto l : nestedList)
+            q.push(l);
+        
+        while(!q.empty()) {
+            int n = q.size();
+            while(n--) {
+                NestedInteger nest = q.front();
+                q.pop();
+                if(nest.isInteger()) {
+                    sumOfElements += nest.getInteger();
+                    sumOfProducts += nest.getInteger() * depth;
+                }
+                else {
+                    for(auto l : nest.getList())
+                        q.push(l);
+                }
+            }
+            
+            max_depth = max(max_depth, depth);
+            depth++;
+        }
+        
         
         return (max_depth + 1) * sumOfElements - sumOfProducts;
     }
