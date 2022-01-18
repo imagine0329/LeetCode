@@ -13,9 +13,9 @@ public:
             }
             
             if(str == "")
-                str = to_string(i);
-            
-            ans.push_back(str);
+                ans.push_back(to_string(i));
+            else
+                ans.push_back(str);
         }
         
         return ans;
