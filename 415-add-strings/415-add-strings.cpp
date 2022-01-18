@@ -12,8 +12,11 @@ public:
             
             sum += carry;
             carry = sum / 10;
-            ret = to_string(sum % 10) + ret;
+            //ret = to_string(sum % 10) + ret;
+            ret += to_string(sum % 10);
         }
+        
+        reverse(ret.begin(), ret.end());
         
         return ret;
     }
