@@ -1,7 +1,7 @@
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        unordered_set<int> s;
+        vector<int> v;
         int p1 = 0, p2 = 0;
         
         sort(nums1.begin(), nums1.end());
@@ -9,7 +9,8 @@ public:
         
         while(p1 < nums1.size() && p2 < nums2.size()) {
             if(nums1[p1] == nums2[p2]) {
-                s.insert(nums1[p1]);
+                if(v.empty() || v.back() != nums1[p1])
+                    v.push_back(nums1[p1]);
                 p1++;
                 p2++;
             }
@@ -19,6 +20,6 @@ public:
                 p2++;
         }
         
-        return vector<int>(s.begin(), s.end());
+        return v;
     }
 };
