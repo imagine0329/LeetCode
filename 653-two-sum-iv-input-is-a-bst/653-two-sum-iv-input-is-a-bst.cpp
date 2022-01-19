@@ -12,23 +12,30 @@
 class Solution {
 public:
     bool findTarget(TreeNode* root, int k) {
-        unordered_set<int> s;
-        queue<TreeNode*> q;
+        vector<int> v;
+        inorder(root, v);
         
-        q.push(root);
-        while(!q.empty()) {
-            root = q.front();
-            q.pop();
-            
-            if(s.find(k - root->val) != s.end())
+        int left = 0, right = v.size() - 1;
+        while(left < right) {
+            int val = v[left] + v[right];
+            if(val == k)
                 return true;
-            s.insert(root->val);
-            if(root->left)
-                q.push(root->left);
-            if(root->right)
-                q.push(root->right);
+            
+            if(val < k)
+                left++;
+            else
+                right--;
         }
         
         return false;
+    }
+    
+    void inorder(TreeNode* root, vector<int>& v) {
+        if(root == nullptr)
+            return;
+        
+        inorder(root->left, v);
+        v.push_back(root->val);
+        inorder(root->right, v);
     }
 };
