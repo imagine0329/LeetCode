@@ -13,17 +13,22 @@ class Solution {
 public:
     bool findTarget(TreeNode* root, int k) {
         unordered_set<int> s;
-        return traverse(root, k, s);
-    }
-    
-    bool traverse(TreeNode* root, int k, unordered_set<int>& s) {
-        if(root == nullptr)
-            return false;
+        queue<TreeNode*> q;
         
-        if(s.find(k - root->val) != s.end())
-            return true;
+        q.push(root);
+        while(!q.empty()) {
+            root = q.front();
+            q.pop();
+            
+            if(s.find(k - root->val) != s.end())
+                return true;
+            s.insert(root->val);
+            if(root->left)
+                q.push(root->left);
+            if(root->right)
+                q.push(root->right);
+        }
         
-        s.insert(root->val);
-        return traverse(root->left, k, s) || traverse(root->right, k, s);
+        return false;
     }
 };
