@@ -10,17 +10,14 @@
 class Solution {
 public:
     TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
-        TreeNode* successor = nullptr;
+        if(root == nullptr)
+            return nullptr;
         
-        while(root) {
-            if(root->val <= p->val)
-                root = root->right;
-            else {
-                successor = root;
-                root = root->left;
-            }
+        if(root->val <= p->val)
+            return inorderSuccessor(root->right, p);
+        else {
+            auto node = inorderSuccessor(root->left, p);
+            return node == nullptr ? root : node;
         }
-        
-        return successor;
     }
 };
