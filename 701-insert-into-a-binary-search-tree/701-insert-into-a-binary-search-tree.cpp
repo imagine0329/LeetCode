@@ -12,9 +12,6 @@
 class Solution {
 public:
     TreeNode* insertIntoBST(TreeNode* root, int val) {
-        if(root == nullptr)
-            return new TreeNode(val);
-        
         TreeNode* node = root;
         while(node) {
             if(node->val > val) {
@@ -35,6 +32,6 @@ public:
             }
         }
         
-        return root;
+        return new TreeNode(val);
     }
 };
