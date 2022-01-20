@@ -15,9 +15,9 @@ public:
         if(root == nullptr || root->val == val)
             return root;
         
-        if(root->val > val)
-            return searchBST(root->left, val);
-        else
-            return searchBST(root->right, val);
+        while(root && root->val != val)
+            root = root->val > val ? root->left : root->right;
+        
+        return root;
     }
 };
