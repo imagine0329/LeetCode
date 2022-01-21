@@ -1,10 +1,8 @@
 class Solution {
 public:
     string mostCommonWord(string paragraph, vector<string>& banned) {
-        unordered_set<string> s;
+        unordered_set<string> s(banned.begin(), banned.end());
         unordered_map<string, int> m;
-        if(banned.size() > 0)
-            s = unordered_set<string>(banned.begin(), banned.end());
         
         int i = 0;
         
