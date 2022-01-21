@@ -10,22 +10,26 @@
  * };
  */
 class Solution {
-private:
-    TreeNode* curr;
-    
 public:
     TreeNode* increasingBST(TreeNode* root) {
-        return inorder(root, nullptr);
-    }
-    
-    TreeNode* inorder(TreeNode* root, TreeNode* successor) {
-        if(root == nullptr)
-            return successor;
+        TreeNode* head = new TreeNode(0);
+        TreeNode* prev = head;
+        stack<TreeNode*> s;
         
-        TreeNode* res = inorder(root->left, root);
-        root->left = nullptr;
-        root->right = inorder(root->right, successor);
+        while(root || !s.empty()) {
+            while(root) {
+                s.push(root);
+                root = root->left;
+            }
+            
+            root = s.top();
+            s.pop();
+            prev->right = root;
+            prev = root;
+            root->left = nullptr;
+            root = root->right;
+        }
         
-        return res;
+        return head->right;
     }
 };
