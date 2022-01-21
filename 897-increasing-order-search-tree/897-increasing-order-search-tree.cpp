@@ -15,20 +15,17 @@ private:
     
 public:
     TreeNode* increasingBST(TreeNode* root) {
-        TreeNode* ans = new TreeNode(0);
-        curr = ans;
-        inorder(root);
-        return ans->right;
+        return inorder(root, nullptr);
     }
     
-    void inorder(TreeNode* root) {
+    TreeNode* inorder(TreeNode* root, TreeNode* successor) {
         if(root == nullptr)
-            return;
+            return successor;
         
-        inorder(root->left);
+        TreeNode* res = inorder(root->left, root);
         root->left = nullptr;
-        curr->right = root;
-        curr = root;
-        inorder(root->right);
+        root->right = inorder(root->right, successor);
+        
+        return res;
     }
 };
