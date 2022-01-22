@@ -3,12 +3,9 @@ public:
     string removeDuplicates(string s) {
         deque<char> dq;
         for(int i = 0; i < s.length(); i++) {
-            while(!dq.empty() && s[i] == dq.back()){
+            if(!dq.empty() && s[i] == dq.back())
                 dq.pop_back();
-                i++;
-            }
-            
-            if(i < s.length())
+            else
                 dq.push_back(s[i]);
         }
         
