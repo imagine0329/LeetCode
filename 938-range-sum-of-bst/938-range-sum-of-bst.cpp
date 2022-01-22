@@ -13,20 +13,20 @@ class Solution {
 public:
     int rangeSumBST(TreeNode* root, int low, int high) {
         int sum = 0;
-        traverse(root, low, high, sum);
+        
+        stack<TreeNode*> s;
+        s.push(root);
+        while(!s.empty()) {
+            root = s.top();
+            s.pop();
+            if(root->val >= low && root->val <= high)
+                sum += root->val;
+            if(root->left && root->val > low)
+                s.push(root->left);
+            if(root->right && root->val < high)
+                s.push(root->right);
+        }
+        
         return sum;
-    }
-    
-    void traverse(TreeNode* root, int low, int high, int& sum) {
-        if(root == nullptr)
-            return;
-        
-        if(root->val >= low && root->val <= high)
-            sum += root->val;
-        
-        if(root->val > low)
-            traverse(root->left, low, high, sum);
-        if(root->val < high)
-            traverse(root->right, low, high, sum);
     }
 };
