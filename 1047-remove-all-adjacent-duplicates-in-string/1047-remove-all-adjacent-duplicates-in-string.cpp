@@ -11,7 +11,7 @@ public:
         
         string ans = "";
         int n = dq.size();
-        for(int i = 0; i < n; i++) {
+        while(n--) {
             ans += dq.front();
             dq.pop_front();
         }
