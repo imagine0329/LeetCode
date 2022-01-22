@@ -1,32 +1,34 @@
 class Solution {
 public:
     vector<int> sortArray(vector<int>& nums) {
-        mergeSort(nums);
+        heapSort(nums);
         return nums;
     }
     
 private:
-    void mergeSort(vector<int>& nums) {
-        int n = nums.size();
-        for(int size = 1; size < n; size *= 2) {
-            for(int left = 0; left < n - size; left += 2 * size) {
-                int mid = left + size - 1;
-                int right = min(left + (2 * size) - 1, n - 1);
-                merge(nums, left, mid, right);
-            }
+    void heapSort(vector<int>& nums) {
+        int size = nums.size();
+        for(int i = size / 2 - 1; i >= 0; i--)
+            heapify(nums, size, i);
+        
+        for(int i = size - 1; i > 0; i--) {
+            swap(nums[0], nums[i]);
+            heapify(nums, i, 0);
         }
     }
     
-    void merge(vector<int>& nums, int left, int mid, int right) {
-        vector<int> temp(right - left + 1);
-        int i = left, j = mid + 1, k = 0;
-        while(i <= mid || j <= right) {
-            if(i > mid || (j <= right && nums[i] > nums[j]))
-                temp[k++] = nums[j++];
-            else
-                temp[k++] = nums[i++];
-        }
+    void heapify(vector<int>& nums, int size, int i) {
+        int largest = i;
+        int l_child = 2 * i + 1, r_child = 2 * i + 2;
         
-        copy(temp.begin(), temp.end(), nums.begin() + left);
+        if(l_child < size && nums[l_child] > nums[largest])
+            largest = l_child;
+        if(r_child < size && nums[r_child] > nums[largest])
+            largest = r_child;
+        
+        if(largest != i) {
+            swap(nums[i], nums[largest]);
+            heapify(nums, size, largest);
+        }
     }
 };
