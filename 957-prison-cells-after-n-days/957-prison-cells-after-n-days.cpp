@@ -1,21 +1,9 @@
 class Solution {
 private:
-    int cellToBitmap(vector<int>& cells) {
-        int ret = 0;
-        for(auto c : cells)
-            ret = (ret << 1) + c;
-        
-        return ret;
-    }
-    
-    vector<int> nextDay(vector<int>& cells) {
-        vector<int> temp(cells.size());
-        temp[0] = 0;
-        temp[cells.size()-1] = 0;
-        for(int i = 1; i < cells.size()-1; i++)
-            temp[i] = !(cells[i-1] ^ cells[i+1]);
-        
-        return temp;
+    int nextDay(int state) {
+        state = ~(state << 1) ^ (state >> 1);
+        state &= 0x7e;
+        return state;
     }
     
 public:
@@ -23,9 +11,14 @@ public:
         unordered_map<int, int> seen;
         bool isFastForwarded = false;
         
+        int state = 0;
+        for(auto c : cells) {
+            state <<= 1;
+            state |= c;
+        }
+        
         while(n > 0) {
             if(!isFastForwarded) {
-                int state = cellToBitmap(cells);
                 if(seen.find(state) != seen.end()) {
                     n %= seen[state] - n;
                     isFastForwarded = true;
@@ -36,10 +29,16 @@ public:
             
             if(n > 0) {
                 n--;
-                cells = nextDay(cells);
+                state = nextDay(state);
             }
         }
         
-        return cells;
+        vector<int> ret(cells.size());
+        for(int i = cells.size() - 1; i >= 0; i--) {
+            ret[i] = state & 1;
+            state >>= 1;
+        }
+        
+        return ret;
     }
 };
