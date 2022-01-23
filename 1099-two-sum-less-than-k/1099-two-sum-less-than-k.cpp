@@ -1,16 +1,20 @@
 class Solution {
 public:
     int twoSumLessThanK(vector<int>& nums, int k) {
-        sort(nums.begin(), nums.end());
-        int left = 0, right = nums.size() - 1;
+        vector<int> count(1001, 0);
+        for(auto n : nums)
+            count[n]++;
+        
         int maxSum = -1;
-        while(left < right) {
-            int sum = nums[left] + nums[right];
-            if(sum < k) {
-                maxSum = max(maxSum, sum);
-                left++;
+        int lo = 1, hi = 1000;
+        while(lo <= hi) {
+            if(lo + hi >= k || count[hi] == 0)
+                hi--;
+            else {
+                if(count[lo] > (lo < hi ? 0 : 1))
+                    maxSum = max(maxSum, lo + hi);
+                lo++;
             }
-            else right--;
         }
         
         return maxSum;
