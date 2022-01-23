@@ -30,11 +30,11 @@ public:
         
         if(rank[x] > rank[y]) {
             parent[y] = x;
-            rank[x]++;
+            rank[x] += rank[y];
         }
         else {
             parent[x] = y;
-            rank[y]++;
+            rank[y] += rank[x];
         }
         
         count--;
