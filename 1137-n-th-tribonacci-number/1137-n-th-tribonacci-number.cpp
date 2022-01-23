@@ -1,18 +1,15 @@
 class Solution {
 public:
     int tribonacci(int n) {
-        vector<int> memo(n + 1, 0);
-        return getTribonacci(n, memo);
-    }
-    
-    int getTribonacci(int n, vector<int>& memo) {
         if(n < 3)
             return n == 0 ? 0 : 1;
         
-        if(memo[n] != 0)
-            return memo[n];
+        vector<int> dp(n + 1, 0);
         
-        memo[n] = getTribonacci(n-1, memo) + getTribonacci(n-2, memo) + getTribonacci(n-3, memo);
-        return memo[n];
+        dp[0] = 0, dp[1] = 1, dp[2] = 1;
+        for(int i = 3; i <= n; i++)
+            dp[i] = dp[i-1] + dp[i-2] + dp[i-3];
+        
+        return dp[n];
     }
 };
