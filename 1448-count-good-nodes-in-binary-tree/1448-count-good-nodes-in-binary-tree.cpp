@@ -12,16 +12,27 @@
 class Solution {
 public:
     int goodNodes(TreeNode* root) {
-        return traverse(root, INT_MIN);
-    }
-    
-    int traverse(TreeNode* root, int maximum) {
         if(root == nullptr)
             return 0;
         
-        int left = traverse(root->left, max(maximum, root->val));
-        int right = traverse(root->right, max(maximum, root->val));
+        int count = 0;
+        stack<pair<TreeNode*, int>> s;
+        s.push({root, INT_MIN});
         
-        return root->val >= maximum ? left + right + 1 : left + right;
+        while(!s.empty()) {
+            root = s.top().first;
+            int maximum = s.top().second;
+            s.pop();
+            
+            if(root->val >= maximum)
+                count++;
+            
+            if(root->left)
+                s.push({root->left, max(root->val, maximum)});
+            if(root->right)
+                s.push({root->right, max(root->val, maximum)});
+        }
+        
+        return count;
     }
 };
