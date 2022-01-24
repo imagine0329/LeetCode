@@ -16,21 +16,21 @@ public:
             return 0;
         
         int count = 0;
-        stack<pair<TreeNode*, int>> s;
-        s.push({root, INT_MIN});
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, INT_MIN});
         
-        while(!s.empty()) {
-            root = s.top().first;
-            int maximum = s.top().second;
-            s.pop();
+        while(!q.empty()) {
+            root = q.front().first;
+            int maximum = q.front().second;
+            q.pop();
             
             if(root->val >= maximum)
                 count++;
             
             if(root->left)
-                s.push({root->left, max(root->val, maximum)});
+                q.push({root->left, max(root->val, maximum)});
             if(root->right)
-                s.push({root->right, max(root->val, maximum)});
+                q.push({root->right, max(root->val, maximum)});
         }
         
         return count;
