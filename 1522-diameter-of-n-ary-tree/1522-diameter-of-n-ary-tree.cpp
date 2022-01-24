@@ -30,20 +30,22 @@ public:
         if(root == nullptr)
             return 0;
         
-        vector<int> heights;
+        int first = 0, second = 0;
         for(auto node : root->children) {
             int ret = dfs(node, longest);
-            heights.push_back(ret);
+            if(ret > first) {
+                second = first;
+                first = ret;
+            }
+            else if(ret > second)
+                second = ret;
         }
         
-        sort(heights.begin(), heights.end(), [](int& a, int& b) {
-            return a > b;
-        });
-        
-        int first = heights.size() > 0 ? heights[0] : 0;
-        int second = heights.size() > 1 ? heights[1] : 0;
         longest = max(longest, first + second);
         
         return max(first, second) + 1;
     }
 };
+
+
+
