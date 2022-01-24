@@ -1,14 +1,15 @@
 class Solution {
 public:
     int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
-        sort(boxTypes.begin(), boxTypes.end(), [](vector<int>& a, vector<int>& b) {
-            return a[1] > b[1];
-        });
+        priority_queue<vector<int>, vector<vector<int>>, Comparator> q;
+        for(auto b : boxTypes)
+            q.push(b);
         
         int sum = 0;
-        for(auto b : boxTypes) {
-            int num = min(b[0], truckSize);
-            sum += num * b[1];
+        while(!q.empty()) {
+            int num = min(q.top().front(), truckSize);
+            sum += num * q.top().back();
+            q.pop();
             truckSize -= num;
             if(truckSize == 0)
                 break;
@@ -16,4 +17,10 @@ public:
         
         return sum;
     }
+    
+    struct Comparator {
+        bool operator()(vector<int> const& a, vector<int> const& b) {
+            return a[1] < b[1];
+        }
+    };
 };
