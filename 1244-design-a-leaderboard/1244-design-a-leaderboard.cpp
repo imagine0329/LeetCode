@@ -1,6 +1,7 @@
 class Leaderboard {
 private:
-    unordered_map<int, int> board;
+    unordered_map<int, int> scores;
+    set<pair<int, int>, greater<pair<int, int>>> sortedScores;
     
 public:
     Leaderboard() {
@@ -8,28 +9,25 @@ public:
     }
     
     void addScore(int playerId, int score) {
-        board[playerId] += score;
+        sortedScores.erase({scores[playerId], playerId});
+        scores[playerId] += score;
+        sortedScores.insert({scores[playerId], playerId});
     }
     
     int top(int K) {
-        priority_queue<int, vector<int>, greater<int>> q;
-        for(auto s : board) {
-            q.push(s.second);
-            if(q.size() > K)
-                q.pop();
-        }
-        
         int sum = 0;
-        while(!q.empty()){
-            sum += q.top();
-            q.pop();
+        for(auto score : sortedScores) {
+            sum += score.first;
+            if(--K == 0)
+                break;
         }
         
         return sum;
     }
     
     void reset(int playerId) {
-        board[playerId] = 0;
+        sortedScores.erase({scores[playerId], playerId});
+        scores[playerId] = 0;
     }
 };
 
