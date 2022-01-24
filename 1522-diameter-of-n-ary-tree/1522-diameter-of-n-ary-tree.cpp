@@ -22,17 +22,17 @@ class Solution {
 public:
     int diameter(Node* root) {
         int longest = 0;
-        dfs(root, longest);
+        dfs(root, longest, 0);
         return longest;
     }
     
-    int dfs(Node* root, int& longest) {
+    int dfs(Node* root, int& longest, int depth) {
         if(root == nullptr)
-            return 0;
+            return depth;
         
-        int first = 0, second = 0;
+        int first = depth, second = 0;
         for(auto node : root->children) {
-            int ret = dfs(node, longest);
+            int ret = dfs(node, longest, depth + 1);
             if(ret > first) {
                 second = first;
                 first = ret;
@@ -41,9 +41,9 @@ public:
                 second = ret;
         }
         
-        longest = max(longest, first + second);
+        longest = max(longest, first + second - (2 * depth));
         
-        return max(first, second) + 1;
+        return first;
     }
 };
 
