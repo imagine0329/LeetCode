@@ -1,7 +1,7 @@
 class FirstUnique {
 private:
-    unordered_map<int, bool> isUnique;
-    queue<int> q;
+    list<int> l;
+    unordered_map<int, list<int>::iterator> m;
     
 public:
     FirstUnique(vector<int>& nums) {
@@ -10,22 +10,19 @@ public:
     }
     
     int showFirstUnique() {
-        while(!q.empty() && !isUnique[q.front()])
-            q.pop();
-        
-        if(!q.empty())
-            return q.front();
-        
-        return -1;
+        return l.empty() ? -1 : l.front();
     }
     
     void add(int value) {
-        if(isUnique.find(value) == isUnique.end()) {
-            isUnique[value] = true;
-            q.push(value);
+        auto it = m.find(value);
+        if(it == m.end()) {
+            l.push_back(value);
+            m[value] = --l.end();
         }
-        else
-            isUnique[value] = false;
+        else if(it->second != l.end()) {
+            l.erase(it->second);
+            m[value] = l.end();
+        }
     }
 };
 
