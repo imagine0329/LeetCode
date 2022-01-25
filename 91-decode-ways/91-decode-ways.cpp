@@ -1,24 +1,18 @@
 class Solution {
 public:
     int numDecodings(string s) {
-        unordered_map<int, int> memo;
-        return recursive(s, 0, memo);
-    }
-    
-    int recursive(string s, int i, unordered_map<int, int>& memo) {
-        if(memo.find(i) != memo.end())
-            return memo[i];
-        if(i == s.length())
-            return 1;
-        if(s[i] == '0')
-            return 0;
-        if(i == s.length() - 1)
-            return 1;
+        vector<int> dp(s.length() + 1, 0);
+        dp[0] = 1;
+        dp[1] = s[0] == '0' ? 0 : 1;
         
-        memo[i] = recursive(s, i + 1, memo);
-        if(stoi(s.substr(i, 2)) <= 26)
-            memo[i] += recursive(s, i + 2, memo);
+        for(int i = 2; i <= s.length(); i++) {
+            if(s[i - 1] != '0')
+                dp[i] += dp[i - 1];
+            int n = stoi(s.substr(i - 2, 2));
+            if(n >= 10 && n <= 26)
+                dp[i] += dp[i - 2];
+        }
         
-        return memo[i];
+        return dp[s.length()];
     }
 };
