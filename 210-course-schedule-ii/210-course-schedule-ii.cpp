@@ -2,34 +2,33 @@ class Solution {
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
         unordered_map<int, vector<int>> m;
-        vector<int> indegree(numCourses, 0);
-        queue<int> q;
+        vector<int> visited(numCourses, -1);
         vector<int> ans;
         
-        for(auto p : prerequisites) {
-            m[p[1]].push_back(p[0]);
-            indegree[p[0]]++;
-        }
+        for(auto pre : prerequisites)
+            m[pre[1]].push_back(pre[0]);
         
-        for(int i = 0; i < indegree.size(); i++) {
-            if(indegree[i] == 0)
-                q.push(i);
-        }
-        
-        while(!q.empty()) {
-            auto n = q.front();
-            q.pop();
-            ans.push_back(n);
-            
-            for(auto v : m[n]) {
-                if(--indegree[v] == 0)
-                    q.push(v);
+        for(int i = 0; i < numCourses; i++) {
+            if(visited[i] == -1) {
+                if(dfs(m, visited, ans, i) == false)
+                    return {};
             }
         }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+    
+    bool dfs(unordered_map<int, vector<int>>& m, vector<int>& visited, vector<int>& ans, int v) {
+        visited[v] = 0;
         
-        if(ans.size() == numCourses)
-            return ans;
-        
-        return vector<int>();
+        for(auto u : m[v]) {
+            if(visited[u] == 0)
+                return false;
+            if(visited[u] == -1 && dfs(m, visited, ans, u) == false)
+                return false;
+        }
+        ans.push_back(v);
+        visited[v] = 1;
+        return true;
     }
 };
