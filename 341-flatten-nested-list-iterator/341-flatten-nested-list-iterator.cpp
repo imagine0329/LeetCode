@@ -1,4 +1,4 @@
-/**
+/** 
  * // This is the interface that allows for creating nested lists.
  * // You should not implement it, or speculate about its implementation
  * class NestedInteger {
@@ -18,30 +18,33 @@
 
 class NestedIterator {
 private:
-    vector<int> integers;
-    int position;
+    stack<NestedInteger> s;
     
 public:
     NestedIterator(vector<NestedInteger> &nestedList) {
-        position = 0;
-        flattenList(nestedList);
+        for(int i = nestedList.size() - 1; i >= 0; i--)
+            s.push(nestedList[i]);
     }
     
-    void flattenList(vector<NestedInteger>& nestedList) {
-        for(auto nested : nestedList) {
-            if(nested.isInteger())
-                integers.push_back(nested.getInteger());
-            else
-                flattenList(nested.getList());
+    void makeStackTopInteger() {
+        while(!s.empty() && !s.top().isInteger()) {
+            vector<NestedInteger> nested = s.top().getList();
+            s.pop();
+            for(int i = nested.size() - 1; i >= 0; i--)
+                s.push(nested[i]);
         }
     }
     
     int next() {
-        return integers[position++];
+        makeStackTopInteger();
+        int n = s.top().getInteger();
+        s.pop();
+        return n;
     }
     
     bool hasNext() {
-        return position < integers.size();
+        makeStackTopInteger();
+        return !s.empty();
     }
 };
 
