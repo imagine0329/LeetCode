@@ -11,24 +11,46 @@
 class Solution {
 public:
     ListNode* sortList(ListNode* head) {
-        multimap<int, ListNode*> m;
-        ListNode* node = head;
+        if(!head || !head->next)
+            return head;
         
-        while(node) {
-            m.insert({node->val, node});
-            node = node->next;
+        ListNode* mid = getMid(head);
+        ListNode* left = sortList(head);
+        ListNode* right = sortList(mid);
+        return merge(left, right);
+    }
+    
+    ListNode* merge(ListNode* l1, ListNode* l2) {
+        ListNode dummy(0);
+        ListNode* ptr = &dummy;
+        while(l1 && l2) {
+            if(l1->val < l2->val) {
+                ptr->next = l1;
+                l1 = l1->next;
+            }
+            else {
+                ptr->next = l2;
+                l2 = l2->next;
+            }
+            
+            ptr = ptr->next;
         }
         
-        ListNode* prev = nullptr;
-        node = nullptr;
-        for(auto n : m) {
-            if(prev) prev->next = n.second;
-            if(!node) node = n.second;
-            prev = n.second;
+        if(l1) ptr->next = l1;
+        else ptr->next = l2;
+        
+        return dummy.next;
+    }
+    
+    ListNode* getMid(ListNode* head) {
+        ListNode *slow = nullptr, *fast = head;
+        while(fast && fast->next) {
+            slow = slow ? slow->next : head;
+            fast = fast->next->next;
         }
+        ListNode* mid = slow->next;
+        slow->next = nullptr;
         
-        if(prev) prev->next = nullptr;
-        
-        return node;
+        return mid;
     }
 };
