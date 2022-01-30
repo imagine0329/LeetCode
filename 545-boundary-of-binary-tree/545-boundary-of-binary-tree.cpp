@@ -13,25 +13,47 @@ class Solution {
 public:
     vector<int> boundaryOfBinaryTree(TreeNode* root) {
         if(!root) return {};
-        
         vector<int> ans;
         
-        ans.push_back(root->val);
-        dfs(root->left, true, false, ans);
-        dfs(root->right, false, true, ans);
+        if(root->left || root->right)
+            ans.push_back(root->val);
+        
+        TreeNode* node = root->left;
+        while(node) {
+            if(node->left || node->right)
+                ans.push_back(node->val);
+            
+            if(node->left) node = node->left;
+            else node = node->right;
+        }
+        
+        addLeaves(root, ans);
+        
+        stack<TreeNode*> s;
+        node = root->right;
+        while(node) {
+            if(node->left || node->right)
+                s.push(node);
+            
+            if(node->right) node = node->right;
+            else node = node->left;
+        }
+        
+        while(!s.empty()) {
+            ans.push_back(s.top()->val);
+            s.pop();
+        }
+        
         return ans;
     }
     
-    void dfs(TreeNode* root, bool left, bool right, vector<int>& ans) {
+    void addLeaves(TreeNode* root, vector<int>& ans) {
         if(!root) return;
         
-        if(left || (!left && !right && !root->left && !root->right))
+        if(!root->left && !root->right)
             ans.push_back(root->val);
         
-        dfs(root->left, left, right && !root->right, ans);
-        dfs(root->right, left && !root->left, right, ans);
-        
-        if(right)
-            ans.push_back(root->val);
+        addLeaves(root->left, ans);
+        addLeaves(root->right, ans);
     }
 };
