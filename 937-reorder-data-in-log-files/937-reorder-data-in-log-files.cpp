@@ -1,22 +1,30 @@
-bool comparator(const string a, const string b) {
-    int i = a.find(' ') + 1, j = b.find(' ') + 1;
-
-    if(!isdigit(a[i]) && !isdigit(b[j])) {
-        if(a.substr(i) == b.substr(j)) 
-            return a.substr(0, i-1) < b.substr(0, j-1);
-        else 
-            return a.substr(i) < b.substr(j);
-    }
-    else {
-        if(!isdigit(a[i])) return true;
-        else return false;
-    }
+bool compare(string &a, string &b) {
+    int i = a.find(' '), j = b.find(' ');
+    
+    if(a.substr(i + 1) == b.substr(j + 1))
+        return a.substr(0, i) < b.substr(0, j);
+    else
+        return a.substr(i + 1) < b.substr(j + 1);
 }
 
 class Solution {
 public:
     vector<string> reorderLogFiles(vector<string>& logs) {
-        stable_sort(logs.begin(), logs.end(), comparator);
-        return logs;
+        vector<string> letters, digits;
+        
+        for(auto s : logs) {
+            int i = s.find(' ');
+            if(!isdigit(s[i + 1]))
+                letters.push_back(s);
+            else
+                digits.push_back(s);
+        }
+        
+        sort(letters.begin(), letters.end(), compare);
+        
+        for(auto s : digits)
+            letters.push_back(s);
+        
+        return letters;
     }
 };
