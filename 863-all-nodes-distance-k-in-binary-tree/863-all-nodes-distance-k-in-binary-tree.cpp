@@ -24,10 +24,11 @@ public:
                 visited.insert(u);
                 if(dist == k)
                     ans.push_back(u);
-                
-                for(auto v : graph[u]) {
-                    if(visited.find(v) == visited.end())
-                        q.push(v);
+                else {
+                    for(auto v : graph[u]) {
+                        if(visited.find(v) == visited.end())
+                            q.push(v);
+                    }
                 }
             }
             dist++;
