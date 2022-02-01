@@ -1,5 +1,6 @@
 class Trie {
 private:
+    vector<string> words;
     Trie* next[26] = {nullptr};
     bool isEnd = false;
     
@@ -14,37 +15,20 @@ public:
             if(node->next[c - 'a'] == nullptr)
                 node->next[c - 'a'] = new Trie();
             node = node->next[c - 'a'];
+            node->words.push_back(s);
         }
         node->isEnd = true;
     }
     
     vector<string> search(string s) {
         Trie* node = this;
-        vector<string> result;
-        
         for(auto c : s) {
             if(node->next[c - 'a'] == nullptr)
-                return result;
+                return {};
             node = node->next[c - 'a'];
         }
         
-        dfs(node, s, result);
-        return result;
-    }
-    
-    void dfs(Trie* node, string word, vector<string>& result) {
-        if(result.size() == 3)
-            return;
-        if(node->isEnd)
-            result.push_back(word);
-        
-        for(int i = 0; i < 26; i++) {
-            if(node->next[i]) {
-                word += i + 'a';
-                dfs(node->next[i], word, result);
-                word.pop_back();
-            }
-        }
+        return node->words;
     }
 };
 
@@ -53,6 +37,7 @@ public:
     vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
         vector<vector<string>> ans(searchWord.length());
         
+        sort(products.begin(), products.end());
         Trie* trie = new Trie();
         for(int i = 0; i < products.size(); i++)
             trie->insert(products[i]);
