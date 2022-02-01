@@ -7,12 +7,15 @@ public:
         for(int i = 1; i <= m; i++) {
             if(n % i == 0) {
                 factors.push_back(i);
-                if(i * i != n)
-                    factors.push_back(n / i);
+                --k;
+                if(k == 0)
+                    return i;
             }
         }
         
-        sort(factors.begin(), factors.end());
-        return factors.size() < k ? -1 : factors[k - 1];
+        if(m * m == n)
+            k++;
+        
+        return factors.size() < k ? -1 : n / factors[factors.size() - k];
     }
 };
