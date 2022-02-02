@@ -1,12 +1,7 @@
 class Solution {
 public:
     int uniquePaths(int m, int n) {
-        vector<vector<int>> grid(m, vector<int>(n, 0));
-        
-        for(int row = 0; row < m; row++)
-            grid[row][0] = 1;
-        for(int col = 0; col < n; col++)
-            grid[0][col] = 1;
+        vector<vector<int>> grid(m, vector<int>(n, 1));
         
         for(int row = 1; row < m; row++) {
             for(int col = 1; col < n; col++)
