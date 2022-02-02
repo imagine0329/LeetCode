@@ -2,7 +2,6 @@ class Solution {
 public:
     void solve(vector<vector<char>>& board) {
         int m = board.size(), n = board[0].size();
-        
         for(int i = 0; i < m; i++) {
             if(board[i][0] == 'O')
                 dfs(board, i, 0);
@@ -17,24 +16,25 @@ public:
                 dfs(board, m-1, i);
         }
         
-        for(int i = 0; i < m; i++) {
-            for(int j = 0; j < n; j++) {
-                if(board[i][j] == '#')
-                    board[i][j] = 'O';
-                else if(board[i][j] == 'O')
-                    board[i][j] = 'X';
+        for(int row = 0; row < m; row++) {
+            for(int col = 0; col < n; col++) {
+                if(board[row][col] == '#')
+                    board[row][col] = 'O';
+                else if(board[row][col] == 'O')
+                    board[row][col] = 'X';
             }
         }
     }
     
     void dfs(vector<vector<char>>& board, int row, int col) {
-        if(row < 0 || row >= board.size() || col < 0 || col >= board[0].size() || board[row][col] != 'O')
-            return;
-        
+        int m = board.size(), n = board[0].size();
         board[row][col] = '#';
         
-        vector<int> offset = {-1, 0 , 1, 0, -1};
-        for(int i = 0; i < 4; i++)
-            dfs(board, row + offset[i], col + offset[i + 1]);
+        vector<int> offset = {-1, 0, 1, 0, -1};
+        for(int i = 0; i < 4; i++) {
+            int r = row + offset[i], c = col + offset[i + 1];
+            if(r >= 0 && r < m && c >= 0 && c < n && board[r][c] == 'O')
+                dfs(board, r, c);
+        }
     }
 };
