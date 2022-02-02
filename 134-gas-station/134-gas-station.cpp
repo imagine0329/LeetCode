@@ -7,8 +7,8 @@ public:
         for(int i = 0; i < gas.size(); i++) {
             tank += gas[i] - cost[i];
             total_tank += gas[i] - cost[i];
-            if(tank + gas[i] < cost[i]) {
-                ans = (i + 1) % gas.size();
+            if(tank < 0) {
+                ans = i + 1;
                 tank = 0;
             }
         }
