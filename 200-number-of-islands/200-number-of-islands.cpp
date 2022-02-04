@@ -62,7 +62,7 @@ public:
         vector<int> offset = {-1, 0, 1, 0, -1};
         for(int row = 0; row < m; row++) {
             for(int col = 0; col < n; col++) {
-                if(grid[row][col] == '1' && !visited[row][col]) {
+                if(grid[row][col] == '1') {
                     visited[row][col] = true;
                     for(int i = 0; i < 4; i++) {
                         int r = row + offset[i], c = col + offset[i + 1];
