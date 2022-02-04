@@ -1,19 +1,18 @@
 class Solution {
 public:
     int countPrimes(int n) {
-        if(n < 3)
-            return 0;
+        int bound = sqrt(n);
+        vector<bool> nums(n, false);
         
-        vector<bool> prime(n, true);
-        prime[0] = false, prime[1] = false;
-        
-        for(int i=2; i<sqrt(n); i++) {
-            if(prime[i]) {
-                for(int j=i*i; j<n; j+=i)
-                    prime[j] = false;
-            }
+        for(int i = 2; i <= bound; i++) {
+            for(int j = i * i; j < n; j += i)
+                nums[j] = true;
         }
         
-        return count(prime.begin(), prime.end(), true);
+        int primes = 0;
+        for(int i = 2; i < n; i++)
+            primes += nums[i] ? 0 : 1;
+        
+        return primes;
     }
 };
