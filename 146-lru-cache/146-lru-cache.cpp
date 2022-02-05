@@ -21,7 +21,7 @@ public:
     }
     
     void put(int key, int value) {
-        if(cache.find(key) == cache.end() && cache.size() == capacity) {
+        if(cache.find(key) == cache.end() && l.size() == capacity) {
             cache.erase(l.back());
             it.erase(l.back());
             l.pop_back();
