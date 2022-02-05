@@ -22,16 +22,16 @@ public:
     
     void put(int key, int value) {
         if(cache.find(key) == cache.end() && cache.size() == capacity) {
-            int erase_key = l.back(); l.pop_back();
-            cache.erase(erase_key);
-            it.erase(erase_key);
+            cache.erase(l.back());
+            it.erase(l.back());
+            l.pop_back();
         }
         else if(cache.find(key) != cache.end())
             l.erase(it[key]);
         
-        cache[key] = value;
         l.push_front(key);
         it[key] = l.begin();
+        cache[key] = value;
     }
 };
 
