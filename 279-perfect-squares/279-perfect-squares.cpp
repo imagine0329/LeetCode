@@ -10,7 +10,7 @@ public:
         if(n < 0) return INT_MAX;
         if(memo[n] != INT_MAX) return memo[n];
         if(n == 0)
-            return memo[n] = 0;
+            return 0;
         
         int minimum = INT_MAX;
         for(int i = start; i >= 1; i--)
