@@ -2,23 +2,40 @@ class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int, int> m;
-        priority_queue<pair<int, int>, vector<pair<int,int>>, greater<pair<int, int>>> q;
+        vector<int> unique;
         
         for(auto n : nums)
             m[n]++;
+        for(auto n : m)
+            unique.push_back(n.first);
         
-        for(auto n : m) {
-            q.push({n.second, n.first});
-            if(q.size() > k)
-                q.pop();
+        quickSelect(m, unique, unique.size() - k, 0, unique.size() - 1);
+        return vector<int>(unique.end() - k, unique.end());
+    }
+    
+    int partition(unordered_map<int, int>& m, vector<int>& unique, int left, int right) {
+        int pivot = left + (right - left) / 2;
+        swap(unique[pivot], unique[right]);
+        
+        int j = left;
+        for(int i = left; i < right; i++) {
+            if(m[unique[i]] <= m[unique[right]])
+                swap(unique[i], unique[j++]);
         }
         
-        vector<int> ans;
-        while(!q.empty()) {
-            int n = q.top().second; q.pop();
-            ans.push_back(n);
-        }
+        swap(unique[j], unique[right]);
+        return j;
+    }
+    
+    void quickSelect(unordered_map<int, int>& m, vector<int>& unique, int k, int left, int right) {
+        if(left == right) return;
         
-        return ans;
+        int pivot = partition(m, unique, left, right);
+        if(pivot == k)
+            return;
+        if(pivot < k)
+            quickSelect(m, unique, k, pivot + 1, right);
+        else
+            quickSelect(m, unique, k, left, pivot - 1);
     }
 };
