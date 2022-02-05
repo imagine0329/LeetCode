@@ -2,23 +2,17 @@ class Solution {
 public:
     int numSquares(int n) {
         int bound = sqrt(n);
-        vector<int> memo(n + 1, INT_MAX);
-        return recur(n, bound, memo);
-    }
-    
-    int recur(int n, int start, vector<int>& memo) {
-        if(n < 0) return INT_MAX;
-        if(memo[n] != INT_MAX) return memo[n];
-        if(n == 0)
-            return 0;
+        vector<int> dp(n + 1, INT_MAX);
         
-        int minimum = INT_MAX;
-        for(int i = start; i >= 1; i--)
-            minimum = min(minimum, recur(n - (i * i), start, memo));
+        dp[0] = 0;
         
-        if(minimum != INT_MAX)
-            memo[n] = minimum + 1;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= bound; j++) {
+                if(j * j > i) break;
+                dp[i] = min(dp[i], dp[i - (j * j)] + 1);
+            }
+        }
         
-        return memo[n];
+        return dp[n];
     }
 };
