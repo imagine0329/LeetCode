@@ -1,18 +1,25 @@
 class Solution {
 public:
     int numSquares(int n) {
-        int bound = sqrt(n);
-        vector<int> dp(n + 1, INT_MAX);
+        int temp = n;
+        while(temp % 4 == 0)
+            temp /= 4;
+        if(temp % 8 == 7)
+            return 4;
         
-        dp[0] = 0;
+        if(isSquare(n))
+            return 1;
         
-        for(int i = 1; i <= n; i++) {
-            for(int j = 1; j <= bound; j++) {
-                if(j * j > i) break;
-                dp[i] = min(dp[i], dp[i - (j * j)] + 1);
-            }
+        for(int i = 1; i < sqrt(n); i++) {
+            if(isSquare(n - (i * i)))
+                return 2;
         }
         
-        return dp[n];
+        return 3;
+    }
+    
+    bool isSquare(int n) {
+        int sq = (int) sqrt(n);
+        return n == sq * sq;
     }
 };
