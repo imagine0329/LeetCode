@@ -13,38 +13,20 @@ public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         if(lists.size() == 0) return nullptr;
         
-        int n = lists.size();
-        int interval = 1;
-        while(interval < n) {
-            for(int i = 0; i < n - interval; i += (interval * 2))
-                lists[i] = merge(lists[i], lists[i + interval]);
-            
-            interval *= 2;
+        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> q;
+        for(auto list : lists) {
+            while(list) {
+                q.push({list->val, list});
+                list = list->next;
+            }
         }
         
-        return lists[0];
-    }
-    
-    ListNode* merge(ListNode* a, ListNode* b) {
         ListNode* dummy = new ListNode();
         ListNode* node = dummy;
-        while(a && b) {
-            if(a->val <= b->val) {
-                node->next = a;
-                a = a->next;
-            }
-            else {
-                node->next = b;
-                b = b->next;
-            }
-            
+        while(!q.empty()) {
+            node->next = q.top().second; q.pop();
             node = node->next;
         }
-        
-        if(a)
-            node->next = a;
-        else if(b)
-            node->next = b;
         
         return dummy->next;
     }
