@@ -12,17 +12,17 @@ class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         if(lists.size() == 0) return nullptr;
-        return mergeLists(lists, 0, lists.size() - 1);
-    }
-    
-    ListNode* mergeLists(vector<ListNode*>& lists, int left, int right) {
-        if(left == right)
-            return lists[left];
         
-        int mid = left + (right - left) / 2;
-        ListNode* l = mergeLists(lists, left, mid);
-        ListNode* r = mergeLists(lists, mid + 1, right);
-        return merge(l, r);
+        int n = lists.size();
+        int interval = 1;
+        while(interval < n) {
+            for(int i = 0; i < n - interval; i += (interval * 2))
+                lists[i] = merge(lists[i], lists[i + interval]);
+            
+            interval *= 2;
+        }
+        
+        return lists[0];
     }
     
     ListNode* merge(ListNode* a, ListNode* b) {
