@@ -37,9 +37,7 @@ public:
     }
     
     void dfs(vector<vector<char>>& board, Trie* trie, vector<string>& ans, int row, int col) {
-        int m = board.size(), n = board[0].size();
-        if(row < 0 || row >= m || col < 0 || col >= n 
-           || board[row][col] == '#' || trie->next[board[row][col] - 'a'] == nullptr)
+        if(board[row][col] == '#' || !trie->next[board[row][col] - 'a'])
             return;
         
         char org = board[row][col];
@@ -48,12 +46,12 @@ public:
             ans.push_back(*trie->word);
             trie->word = nullptr;
         }
+        
         board[row][col] = '#';
-        vector<int> offset = {-1, 0, 1, 0, -1};
-        for(int i = 0; i < 4; i++) {
-            int r = row + offset[i], c = col + offset[i + 1];
-            dfs(board, trie, ans, r, c);
-        }
+        if(row - 1 >= 0) dfs(board, trie, ans, row - 1, col);
+        if(row + 1 < board.size()) dfs(board, trie, ans, row + 1, col);
+        if(col - 1 >= 0) dfs(board, trie, ans, row, col - 1);
+        if(col + 1 < board[0].size()) dfs(board, trie, ans, row, col + 1);
         board[row][col] = org;
     }
 };
