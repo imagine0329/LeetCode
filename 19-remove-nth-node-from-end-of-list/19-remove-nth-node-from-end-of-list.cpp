@@ -31,8 +31,6 @@ public:
             prev->next = node->next;
         else
             head = head->next;
-        node = nullptr;
-        delete node;
         
         return head;
     }
