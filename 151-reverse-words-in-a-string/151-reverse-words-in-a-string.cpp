@@ -1,25 +1,13 @@
 class Solution {
 public:
     string reverseWords(string s) {
-        stack<string> st;
+        reverse(s.begin(), s.end());
+        stringstream ss(s);
+        string str, ans;
         
-        int i = 0;
-        while(i < s.length()) {
-            string str;
-            while(i < s.length() && !isspace(s[i]))
-                str += s[i++];
-            
-            if(str.size() > 0)
-                st.push(str);
-            
-            while(i < s.length() && isspace(s[i]))
-                i++;
-        }
-        
-        string ans;
-        while(!st.empty()) {
-            ans += st.top() + " ";
-            st.pop();
+        while(ss >> str) {
+            reverse(str.begin(), str.end());
+            ans += str + " ";
         }
         
         ans.pop_back();
