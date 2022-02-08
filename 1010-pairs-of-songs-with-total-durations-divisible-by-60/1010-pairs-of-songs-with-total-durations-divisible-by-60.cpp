@@ -1,15 +1,20 @@
 class Solution {
 public:
     int numPairsDivisibleBy60(vector<int>& time) {
-        int count = 0;
-        unordered_map<int, int> mod;
+        long long count = 0;
+        vector<long long> mod(60, 0);
         
-        for(auto n : time) {
-            int x = n % 60;
-            count += x == 0 ? mod[x] : mod[60 - x];
-            mod[x]++;
-        }
+        for(auto t : time)
+            mod[t % 60]++;
         
-        return count;
+        if(mod[0] > 0)
+            count += (mod[0] * (mod[0] - 1)) >> 1;
+        if(mod[30] > 0)
+            count += (mod[30] * (mod[30] - 1)) >> 1;
+        
+        for(int i = 1; i < 30; i++)
+            count += mod[i] * mod[60 - i];
+        
+        return (int)count;
     }
 };
