@@ -1,15 +1,15 @@
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> dp(nums.size(), 10001);
-        dp[n - 1] = 0;
-        
-        for(int i = n - 2; i >= 0; i--) {
-            for(int j = 1; j <= nums[i] && i + j < n; j++)
-                dp[i] = min(dp[i], dp[i + j] + 1);
+        int count = 0, farthest = 0, end = 0;
+        for(int i = 0; i < nums.size() - 1; i++) {
+            farthest = max(farthest, i + nums[i]);
+            if(i == end) {
+                count++;
+                end = farthest;
+            }
         }
         
-        return dp[0];
+        return count;
     }
 };
