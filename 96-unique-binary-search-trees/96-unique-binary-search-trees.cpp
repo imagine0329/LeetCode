@@ -4,17 +4,11 @@ public:
         vector<int> dp(n + 1, 0);
         dp[0] = 1; dp[1] = 1;
         
-        return recursive(n, dp);
-    }
-    
-    int recursive(int n, vector<int>& dp) {
-        if(dp[n] != 0)
-            return dp[n];
+        for(int k = 2; k <= n; k++) {
+            for(int i = 1; i <= k; i++)
+                dp[k] += dp[i - 1] * dp[k - i];
+        }
         
-        int count = 0;
-        for(int i = 1; i <= n; i++)
-            count += recursive(i - 1, dp) * recursive(n - i, dp);
-        
-        return dp[n] = count;
+        return dp[n];
     }
 };
