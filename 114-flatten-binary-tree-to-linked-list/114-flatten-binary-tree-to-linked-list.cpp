@@ -18,24 +18,18 @@ public:
     TreeNode* recur(TreeNode* root) {
         if(!root) return nullptr;
         
-        if(root->right && root->left) {
-            TreeNode* node = root;
-            node = node->left;
-            while(node && node->right)
-                node = node->right;
-            if(node) {
-                node->right = root->right;
-                root->right = nullptr;
-            }
-        }
+        if(!root->left && !root->right)
+            return root;
         
-        if(root->left) {
-            root->right = recur(root->left);
+        TreeNode* left = recur(root->left);
+        TreeNode* right = recur(root->right);
+        
+        if(left) {
+            left->right = root->right;
+            root->right = root->left;
             root->left = nullptr;
         }
-        else
-            recur(root->right);
         
-        return root;
+        return right == nullptr ? left : right;
     }
 };
