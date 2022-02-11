@@ -12,24 +12,30 @@
 class Solution {
 public:
     void flatten(TreeNode* root) {
-        vector<TreeNode*> v;
-        
-        preorder(root, v);
-        
-        TreeNode* node = root;
-        for(int i = 1; i < v.size(); i++) {
-            node->left = nullptr;
-            node->right = v[i];
-            node = node->right;
-        }
+        recur(root);
     }
     
-    void preorder(TreeNode* root, vector<TreeNode*>& v) {
-        if(root == nullptr)
-            return;
+    TreeNode* recur(TreeNode* root) {
+        if(!root) return nullptr;
         
-        v.push_back(root);
-        preorder(root->left, v);
-        preorder(root->right, v);
+        if(root->right && root->left) {
+            TreeNode* node = root;
+            node = node->left;
+            while(node && node->right)
+                node = node->right;
+            if(node) {
+                node->right = root->right;
+                root->right = nullptr;
+            }
+        }
+        
+        if(root->left) {
+            root->right = recur(root->left);
+            root->left = nullptr;
+        }
+        else
+            recur(root->right);
+        
+        return root;
     }
 };
