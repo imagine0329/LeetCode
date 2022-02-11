@@ -10,26 +10,17 @@
  * };
  */
 class Solution {
+private:
+    TreeNode* head = nullptr;
+
 public:
     void flatten(TreeNode* root) {
-        recur(root);
-    }
-    
-    TreeNode* recur(TreeNode* root) {
-        if(!root) return nullptr;
+        if(!root) return;
         
-        if(!root->left && !root->right)
-            return root;
-        
-        TreeNode* left = recur(root->left);
-        TreeNode* right = recur(root->right);
-        
-        if(left) {
-            left->right = root->right;
-            root->right = root->left;
-            root->left = nullptr;
-        }
-        
-        return right == nullptr ? left : right;
+        flatten(root->right);
+        flatten(root->left);
+        root->right = head;
+        root->left = nullptr;
+        head = root;
     }
 };
