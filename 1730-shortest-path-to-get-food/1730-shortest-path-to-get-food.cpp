@@ -1,7 +1,6 @@
 class Solution {
 public:
     int getFood(vector<vector<char>>& grid) {
-        vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size(), false));
         queue<pair<int, int>> q;
         vector<int> offset = {-1, 0, 1, 0, -1};
         
@@ -19,13 +18,10 @@ public:
             ++path;
             int n = q.size();
             while(n--) {
-                auto cell = q.front(); q.pop();
-                int row = cell.first, col = cell.second;
-                
-                //visited[row][col] = true;
+                auto [row, col] = q.front(); q.pop();
                 for(int i = 0; i < 4; i++) {
                     int r = row + offset[i], c = col + offset[i + 1];
-                    if(r >= 0 && r < grid.size() && c >= 0 && c < grid[0].size() && grid[r][c] != 'X') {// && !visited[r][c]) 
+                    if(r >= 0 && r < grid.size() && c >= 0 && c < grid[0].size() && grid[r][c] != 'X') {
                         if(grid[r][c] == '#')
                             return path;
                         q.push({r, c});
