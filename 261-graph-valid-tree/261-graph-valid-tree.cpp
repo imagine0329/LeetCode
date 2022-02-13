@@ -1,61 +1,34 @@
-class UnionFind {
-private:
-    vector<int> parent, rank;
-    int count;
-    
-public:
-    UnionFind(int n) {
-        count = n;
-        parent = vector<int>(n);
-        rank = vector<int>(n);
-        for(int i = 0; i < n; i++) {
-            parent[i] = i;
-            rank[i] = 0;
-        }
-    }
-    
-    int find(int n) {
-        if(parent[n] != n)
-            return parent[n] = find(parent[n]);
-        return n;
-    }
-    
-    bool Union(int x, int y) {
-        x = find(x);
-        y = find(y);
-        
-        if(x == y)
-            return false;
-        
-        if(rank[x] >= rank[y]) {
-            parent[y] = x;
-            rank[x]++;
-        }
-        else {
-            parent[x] = y;
-            rank[y]++;
-        }
-        
-        count--;
-        return true;
-    }
-    
-    int getCount() {
-        return count;
-    }
-};
-
 class Solution {
 public:
     bool validTree(int n, vector<vector<int>>& edges) {
-        UnionFind uf(n);
+        vector<vector<int>> graph(n);
+        vector<bool> visited(n, false);
         
         for(auto e : edges) {
-            if(uf.Union(e[0], e[1]) == false)
-                return false;
+            graph[e[0]].push_back(e[1]);
+            graph[e[1]].push_back(e[0]);
         }
         
-        return uf.getCount() == 1;
+        if(!dfs(graph, visited, 0, -1))
+            return false;
+        
+        for(auto v : visited) {
+            if(!v) return false;
+        }
+        
+        return true;
+    }
+    
+    bool dfs(vector<vector<int>>& graph, vector<bool>& visited, int v, int parent) {
+        if(visited[v])
+            return false;
+        
+        visited[v] = true;
+        for(auto u : graph[v]) {
+            if(parent != u && !dfs(graph, visited, u, v))
+                return false;
+        }
+        return true;
     }
 };
 
