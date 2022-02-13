@@ -1,34 +1,32 @@
 class Solution {
 public:
     bool validTree(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> graph(n);
-        vector<bool> visited(n, false);
+        vector<int> parent(n), rank(n, 0);
+        iota(parent.begin(), parent.end(), 0);
         
-        for(auto e : edges) {
-            graph[e[0]].push_back(e[1]);
-            graph[e[1]].push_back(e[0]);
+        for(auto& e : edges) {
+            int x = find(e[0], parent), y = find(e[1], parent);
+            if(x == y) return false;
+            
+            if(rank[x] >= rank[y]) {
+                parent[y] = x;
+                rank[x]++;
+            }
+            else {
+                parent[x] = y;
+                rank[y]++;
+            }
+            
+            n--;
         }
         
-        if(!dfs(graph, visited, 0, -1))
-            return false;
-        
-        for(auto v : visited) {
-            if(!v) return false;
-        }
-        
-        return true;
+        return n == 1;
     }
     
-    bool dfs(vector<vector<int>>& graph, vector<bool>& visited, int v, int parent) {
-        if(visited[v])
-            return false;
-        
-        visited[v] = true;
-        for(auto u : graph[v]) {
-            if(parent != u && !dfs(graph, visited, u, v))
-                return false;
-        }
-        return true;
+    int find(int x, vector<int>& parent) {
+        if(parent[x] != x)
+            return parent[x] = find(parent[x], parent);
+        return x;
     }
 };
 
