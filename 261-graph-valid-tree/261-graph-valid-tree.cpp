@@ -1,32 +1,30 @@
 class Solution {
 public:
     bool validTree(int n, vector<vector<int>>& edges) {
-        vector<int> parent(n), rank(n, 0);
-        iota(parent.begin(), parent.end(), 0);
+        if(edges.size() < n - 1) return false;
+        
+        vector<unordered_set<int>> graph(n);
+        queue<int> q;
+        vector<bool> visited(n, false);
         
         for(auto& e : edges) {
-            int x = find(e[0], parent), y = find(e[1], parent);
-            if(x == y) return false;
-            
-            if(rank[x] >= rank[y]) {
-                parent[y] = x;
-                rank[x]++;
-            }
-            else {
-                parent[x] = y;
-                rank[y]++;
-            }
-            
-            n--;
+            graph[e[0]].insert(e[1]);
+            graph[e[1]].insert(e[0]);
         }
         
-        return n == 1;
-    }
-    
-    int find(int x, vector<int>& parent) {
-        if(parent[x] != x)
-            return parent[x] = find(parent[x], parent);
-        return x;
+        q.push(0);
+        while(!q.empty()) {
+            auto v = q.front(); q.pop();
+            if(visited[v]) return false;
+            visited[v] = true;
+            n--;
+            for(auto u : graph[v]) {
+                q.push(u);
+                graph[u].erase(v);
+            }
+        }
+        
+        return n == 0;
     }
 };
 
