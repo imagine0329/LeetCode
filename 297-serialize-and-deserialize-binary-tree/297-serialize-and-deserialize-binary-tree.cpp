@@ -12,10 +12,9 @@ public:
 
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        if(root == nullptr)
-            return "|";
-        
-        return to_string(root->val) + "|" + serialize(root->left) + serialize(root->right);
+        stringstream ss;
+        serialize(root, ss);
+        return ss.str();
     }
 
     // Decodes your encoded data to tree.
@@ -24,15 +23,26 @@ public:
         return deserialize(ss);
     }
     
-private:
-    TreeNode* deserialize(stringstream& ss) {
-        string token;
-        getline(ss, token, '|');
+    void serialize(TreeNode* root, stringstream& ss) {
+        if(!root) {
+            ss << "null ";
+            return;
+        }
+        else
+            ss << to_string(root->val) + " ";
         
-        if(token == "")
+        serialize(root->left, ss);
+        serialize(root->right, ss);
+    }
+    
+    TreeNode* deserialize(stringstream& ss) {
+        string str;
+        ss >> str;
+        if(str == "null")
             return nullptr;
         
-        TreeNode* node = new TreeNode(stoi(token));
+        int val = stoi(str);
+        TreeNode* node = new TreeNode(val);
         node->left = deserialize(ss);
         node->right = deserialize(ss);
         return node;
