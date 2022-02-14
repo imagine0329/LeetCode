@@ -1,35 +1,31 @@
 class Solution {
 public:
     int countComponents(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> graph(n);
-        vector<bool> visited(n, false);
+        vector<int> parent(n), rank(n, 0);
+        iota(parent.begin(), parent.end(), 0);
         
         for(auto e : edges) {
-            graph[e[0]].push_back(e[1]);
-            graph[e[1]].push_back(e[0]);
-        }
-        
-        int count = 0;
-        for(int i = 0; i < n; i++) {
-            if(visited[i] == false) {
-                count++;
-                dfs(graph, visited, i);
+            int x = find(e[0], parent), y = find(e[1], parent);
+            if(x == y) continue;
+            
+            if(rank[x] >= rank[y]) {
+                parent[y] = x;
+                rank[x]++;
             }
+            else {
+                parent[x] = y;
+                rank[y]++;
+            }
+            
+            n--;
         }
         
-        return count;
+        return n;
     }
     
-    void dfs(vector<vector<int>>& graph, vector<bool>& visited, int i) {
-        if(visited[i])
-            return;
-        
-        visited[i] = true;
-        
-        for(int j = 0; j < graph[i].size(); j++) {
-            if(visited[graph[i][j]] == false)
-                dfs(graph, visited, graph[i][j]);
-        }
+    int find(int x, vector<int>& parent) {
+        if(parent[x] != x)
+            return parent[x] = find(parent[x], parent);
+        return x;
     }
 };
-
