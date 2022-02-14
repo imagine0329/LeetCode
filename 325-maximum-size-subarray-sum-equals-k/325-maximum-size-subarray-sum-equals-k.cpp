@@ -1,21 +1,16 @@
 class Solution {
 public:
     int maxSubArrayLen(vector<int>& nums, int k) {
-        int prefix = 0;
-        int longest = 0;
-        unordered_map<int, int> m;
+        unordered_map<int, int> prefix;
         
+        prefix[0] = 0;
+        int sum = 0, longest = 0;
         for(int i = 0; i < nums.size(); i++) {
-            prefix += nums[i];
-            
-            if(prefix == k)
-                longest = i + 1;
-            
-            if(m.find(prefix - k) != m.end())
-                longest = max(longest, i - m[prefix - k]);
-            
-            if(m.find(prefix) == m.end())
-                m[prefix] = i;
+            sum += nums[i];
+            if(prefix.find(sum - k) != prefix.end())
+                longest = max(longest, i - prefix[sum - k] + 1);
+            if(prefix.find(sum) == prefix.end())
+                prefix[sum] = i + 1;
         }
         
         return longest;
