@@ -14,7 +14,11 @@ public:
     TreeNode* deleteNode(TreeNode* root, int key) {
         if(!root) return nullptr;
         
-        if(root->val == key) {
+        if(root->val > key)
+                root->left = deleteNode(root->left, key);
+        else if(root->val < key)
+            root->right = deleteNode(root->right, key);
+        else {
             if(!root->left || !root->right) {
                 TreeNode* temp = root;
                 root = root->left ? root->left : root->right;
@@ -27,12 +31,6 @@ public:
                 root->val = leftmost->val;
                 root->right = deleteNode(root->right, root->val);
             }
-        }
-        else {
-            if(root->val > key)
-                root->left = deleteNode(root->left, key);
-            else
-                root->right = deleteNode(root->right, key);
         }
         
         return root;
