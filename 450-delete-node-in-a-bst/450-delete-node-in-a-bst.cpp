@@ -15,17 +15,10 @@ public:
         if(!root) return nullptr;
         
         if(root->val == key) {
-            if(!root->left && !root->right) {
+            if(!root->left || !root->right) {
                 TreeNode* temp = root;
-                root = nullptr;
+                root = root->left ? root->left : root->right;
                 delete temp;
-            }
-            else if(root->left) {
-                TreeNode* rightmost = root->left;
-                while(rightmost->right)
-                    rightmost = rightmost->right;
-                root->val = rightmost->val;
-                root->left = deleteNode(root->left, root->val);
             }
             else {
                 TreeNode* leftmost = root->right;
