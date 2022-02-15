@@ -20,9 +20,9 @@ public:
             root->right = deleteNode(root->right, key);
         else {
             if(!root->left || !root->right) {
-                TreeNode* temp = root;
+          //      TreeNode* temp = root;
                 root = root->left ? root->left : root->right;
-                delete temp;
+            //    delete temp;
             }
             else {
                 TreeNode* leftmost = root->right;
