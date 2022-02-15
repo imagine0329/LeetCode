@@ -1,23 +1,35 @@
-typedef pair<int, pair<int, int>> t;
-
 class Solution {
 public:
     int kthSmallest(vector<vector<int>>& matrix, int k) {
         int n = matrix.size();
-        priority_queue<t, vector<t>, greater<t>> q;
-        
-        for(int r = 0; r < n; r++)
-            q.push({matrix[r][0], {r, 0}});
-        
-        int ans;
-        while(k--) {
-            auto cell = q.top(); q.pop();
-            ans = cell.first;
-            int r = cell.second.first, c = cell.second.second;
-            if(c + 1 < n)
-                q.push({matrix[r][c + 1], {r, c + 1}});
+        int left = matrix[0][0], right = matrix[n - 1][n - 1];
+        int ans = -1;
+        while(left <= right) {
+            int mid = left + (right - left) / 2;
+            int leftHalf = countLeftHalf(matrix, mid);
+            if(leftHalf >= k) {
+                ans = mid;
+                right = mid - 1;
+            }
+            else
+                left = mid + 1;
         }
         
         return ans;
+    }
+    
+    int countLeftHalf(vector<vector<int>>& matrix, int val) {
+        int n = matrix.size();
+        int count = 0;
+        for(int row = n - 1; row >= 0; row--) {
+            for(int col = 0; col < n; col++) {
+                if(matrix[row][col] > val)
+                    break;
+                
+                count++;
+            }
+        }
+        
+        return count;
     }
 };
