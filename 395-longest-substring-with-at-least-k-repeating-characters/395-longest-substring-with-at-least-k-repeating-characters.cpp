@@ -1,25 +1,30 @@
 class Solution {
 public:
     int longestSubstring(string s, int k) {
-        int longest = 0;
-        
-        for(int i = 0; i < s.length(); i++) {
-            vector<int> freq(26, 0);
-            for(int j = i; j < s.length(); j++) {
-                freq[s[j] - 'a']++;
-                if(checkFreq(freq, k))
-                    longest = max(longest, j - i + 1);
-            }
-        }
-        
-        return longest;
+        return longestSubstring(s, k, 0, s.length() - 1);
     }
     
-    bool checkFreq(vector<int>& freq, int k) {
-        for(auto f : freq) {
-            if(f > 0 && f < k)
-                return false;
+    int longestSubstring(string s, int k, int start, int end) {
+        if(start > end)
+            return 0;
+        
+        unordered_map<char, vector<int>> m;
+        for(int i = start; i <= end; i++)
+            m[s[i]].push_back(i);
+        
+        int mid = findInvalid(m, k);
+        if(mid == -1)
+            return end - start + 1;
+        
+        return max(longestSubstring(s, k, start, mid - 1), longestSubstring(s, k, mid + 1, end));
+    }
+    
+    int findInvalid(unordered_map<char, vector<int>>& m, int k) {
+        for(auto n : m) {
+            if(n.second.size() < k)
+                return n.second.front();
         }
-        return true;
+        
+        return -1;
     }
 };
