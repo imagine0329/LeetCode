@@ -33,8 +33,7 @@ public:
             if(prev->val <= insertVal && next->val >= insertVal)
                 break;
             else if(prev->val > next->val) {
-                if((prev->val <= insertVal && next->val <= insertVal) ||
-                   (prev->val >= insertVal && next->val >= insertVal))
+                if(prev->val <= insertVal || next->val >= insertVal)
                     break;
             }
             
