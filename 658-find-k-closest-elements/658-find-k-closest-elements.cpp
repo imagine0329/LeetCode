@@ -1,16 +1,29 @@
+struct Compare{
+    bool operator() (const pair<int, int>& a, const pair<int, int>& b) {
+        if(a.first == b.first)
+            return a.second < b.second;
+        return a.first < b.first;
+    }
+};
+
 class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
-        int left = 0, right = arr.size() - k;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, Compare> q;
         
-        while(left < right) {
-            int mid = left + (right - left) / 2;
-            if(x - arr[mid] > arr[mid+k] - x)
-                left = mid + 1;
-            else
-                right = mid;
+        for(auto n : arr) {
+            q.push({abs(n - x), n});
+            if(q.size() > k)
+                q.pop();
         }
         
-        return vector<int>(arr.begin() + left, arr.begin() + left + k);
+        vector<int> ans;
+        while(!q.empty()) {
+            ans.push_back(q.top().second);
+            q.pop();
+        }
+        
+        sort(ans.begin(), ans.end());
+        return ans;
     }
 };
