@@ -1,27 +1,27 @@
 class FreqStack {
 private:
-    stack<int> maxFreq;
+    int maxFreq;
     unordered_map<int, stack<int>> freqStack;
     unordered_map<int, int> freq;
     
 public:
     FreqStack() {
-        
+        maxFreq = 0;
     }
     
     void push(int val) {
         ++freq[val];
         freqStack[freq[val]].push(val);
-        if(maxFreq.empty() || freq[val] > maxFreq.top())
-            maxFreq.push(freq[val]);
+        if(freq[val] > maxFreq)
+            maxFreq = freq[val];
     }
     
     int pop() {
-        int ret = freqStack[maxFreq.top()].top();
-        freqStack[maxFreq.top()].pop();
+        int ret = freqStack[maxFreq].top();
+        freqStack[maxFreq].pop();
         --freq[ret];
-        if(freqStack[maxFreq.top()].empty())
-            maxFreq.pop();
+        if(freqStack[maxFreq].empty())
+            maxFreq--;
         return ret;
     }
 };
