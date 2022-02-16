@@ -22,27 +22,27 @@ public:
 class Solution {
 public:
     Node* insert(Node* head, int insertVal) {
-        if(head == nullptr) {
+        if(!head) {
             Node* newNode = new Node(insertVal);
             newNode->next = newNode;
             return newNode;
         }
         
-        Node *prev = head, *curr = head->next;
-        
-        do{
-            if(prev->val <= insertVal && curr->val >= insertVal)
+        Node *prev = head, *next = head->next;
+        while(head != next) {
+            if(prev->val <= insertVal && next->val >= insertVal)
                 break;
-            else if(prev->val > curr->val) {
-                if(prev->val <= insertVal || curr->val >= insertVal)
+            else if(prev->val > next->val) {
+                if((prev->val <= insertVal && next->val <= insertVal) ||
+                   (prev->val >= insertVal && next->val >= insertVal))
                     break;
             }
             
-            prev = curr;
-            curr = curr->next;
-        }while(prev != head);
+            prev = next;
+            next = next->next;
+        }
         
-        prev->next = new Node(insertVal, curr);
+        prev->next = new Node(insertVal, next);
         return head;
     }
 };
