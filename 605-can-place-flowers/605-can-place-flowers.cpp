@@ -9,6 +9,8 @@ public:
                 if(left && right) {
                     flowerbed[i] = 1;
                     available++;
+                    if(available >= n)
+                        return true;
                 }
             }
         }
