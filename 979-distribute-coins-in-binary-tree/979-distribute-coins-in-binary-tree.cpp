@@ -12,16 +12,16 @@
 class Solution {
 public:
     int distributeCoins(TreeNode* root) {
-        int moves = 0;
-        traverse(root, moves);
-        return moves;
+        int ans = 0;
+        dfs(root, ans);
+        return ans;
     }
     
-    int traverse(TreeNode* root, int& moves) {
+    int dfs(TreeNode* root, int& ans) {
         if(!root) return 0;
-        int left = traverse(root->left, moves);
-        int right = traverse(root->right, moves);
-        moves += abs(left) + abs(right);
+        int left = dfs(root->left, ans);
+        int right = dfs(root->right, ans);
+        ans += abs(left) + abs(right);
         return root->val + left + right - 1;
     }
 };
