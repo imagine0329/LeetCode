@@ -12,24 +12,24 @@
 class Solution {
 public:
     TreeNode* increasingBST(TreeNode* root) {
-        TreeNode* head = new TreeNode(0);
-        TreeNode* prev = head;
-        stack<TreeNode*> s;
+        vector<TreeNode*> v;
+        inorder(root, v);
         
-        while(root || !s.empty()) {
-            while(root) {
-                s.push(root);
-                root = root->left;
-            }
-            
-            root = s.top();
-            s.pop();
-            prev->right = root;
-            prev = root;
-            root->left = nullptr;
-            root = root->right;
+        root = v[0];
+        TreeNode* node = root;
+        for(int i = 1; i < v.size(); i++) {
+            v[i]->left = nullptr;
+            node->right = v[i];
+            node = node->right;
         }
         
-        return head->right;
+        return root;
+    }
+    
+    void inorder(TreeNode* root, vector<TreeNode*>& v) {
+        if(!root) return;
+        inorder(root->left, v);
+        v.push_back(root);
+        inorder(root->right, v);
     }
 };
