@@ -13,26 +13,27 @@ class Solution {
 public:
     vector<vector<int>> verticalTraversal(TreeNode* root) {
         map<int, map<int, multiset<int>>> m;
-        dfs(root, 0, 0, m);
         
-        vector<vector<int>> ans;
-        for(auto c : m) {
-            vector<int> v;
-            for(auto r : c.second) {
-                for(auto it = r.second.begin(); it != r.second.end(); ++it)
-                    v.push_back(*it);
+        dfs(root, m, 0, 0);
+        
+        vector<vector<int>> ans(m.size());
+        int i = 0;
+        for(auto col : m) {
+            for(auto row : col.second) {
+                for(auto val : row.second)
+                    ans[i].push_back(val);
             }
-            ans.push_back(v);
+            i++;
         }
         
         return ans;
     }
     
-    void dfs(TreeNode* root, int row, int col, map<int, map<int, multiset<int>>>& m) {
+    void dfs(TreeNode* root, map<int, map<int, multiset<int>>>& m, int row, int col) {
         if(!root) return;
         
         m[col][row].insert(root->val);
-        dfs(root->left, row+1, col-1, m);
-        dfs(root->right, row+1, col+1, m);
+        dfs(root->left, m, row + 1, col - 1);
+        dfs(root->right, m, row + 1, col + 1);
     }
 };
