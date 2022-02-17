@@ -7,6 +7,8 @@ struct Compare {
 class Solution {
 public:
     int minimumCost(int n, vector<vector<int>>& connections) {
+        if(connections.size() < n - 1) return -1;
+        
         vector<int> parent(n + 1), rank(n + 1, 0);
         iota(parent.begin(), parent.end(), 0);
         
