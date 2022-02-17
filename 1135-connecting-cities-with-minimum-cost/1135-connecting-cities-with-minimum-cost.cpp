@@ -36,8 +36,12 @@ public:
     }
     
     int find(vector<int>& parent, int x) {
-        if(parent[x] != x)
-            return parent[x] = find(parent, parent[x]);
+        int root = parent[x];
+        while(x != root) {
+            parent[x] = parent[root];
+            x = root;
+            root = parent[x];
+        }
         return x;
     }
 };
