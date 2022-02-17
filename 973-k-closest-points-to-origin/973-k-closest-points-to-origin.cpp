@@ -1,14 +1,20 @@
-struct Compare {
-    bool operator()(const vector<int>& a, const vector<int>& b) {
-        return a[0] * a[0] + a[1] * a[1] < b[0] * b[0] + b[1] * b[1];
-    }    
-};
-
 class Solution {
 public:
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-        sort(points.begin(), points.end(), Compare());
+        priority_queue<pair<int, int>> pq;
         
-        return vector<vector<int>>(points.begin(), points.begin() + k);
+        for(int i = 0; i < points.size(); i++) {
+            pq.push({points[i][0] * points[i][0] + points[i][1] * points[i][1], i});
+            if(pq.size() > k)
+                pq.pop();
+        }
+        
+        vector<vector<int>> ans;
+        while(!pq.empty()) {
+            ans.push_back(points[pq.top().second]);
+            pq.pop();
+        }
+        
+        return ans;
     }
 };
