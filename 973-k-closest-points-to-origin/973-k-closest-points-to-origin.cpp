@@ -1,49 +1,45 @@
 class Solution {
 public:
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-        vector<double> distance;
-        vector<int> remain;
-        double low = 0, high = 0;
+        vector<pair<int, int>> distance;
+        for(int i = 0; i < points.size(); i++)
+            distance.push_back({euclideanDistance(points[i]), i});
         
-        for(int i = 0; i < points.size(); i++) {
-            distance.push_back(euclideanDistance(points[i]));
-            remain.push_back(i);
-            high = max(high, distance[i]);
-        }
-        
-        vector<int> closest;
-        while(k) {
-            double mid = low + (high - low) / 2;
-            vector<vector<int>> res = splitDistance(remain, distance, mid);
-            if(res[0].size() > k) {
-                remain.swap(res[0]);
-                high = mid;
-            }
-            else {
-                k -= res[0].size();
-                closest.insert(closest.end(), res[0].begin(), res[0].end());
-                remain.swap(res[1]);
-                low = mid;
-            }
-        }
+        quickSelect(distance, k - 1, 0, distance.size() - 1);
         
         vector<vector<int>> ans;
-        for(auto i : closest)
-            ans.push_back(points[i]);
+        for(int i = 0; i < k; i++)
+            ans.push_back(points[distance[i].second]);
         
         return ans;
     }
     
-    vector<vector<int>> splitDistance(vector<int>& remain, vector<double>& distance, double mid) {
-        vector<vector<int>> res(2);
-        for(auto i : remain) {
-            if(distance[i] <= mid)
-                res[0].push_back(i);
-            else
-                res[1].push_back(i);
+    int partition(vector<pair<int, int>>& distance, int left, int right) {
+        int pivot = left + (right - left) / 2;
+        swap(distance[pivot], distance[right]);
+        
+        int j = left;
+        while(j < right) {
+            if(distance[j].first < distance[right].first)
+                swap(distance[left++], distance[j]);
+            j++;
         }
         
-        return res;
+        swap(distance[left], distance[right]);
+        return left;
+    }
+    
+    void quickSelect(vector<pair<int, int>>& distance, int k, int left, int right) {
+        if(left == right) return;
+        int pivot = partition(distance, left, right);
+        
+        if(pivot == k)
+            return;
+        
+        if(pivot > k)
+            quickSelect(distance, k, left, pivot - 1);
+        else
+            quickSelect(distance, k, pivot + 1, right);
     }
     
     double euclideanDistance(vector<int>& point) {
