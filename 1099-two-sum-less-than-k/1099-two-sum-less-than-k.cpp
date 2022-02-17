@@ -1,19 +1,15 @@
 class Solution {
 public:
     int twoSumLessThanK(vector<int>& nums, int k) {
-        sort(nums.begin(), nums.end());
-        int maximum = INT_MIN;
-        int left = 0, right = nums.size() - 1;
+        int maximum = -1;
         
-        while(left < right) {
-            if(nums[left] + nums[right] >= k)
-                right--;
-            else {
-                maximum = max(maximum, nums[left] + nums[right]);
-                left++;
-            }
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i < nums.size() && nums[i] < k; i++) {
+            int j = lower_bound(nums.begin() + i + 1, nums.end(), k - nums[i]) - nums.begin() - 1;
+            if(j != i)
+                maximum = max(maximum, nums[i] + nums[j]);
         }
         
-        return maximum == INT_MIN ? -1 : maximum;
+        return maximum;
     }
 };
