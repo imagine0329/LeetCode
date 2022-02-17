@@ -2,28 +2,22 @@ class Solution {
 public:
     int twoSumLessThanK(vector<int>& nums, int k) {
         int maximum = -1;
+        vector<int> count(1001, 0);
         
-        sort(nums.begin(), nums.end());
-        for(int i = 0; i < nums.size() && nums[i] < k; i++) {
-            int j = binarySearch(nums, k - nums[i], i + 1) - 1;
-            if(j > i)
-                maximum = max(maximum, nums[i] + nums[j]);
+        for(auto n : nums)
+            count[n]++;
+        
+        int lo = 1, hi = 1000;
+        while(lo <= hi) {
+            if(lo + hi >= k || count[hi] == 0)
+                hi--;
+            else {
+                if(count[lo] > (lo < hi ? 0 : 1))
+                    maximum = max(maximum, lo + hi);
+                lo++;
+            }
         }
         
         return maximum;
-    }
-    
-    int binarySearch(vector<int>& nums, int k, int start) {
-        int left = start, right = nums.size();
-        
-        while(left < right) {
-            int mid = left + (right - left) / 2;
-            if(nums[mid] < k)
-                left = mid + 1;
-            else
-                right = mid;
-        }
-        
-        return left;
     }
 };
