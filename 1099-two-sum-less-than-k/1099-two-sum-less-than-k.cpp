@@ -1,22 +1,19 @@
 class Solution {
 public:
     int twoSumLessThanK(vector<int>& nums, int k) {
-        vector<int> count(1001, 0);
-        for(auto n : nums)
-            count[n]++;
+        sort(nums.begin(), nums.end());
+        int maximum = INT_MIN;
+        int left = 0, right = nums.size() - 1;
         
-        int maxSum = -1;
-        int lo = 1, hi = 1000;
-        while(lo <= hi) {
-            if(lo + hi >= k || count[hi] == 0)
-                hi--;
+        while(left < right) {
+            if(nums[left] + nums[right] >= k)
+                right--;
             else {
-                if(count[lo] > (lo < hi ? 0 : 1))
-                    maxSum = max(maxSum, lo + hi);
-                lo++;
+                maximum = max(maximum, nums[left] + nums[right]);
+                left++;
             }
         }
         
-        return maxSum;
+        return maximum == INT_MIN ? -1 : maximum;
     }
 };
