@@ -1,36 +1,35 @@
 class Solution {
 public:
     int minimumSemesters(int n, vector<vector<int>>& relations) {
-        vector<vector<int>> courses(n + 1);
+        vector<vector<int>> graph(n + 1);
         vector<int> indegree(n + 1, 0);
-        queue<int> q;
         
-        for(auto& relation : relations) {
-            courses[relation[0]].push_back(relation[1]);
-            ++indegree[relation[1]];
+        for(auto r : relations) {
+            graph[r[0]].push_back(r[1]);
+            //graph[r[1]].push_back(r[0]);
+            indegree[r[1]]++;
         }
         
-        for(int i = 1; i < indegree.size(); i++) {
+        queue<int> q;
+        for(int i = 1; i < n + 1; i++) {
             if(indegree[i] == 0)
                 q.push(i);
         }
         
-        int count = 0, visited = 0;
+        int step = 0, course = 0;
         while(!q.empty()) {
-            count++;
-            int n = q.size();
-            while(n--) {
-                int v = q.front();
-                q.pop();
-                
-                visited++;
-                for(auto c : courses[v]) {
-                    if(--indegree[c] == 0)
-                        q.push(c);
+            int sz = q.size();
+            course += sz;
+            while(sz--) {
+                int v = q.front(); q.pop();
+                for(auto u : graph[v]) {
+                    if(--indegree[u] == 0)
+                        q.push(u);
                 }
             }
+            step++;
         }
         
-        return visited == n ? count : -1;
+        return course == n ? step : -1;
     }
 };
