@@ -6,7 +6,6 @@ public:
         
         for(auto r : relations) {
             graph[r[0]].push_back(r[1]);
-            //graph[r[1]].push_back(r[0]);
             indegree[r[1]]++;
         }
         
@@ -15,6 +14,9 @@ public:
             if(indegree[i] == 0)
                 q.push(i);
         }
+        
+        if(q.size() == 0)
+            return -1;
         
         int step = 0, course = 0;
         while(!q.empty()) {
