@@ -1,6 +1,6 @@
 class FirstUnique {
 private:
-    unordered_map<int, int> freq;
+    unordered_map<int, bool> isUnique;
     queue<int> q;
     
 public:
@@ -10,15 +10,19 @@ public:
     }
     
     int showFirstUnique() {
-        while(!q.empty() && freq[q.front()] != 1)
+        while(!q.empty() && !isUnique[q.front()])
             q.pop();
         
         return q.empty() ? -1 : q.front();
     }
     
     void add(int value) {
-        q.push(value);
-        freq[value]++;
+        if(isUnique.find(value) == isUnique.end()) {
+            isUnique[value] = true;
+            q.push(value);
+        }
+        else
+            isUnique[value] = false;
     }
 };
 
