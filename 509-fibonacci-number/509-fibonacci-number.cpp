@@ -6,8 +6,7 @@ public:
     }
     
     int fibonacci(int n, vector<int>& memo) {
-        if(n == 0) return 0;
-        if(n < 3) return 1;
+        if(n <= 1) return n;
         if(memo[n] != -1) return memo[n];
         return memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo);
     }
