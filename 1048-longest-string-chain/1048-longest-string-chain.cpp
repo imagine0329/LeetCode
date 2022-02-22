@@ -1,28 +1,23 @@
+static bool compare(const string &s1, const string &s2) {
+    return s1.length() < s2.length();
+}
+
 class Solution {
 public:
     int longestStrChain(vector<string>& words) {
-        unordered_map<string, int> memo;
-        unordered_set<string> s;
-        
-        for(const auto& word : words)
-            s.insert(word);
+        unordered_map<string, int> dp;
+        sort(words.begin(), words.end(), compare);
         
         int longest = 0;
-        for(const auto& word : words)
-            longest = max(longest, dfs(s, memo, word));
-        return longest;
-    }
-    
-    int dfs(unordered_set<string>& words, unordered_map<string, int>& memo, string word) {
-        if(memo.find(word) != memo.end()) return memo[word];
-        
-        int longest = 1;
-        for(int i = 0; i < word.length(); i++) {
-            string newWord = word.substr(0, i) + word.substr(i + 1);
-            if(words.find(newWord) != words.end())
-                longest = max(longest, 1 + dfs(words, memo, newWord));
+        for(const auto& word : words) {
+            for(int i = 0; i < word.length(); i++) {
+                string newWord = word.substr(0, i) + word.substr(i + 1);
+                dp[word] = max(dp[word], dp.find(newWord) == dp.end() ? 1 : 1 + dp[newWord]);
+            }
+            
+            longest = max(longest, dp[word]);
         }
-        
-        return memo[word] = longest;
+            
+        return longest;
     }
 };
