@@ -1,22 +1,61 @@
 class MyHashMap {
 private:
-    vector<int> data;
+    class Node {
+    public:
+        int key, val;
+        Node* next;
+        Node(int key, int val, Node* next) {
+            this->key = key;
+            this->val = val;
+            this->next = next;
+        }
+    };
+    
+    const static int size = 19997;
+    const static int mult = 12582917;
+    
+    Node* data[size] = {nullptr};
     
 public:
     MyHashMap() {
-        data = vector<int>(1000001, -1);
+        
+    }
+    
+    int hash(int key) {
+        return (int)((long)key * mult % size);
     }
     
     void put(int key, int value) {
-        data[key] = value;
+        remove(key);
+        int h = hash(key);
+        Node* node = new Node(key, value, data[h]);
+        data[h] = node;
     }
     
     int get(int key) {
-        return data[key];
+        int h = hash(key);
+        Node* node = data[h];
+        while(node) {
+            if(node->key == key) return node->val;
+            node = node->next;
+        }
+        return -1;
     }
     
     void remove(int key) {
-        data[key] = -1;
+        int h = hash(key);
+        Node* node = data[h];
+        if(!node) return;
+        if(node->key == key) data[h] = node->next;
+        else {
+            while(node->next) {
+                if(node->next->key == key) {
+                    node->next = node->next->next;
+                    return;
+                }
+                node = node->next;
+            }
+        }
     }
 };
 
