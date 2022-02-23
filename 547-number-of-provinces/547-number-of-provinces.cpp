@@ -15,6 +15,7 @@ public:
     }
     
     void dfs(vector<vector<int>>& isConnected, vector<bool>& visited, int v) {
+        visited[v] = true;
         for(int i = 0; i < isConnected.size(); i++) {
             if(isConnected[v][i] && visited[i] == false) {
                 visited[i] = true;
