@@ -1,59 +1,44 @@
-class UnionFind {
-private:
-    vector<int> parent, rank;
-    int count;
-    
-public:
-    UnionFind(int n) {
-        count = n;
-        parent = vector<int>(n);
-        iota(parent.begin(), parent.end(), 0);
-        rank = vector<int>(n, 0);
-    }
-    
-    int find(int x) {
-        if(parent[x] != x)
-            return parent[x] = find(parent[x]);
-        return x;
-    }
-    
-    void Union(int x, int y) {
-        x = find(x);
-        y = find(y);
-        
-        if(x == y) return;
-        
-        if(rank[x] >= rank[y]) {
-            parent[y] = x;
-            rank[x]++;
-        }
-        else {
-            parent[x] = y;
-            rank[y]++;
-        }
-        
-        count--;
-    }
-    
-    int getCount() {
-        return count;
-    }
-};
-
 class Solution {
 public:
     int findCircleNum(vector<vector<int>>& isConnected) {
         int n = isConnected.size();
-        UnionFind uf(n);
+        vector<vector<int>> graph(n);
         
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < n; j++) {
-                if(isConnected[i][j] == 1)
-                    uf.Union(i, j);
+                if(isConnected[i][j])
+                    graph[i].push_back(j);
             }
         }
         
-        return uf.getCount();
+        vector<bool> visited(n, false);
+        int count = 0;
+        for(int v = 0; v < n; v++) {
+            if(visited[v] == false) {
+                count++;
+                bfs(graph, visited, v);
+            }
+        }
+        
+        return count;
+    }
+    
+    void bfs(vector<vector<int>>& graph, vector<bool>& visited, int v) {
+        queue<int> q;
+        q.push(v);
+        visited[v] = true;
+        
+        while(!q.empty()) {
+            int n = q.size();
+            while(n--) {
+                v = q.front(); q.pop();
+                for(auto u : graph[v]) {
+                    if(visited[u] == false) {
+                        visited[u] = true;
+                        q.push(u);
+                    }
+                }
+            }
+        }
     }
 };
-
