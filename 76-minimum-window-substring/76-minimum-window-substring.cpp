@@ -1,37 +1,24 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        vector<int> ans = {INT_MAX, 0};
-        unordered_map<char, int> dict;
-        unordered_map<char, int> window;
+        vector<int> dict(128, 0);
+        for(auto c : t) dict[c]++;
         
-        for(auto c : t)
-            dict[c]++;
-        
-        int formed = 0, required = dict.size();
+        int len = INT_MAX, start = 0;
+        int remain = t.length();
         int left = 0, right = 0;
         
         while(right < s.length()) {
-            char c = s[right];
-            window[c]++;
-            if(window[c] == dict[c]) formed++;
-            
-            while(left <= right && formed == required) {
-                c = s[left];
-                if(ans[0] > right - left + 1) {
-                    ans[0] = right - left + 1;
-                    ans[1] = left;
+            if(--dict[s[right++]] >= 0) remain--;
+            while(remain == 0) {
+                if(len > right - left) {
+                    len = right - left;
+                    start = left;
                 }
-                
-                --window[c];
-                if(dict.find(c) != dict.end() && window[c] < dict[c])
-                    formed--;
-                
-                left++;
+                if(++dict[s[left++]] > 0) remain++;
             }
-            right++;
         }
         
-        return ans[0] == INT_MAX ? "" : s.substr(ans[1], ans[0]);
+        return len == INT_MAX ? "" : s.substr(start, len);
     }
 };
