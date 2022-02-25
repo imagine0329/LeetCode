@@ -1,6 +1,6 @@
 class MyCalendar {
 private:
-    vector<pair<int, int>> calendar;
+    map<int, int> books;
     
 public:
     MyCalendar() {
@@ -8,11 +8,10 @@ public:
     }
     
     bool book(int start, int end) {
-        for(auto& c : calendar) {
-            if(max(c.first, start) < min(c.second, end))
-                return false;
-        }
-        calendar.push_back({start, end});
+        auto next = books.lower_bound(start);
+        if(next != books.end() && next->first < end) return false;
+        if(next != books.begin() && (--next)->second > start) return false;
+        books[start] = end;
         return true;
     }
 };
