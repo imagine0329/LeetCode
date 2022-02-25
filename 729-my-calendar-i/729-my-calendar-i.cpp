@@ -9,7 +9,7 @@ public:
     
     bool book(int start, int end) {
         for(auto& c : calendar) {
-            if(c.first  < end && c.second > start)
+            if(max(c.first, start) < min(c.second, end))
                 return false;
         }
         calendar.push_back({start, end});
