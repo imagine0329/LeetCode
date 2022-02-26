@@ -1,41 +1,53 @@
 class NumArray {
 private:
-    vector<int> nums;
-    vector<int> blocks;
-    int len;
+    vector<int> tree;
+    int n;
     
 public:
     NumArray(vector<int>& nums) {
-        this->nums = nums;
-        len = ceil(sqrt(nums.size()));
-        blocks = vector<int>(len);
-        for(int i = 0; i < nums.size(); i++)
-            blocks[i / len] += nums[i];
+        n = nums.size();
+        tree = vector<int>(2 * n);
+        buildTree(nums);
+    }
+    
+    void buildTree(vector<int>& nums) {
+        for(int i = n, j = 0; i < 2 * n; i++, j++)
+            tree[i] = nums[j];
+        for(int i = n - 1; i > 0; i--)
+            tree[i] = tree[i * 2] + tree[i * 2 + 1];
     }
     
     void update(int index, int val) {
-        int i = index / len;
-        blocks[i] = blocks[i] - nums[index] + val;
-        nums[index] = val;
+        index += n;
+        tree[index] = val;
+        while(index > 0) {
+            int left = index, right = index;
+            if(index & 1)
+                left--;
+            else
+                right++;
+            tree[index / 2] = tree[left] + tree[right];
+            index /= 2;
+        }
     }
     
     int sumRange(int left, int right) {
+        left += n;
+        right += n;
         int sum = 0;
-        int start = left / len, end = right / len;
-        
-        if(start == end) {
-            for(int i = left; i <= right; i++)
-                sum += nums[i];
+        while(left <= right) {
+            if(left & 1) {
+                sum += tree[left];
+                left++;
+            }
+            if((right & 1) == 0) {
+                sum += tree[right];
+                right--;
+            }
+            
+            left /= 2;
+            right /= 2;
         }
-        else {
-            for(int i = left; i < (start + 1) * len; i++)
-                sum += nums[i];
-            for(int i = start + 1; i < end; i++)
-                sum += blocks[i];
-            for(int i = end * len; i <= right; i++)
-                sum += nums[i];
-        }
-        
         return sum;
     }
 };
