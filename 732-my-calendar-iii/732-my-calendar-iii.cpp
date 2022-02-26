@@ -12,10 +12,9 @@ public:
         m[end]--;
         int booking = 0, largest = 0;
         
-        for(auto n : m) {
-            booking += n.second;
-            largest = max(largest, booking);
-        }
+        for(auto n : m)
+            largest = max(largest, booking += n.second);
+        
         return largest;
     }
 };
