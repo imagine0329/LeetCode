@@ -1,7 +1,6 @@
 class MyCalendarTwo {
 private:
-    vector<pair<int, int>> calendar;
-    vector<pair<int, int>> overlaps;
+    map<int, int> m;
     
 public:
     MyCalendarTwo() {
@@ -9,14 +8,19 @@ public:
     }
     
     bool book(int start, int end) {
-        for(auto& b : overlaps) {
-            if(start < b.second && end > b.first) return false;
+        m[start]++;
+        m[end]--;
+        
+        int overlap = 0;
+        for(auto e : m) {
+            overlap += e.second;
+            if(overlap == 3) {
+                m[start]--;
+                m[end]++;
+                return false;
+            }
         }
-        for(auto& b : calendar) {
-            if(start < b.second && end > b.first)
-                overlaps.push_back({max(start, b.first), min(end, b.second)});
-        }
-        calendar.push_back({start, end});
+        
         return true;
     }
 };
