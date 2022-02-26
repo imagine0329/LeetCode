@@ -1,53 +1,42 @@
 class NumArray {
 private:
     vector<int> tree;
-    int n;
+    vector<int> nums;
     
 public:
     NumArray(vector<int>& nums) {
-        n = nums.size();
-        tree = vector<int>(2 * n);
-        buildTree(nums);
+        tree = vector<int>(nums.size() + 1, 0);
+        this->nums = nums;
+        for(int i = 0; i < nums.size(); i++)
+            init(i, nums[i]);
     }
     
-    void buildTree(vector<int>& nums) {
-        for(int i = n, j = 0; i < 2 * n; i++, j++)
-            tree[i] = nums[j];
-        for(int i = n - 1; i > 0; i--)
-            tree[i] = tree[i * 2] + tree[i * 2 + 1];
+    void init(int i, int val) {
+        i++;
+        while(i <= nums.size()) {
+            tree[i] += val;
+            i += (i & -i);
+        }
     }
     
     void update(int index, int val) {
-        index += n;
-        tree[index] = val;
-        while(index > 0) {
-            int left = index, right = index;
-            if(index & 1)
-                left--;
-            else
-                right++;
-            tree[index / 2] = tree[left] + tree[right];
-            index /= 2;
-        }
+        int diff = val - nums[index];
+        nums[index] = val;
+        init(index, diff);
     }
     
     int sumRange(int left, int right) {
-        left += n;
-        right += n;
+        return getSum(right) - getSum(left - 1);
+    }
+    
+    int getSum(int i) {
         int sum = 0;
-        while(left <= right) {
-            if(left & 1) {
-                sum += tree[left];
-                left++;
-            }
-            if((right & 1) == 0) {
-                sum += tree[right];
-                right--;
-            }
-            
-            left /= 2;
-            right /= 2;
+        i++;
+        while(i > 0) {
+            sum += tree[i];
+            i -= (i & -i);
         }
+        
         return sum;
     }
 };
