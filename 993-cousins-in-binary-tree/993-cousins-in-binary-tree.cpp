@@ -12,26 +12,27 @@
 class Solution {
 public:
     bool isCousins(TreeNode* root, int x, int y) {
-        int recorded = -1;
-        bool isCousin = false;
-        dfs(root, x, y, 0, recorded, isCousin);
-        return isCousin;
-    }
-    
-    bool dfs(TreeNode* root, int x, int y, int depth, int& recorded, bool& isCousin) {
-        if(!root) return false;
+        queue<TreeNode*> q;
+        q.push(root);
         
-        if(root->val == x || root->val == y) {
-            if(recorded == -1) recorded = depth;
-            return recorded == depth;
+        while(!q.empty()) {
+            int sibling = false, cousin = false;
+            int n = q.size();
+            while(n--) {
+                root = q.front(); q.pop();
+                if(!root) sibling = false;
+                else {
+                    if (root->val == x || root->val == y) {
+                        if(!cousin) sibling = cousin = true;
+                        else return !sibling;
+                    }
+                    if(root->left) q.push(root->left);
+                    if(root->right) q.push(root->right);
+                    q.push(nullptr);
+                }
+            }
+            if(cousin) return false;
         }
-        
-        bool left = dfs(root->left, x, y, depth + 1, recorded, isCousin);
-        bool right = dfs(root->right, x, y, depth + 1, recorded, isCousin);
-        
-        if(left && right && recorded != depth + 1)
-            isCousin = true;
-        
-        return left || right;
+        return false;
     }
 };
