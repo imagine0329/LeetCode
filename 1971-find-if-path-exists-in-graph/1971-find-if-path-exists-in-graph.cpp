@@ -1,23 +1,33 @@
 class Solution {
+private:
+    vector<int> parent, rank;
+
 public:
     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-        unordered_map<int, vector<int>> graph;
-        vector<int> visited(n, false);
+        parent = vector<int>(n);
+        rank = vector<int>(n, 0);
+        iota(parent.begin(), parent.end(), 0);
+        
         for(auto e : edges) {
-            graph[e[0]].push_back(e[1]);
-            graph[e[1]].push_back(e[0]);
+            int x = find(e[0]), y = find(e[1]);
+            if(x != y) {
+                if(rank[x] >= rank[y]) {
+                    parent[y] = x;
+                    rank[x]++;
+                }
+                else {
+                    parent[x] = y;
+                    rank[y]++;
+                }
+            }
         }
         
-        return dfs(graph, visited, source, destination);
+        return find(source) == find(destination);
     }
     
-    bool dfs(unordered_map<int, vector<int>>& graph, vector<int>& visited, int s, int d) {
-        if(s == d) return true;
-        visited[s] = true;
-        for(auto v : graph[s]) {
-            if(!visited[v] && dfs(graph, visited, v, d))
-                return true;
-        }
-        return false;
+    int find(int x) {
+        if(parent[x] != x)
+            return parent[x] = find(parent[x]);
+        return x;
     }
 };
