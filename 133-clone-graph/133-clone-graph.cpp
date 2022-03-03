@@ -24,25 +24,26 @@ public:
     Node* cloneGraph(Node* node) {
         if(!node) return nullptr;
         unordered_map<int, Node*> m;
-        queue<Node*> q;
         
         Node* newNode = new Node(node->val);
         m[newNode->val] = newNode;
-        q.push(node);
-        while(!q.empty()) {
-            int n = q.size();
-            while(n--) {
-                Node* curr = q.front(); q.pop();
-                for(auto& neighbor : curr->neighbors) {
-                    int val = neighbor->val;
-                    if(m.find(val) == m.end()) {
-                        m[val] = new Node(val);
-                        q.push(neighbor);
-                    }
-                    m[curr->val]->neighbors.push_back(m[val]);
-                }
-            }
-        }
+        dfs(node, m);
         return newNode;
     }
+    
+    void dfs(Node* node, unordered_map<int, Node*>& m) {
+        for(auto& neighbor : node->neighbors) {
+            int val = neighbor->val;
+            if(m.find(val) == m.end()) {
+                m[val] = new Node(val);
+                dfs(neighbor, m);
+            }
+            m[node->val]->neighbors.push_back(m[val]);
+        }
+    }
+        
+        
+        
+        
+        
 };
