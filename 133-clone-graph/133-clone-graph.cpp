@@ -33,9 +33,6 @@ public:
             int n = q.size();
             while(n--) {
                 Node* curr = q.front(); q.pop();
-                if(m.find(curr->val) == m.end())
-                    m[curr->val] = new Node(curr->val);
-                
                 for(auto& neighbor : curr->neighbors) {
                     int val = neighbor->val;
                     if(m.find(val) == m.end()) {
