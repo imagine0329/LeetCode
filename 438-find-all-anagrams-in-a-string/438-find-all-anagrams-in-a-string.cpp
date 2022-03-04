@@ -2,6 +2,8 @@ class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
         int ns = s.length(), np = p.length();
+        if(ns < np) return {};
+        
         vector<int> sCount(26, 0), pCount(26, 0);
         
         for(auto c : p)
