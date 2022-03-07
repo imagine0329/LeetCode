@@ -11,35 +11,29 @@
  */
 class BSTIterator {
 private:
-    list<TreeNode*> l;
-    list<TreeNode*>::iterator it;
+    stack<TreeNode*> s;
     
 public:
     BSTIterator(TreeNode* root) {
-        stack<TreeNode*> s;
-        
-        while(!s.empty() || root) {
-            while(root) {
-                s.push(root);
-                root = root->left;
-            }
-            
-            root = s.top(); s.pop();
-            l.push_back(root);
-            root = root->right;
+        store(root);
+    }
+    
+    void store(TreeNode* root) {
+        while(root) {
+            s.push(root);
+            root = root->left;
         }
-        
-        it = l.begin();
     }
     
     int next() {
-        int val = (*it)->val;
-        it++;
-        return val;
+        TreeNode* node = s.top(); s.pop();
+        if(node->right)
+            store(node->right);
+        return node->val;
     }
     
     bool hasNext() {
-        return it != l.end();
+        return !s.empty();
     }
 };
 
