@@ -8,13 +8,12 @@ public:
         
         sort(freq.begin(), freq.end());
         int f_max = freq[25];
-        int idle_time = (f_max - 1) * n;
+        int n_max = 0;
         
-        for(int i = freq.size() - 2; i >= 0 && idle_time > 0; i--)
-            idle_time -= min(f_max - 1, freq[i]);
+        for(auto f : freq) {
+            if(f == f_max) n_max++;
+        }
         
-        idle_time = max(0, idle_time);
-        
-        return idle_time + tasks.size();
+        return max((int)tasks.size(), (f_max - 1) * (n + 1) + n_max);
     }
 };
