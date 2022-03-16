@@ -1,7 +1,7 @@
 class Solution {
 public:
     int threeSumClosest(vector<int>& nums, int target) {
-        sort(nums.begin(), nums.end());
+        selectionSort(nums);
         int diff = INT_MAX, ans;
         
         for(int i = 0; i < nums.size() - 2; i++) {
@@ -21,5 +21,16 @@ public:
         }
         
         return ans;
+    }
+    
+    void selectionSort(vector<int>& nums) {
+        for(int i = 0; i < nums.size() - 1; i++) {
+            int least = i;
+            for(int j = i + 1; j < nums.size(); j++) {
+                if(nums[least] > nums[j])
+                    least = j;
+            }
+            swap(nums[least], nums[i]);
+        }
     }
 };
