@@ -9,48 +9,18 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-
 class Solution {
-private:
-    stack<TreeNode*> s, lower_limit, upper_limit;
-    
-    void update(TreeNode* root, TreeNode* lower, TreeNode* upper)
-    {
-        s.push(root);
-        lower_limit.push(lower);
-        upper_limit.push(upper);
-    }
-    
 public:
     bool isValidBST(TreeNode* root) {
-        TreeNode *lower = nullptr, *upper = nullptr;
+        return dfs(root, nullptr, nullptr);
+    }
+    
+    bool dfs(TreeNode* root, TreeNode* min, TreeNode* max) {
+        if(!root) return true;
         
-        while(root || !s.empty())
-        {
-            while(root)
-            {
-                update(root, lower, upper);
-                upper = root;
-                root = root->left;
-            }
-            
-            root = s.top();
-            s.pop();
-            lower = lower_limit.top();
-            lower_limit.pop();
-            upper = upper_limit.top();
-            upper_limit.pop();
-            
-            if(lower && root->val <= lower->val)
-                return false;
-            if(upper && root->val >= upper->val)
-                return false;
-            
-            lower = root;
-            root = root->right;
-        }
+        if((min != nullptr && root->val <= min->val) || (max != nullptr && root->val >= max->val))
+            return false;
         
-        return true;
+        return dfs(root->left, min, root) && dfs(root->right, root, max);
     }
 };
-
