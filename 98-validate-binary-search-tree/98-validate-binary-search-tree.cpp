@@ -12,15 +12,23 @@
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
-        return dfs(root, nullptr, nullptr);
-    }
-    
-    bool dfs(TreeNode* root, TreeNode* min, TreeNode* max) {
-        if(!root) return true;
+        stack<TreeNode*> s;
+        TreeNode* prev = nullptr;
         
-        if((min != nullptr && root->val <= min->val) || (max != nullptr && root->val >= max->val))
-            return false;
+        while(root || !s.empty()) {
+            while(root) {
+                s.push(root);
+                root = root->left;
+            }
+            
+            TreeNode* curr = s.top(); s.pop();
+            if(prev && prev->val >= curr->val)
+                return false;
+            
+            root = curr->right;
+            prev = curr;
+        }
         
-        return dfs(root->left, min, root) && dfs(root->right, root, max);
+        return true;
     }
 };
