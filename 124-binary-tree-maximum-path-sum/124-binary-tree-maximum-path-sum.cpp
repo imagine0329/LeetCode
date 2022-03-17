@@ -10,27 +10,20 @@
  * };
  */
 class Solution {
-private:
-    int max_sum;
-    
 public:
     int maxPathSum(TreeNode* root) {
-        max_sum = INT_MIN;
-        traverse(root);
-        
-        return max_sum;
+        int maximum = INT_MIN;
+        traverse(root, maximum);
+        return maximum;
     }
     
-    int traverse(TreeNode* root)
-    {
-        if(root == nullptr)
-            return 0;
+    int traverse(TreeNode* root, int& maximum) {
+        if(!root) return 0;
         
-        int left = max(traverse(root->left), 0);
-        int right = max(traverse(root->right), 0);
+        int l = max(traverse(root->left, maximum), 0);
+        int r = max(traverse(root->right, maximum), 0);
+        maximum = max(maximum, root->val + l + r);
         
-        max_sum = max(max_sum, root->val + left + right);
-        
-        return max(left, right) + root->val;
+        return max(root->val, max(root->val + l, root->val + r));
     }
 };
