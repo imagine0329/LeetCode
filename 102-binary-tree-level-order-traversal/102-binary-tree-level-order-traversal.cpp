@@ -12,24 +12,18 @@
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
-        if(!root) return {};
-        queue<TreeNode*> q;
         vector<vector<int>> ans;
-        
-        q.push(root);
-        while(!q.empty()) {
-            int n = q.size();
-            vector<int> v;
-            while(n--) {
-                root = q.front(); q.pop();
-                v.push_back(root->val);
-                if(root->left) q.push(root->left);
-                if(root->right) q.push(root->right);
-            }
-            
-            ans.push_back(v);
-        }
-        
+        recursive(root, ans, 0);
         return ans;
+    }
+    
+    void recursive(TreeNode* root, vector<vector<int>>& ans, int level) {
+        if(!root) return;
+        if(ans.size() == level)
+            ans.push_back({});
+        
+        ans[level].push_back(root->val);
+        recursive(root->left, ans, level + 1);
+        recursive(root->right, ans, level + 1);
     }
 };
