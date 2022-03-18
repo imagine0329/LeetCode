@@ -1,30 +1,31 @@
 class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<int> indegree(numCourses, 0);
-        unordered_map<int, vector<int>> courses;
-        queue<int> q;
-        int edges = prerequisites.size();
+        vector<vector<int>> graph(numCourses);
+        vector<int> visited(numCourses, -1);
         
-        for(auto p : prerequisites) {
-            courses[p.back()].push_back(p.front());
-            indegree[p.front()]++;
-        }
+        for(auto& p : prerequisites)
+            graph[p[1]].push_back(p[0]);
         
         for(int i = 0; i < numCourses; i++) {
-            if(indegree[i] == 0)
-                q.push(i);
+            if(!dfs(graph, visited, i))
+                return false;
         }
         
-        while(!q.empty()) {
-            int v = q.front(); q.pop();
-            for(auto u : courses[v]) {
-                edges--;
-                if(--indegree[u] == 0)
-                    q.push(u);
+        return true;
+    }
+    
+    bool dfs(vector<vector<int>>& graph, vector<int>& visited, int v) {
+        if(visited[v] == 0) return false;
+        
+        visited[v] = 0;
+        for(int i = 0; i < graph[v].size(); i++) {
+            if(visited[graph[v][i]] != 1) {
+                if(!dfs(graph, visited, graph[v][i]))
+                    return false;
             }
         }
-        
-        return edges == 0;
+        visited[v] = 1;
+        return true;
     }
 };
