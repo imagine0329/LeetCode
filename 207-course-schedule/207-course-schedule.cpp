@@ -2,30 +2,30 @@ class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>> graph(numCourses);
-        vector<int> visited(numCourses, -1);
+        vector<int> indegree(numCourses, 0);
+        queue<int> q;
         
-        for(auto& p : prerequisites)
+        for(auto& p : prerequisites) {
             graph[p[1]].push_back(p[0]);
+            indegree[p[0]]++;
+        }
         
         for(int i = 0; i < numCourses; i++) {
-            if(!dfs(graph, visited, i))
-                return false;
+            if(indegree[i] == 0)
+                q.push(i);
         }
         
-        return true;
-    }
-    
-    bool dfs(vector<vector<int>>& graph, vector<int>& visited, int v) {
-        if(visited[v] == 0) return false;
-        
-        visited[v] = 0;
-        for(int i = 0; i < graph[v].size(); i++) {
-            if(visited[graph[v][i]] != 1) {
-                if(!dfs(graph, visited, graph[v][i]))
-                    return false;
+        while(!q.empty()) {
+            auto v = q.front(); q.pop();
+            for(auto e : graph[v]) {
+                if(--indegree[e] == 0)
+                    q.push(e);
             }
         }
-        visited[v] = 1;
+        
+        for(auto v : indegree) {
+            if(v != 0) return false;
+        }
         return true;
     }
 };
