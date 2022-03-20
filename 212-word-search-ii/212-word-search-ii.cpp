@@ -1,44 +1,42 @@
-class Trie { 
+class Trie {
 public:
     Trie* next[26] = {nullptr};
     string* word = nullptr;
     
-    Trie() {
-        
-    }
-    
-    void insert(string& word) {
+    Trie() {}
+    void insert(string& s) {
         Trie* node = this;
-        for(auto c : word) {
+        for(auto c : s) {
             c -= 'a';
-            if(node->next[c] == nullptr)
+            if(!node->next[c])
                 node->next[c] = new Trie();
+            
             node = node->next[c];
         }
-        node->word = &word;
+        node->word = &s;
     }
+    
 };
 
 class Solution {
 public:
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-        int m = board.size(), n = board[0].size();
         Trie* trie = new Trie();
-        vector<string> ans;
         
         for(auto& s : words)
             trie->insert(s);
         
-        for(int row = 0; row < m; row++)
-            for(int col = 0; col < n; col++)
+        vector<string> ans;
+        for(int row = 0; row < board.size(); row++) {
+            for(int col = 0; col < board[0].size(); col++)
                 dfs(board, trie, ans, row, col);
+        }
         
         return ans;
     }
     
     void dfs(vector<vector<char>>& board, Trie* trie, vector<string>& ans, int row, int col) {
-        if(board[row][col] == '#' || !trie->next[board[row][col] - 'a'])
-            return;
+        if(board[row][col] == '#' || !trie->next[board[row][col] - 'a']) return;
         
         char org = board[row][col];
         trie = trie->next[org - 'a'];
@@ -46,6 +44,7 @@ public:
             ans.push_back(*trie->word);
             trie->word = nullptr;
         }
+        
         
         board[row][col] = '#';
         if(row - 1 >= 0) dfs(board, trie, ans, row - 1, col);
