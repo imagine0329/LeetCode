@@ -17,39 +17,27 @@ public:
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        if(head == nullptr)
-            return nullptr;
+        Node* dummy = new Node(0);
+        Node* copied = dummy;
+        unordered_map<Node*, Node*> m;
         
-        Node* newHead = nullptr;
-        Node* old = head;
-        Node* copied = nullptr;
-        
-        while(old)
-        {
-            copied = new Node(old->val);
-            copied->next = old->next;
-            old->next = copied;
-            old = copied->next;
-        }
-        
-        old = head;
-        while(old)
-        {
-            old->next->random = old->random ? old->random->next : nullptr;
-            old = old->next->next;
-        }
-        
-        old = head;
-        newHead = head->next;
-        copied = head->next;
-        while(old)
-        {
-            old->next = old->next->next;
-            copied->next = copied->next ? copied->next->next : nullptr;
-            old = old->next;
+        while(head) {
+            if(m.find(head) == m.end())
+                m[head] = new Node(head->val);
+            
+            copied->next = m[head];
             copied = copied->next;
+            if(!head->random)
+                copied->random = nullptr;
+            else {
+                if(m.find(head->random) == m.end())
+                    m[head->random] = new Node(head->random->val);
+                
+                copied->random = m[head->random];
+            }
+            
+            head = head->next;
         }
-        
-        return newHead;
+        return dummy->next;
     }
 };
