@@ -1,37 +1,32 @@
 class TicTacToe {
 private:
-    vector<int> rows, cols;
-    int diagonal, antidiagonal;
     int n;
+    vector<int> rows, cols;
+    int diagonal, antiDiagonal;
     
 public:
     TicTacToe(int n) {
+        this->n = n;
         rows = vector<int>(n, 0);
         cols = vector<int>(n, 0);
         diagonal = 0;
-        antidiagonal = 0;
-        this->n = n;
+        antiDiagonal = 0;
     }
     
     int move(int row, int col, int player) {
-        int add = player == 1 ? 1 : -1;
+        int val = player == 1 ? 1 : -1;
+        rows[row] += val;
+        cols[col] += val;
+        if(row == col) diagonal += val;
+        if(col == n - row - 1) antiDiagonal += val;
         
-        rows[row] += add;
-        cols[col] += add;
-        
-        if(row == col)
-            diagonal += add;
-        if(col == n - row - 1)
-            antidiagonal += add;
-        
-        int val = add * n;
-        if(rows[row] == val || cols[col] == val || diagonal == val || antidiagonal == val)
+        val *= n;
+        if(rows[row] == val || cols[col] == val || diagonal == val || antiDiagonal == val)
             return player;
-            
+        
         return 0;
     }
 };
-
 
 /**
  * Your TicTacToe object will be instantiated and called as such:
