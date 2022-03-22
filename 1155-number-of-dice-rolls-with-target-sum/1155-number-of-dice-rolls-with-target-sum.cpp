@@ -1,16 +1,18 @@
 class Solution {
 public:
     int numRollsToTarget(int n, int k, int target) {
-        vector<vector<int>> memo(n + 1, vector<int>(target + 1, -1));
-        return helper(n, k, target, memo);
-    }
-    
-    int helper(int n, int k, int remain, vector<vector<int>>& memo) {
-        if(n == 0 || remain <= 0) return n == 0 && remain == 0;
-        if(memo[n][remain] != -1) return memo[n][remain];
-        int res = 0;
-        for(int i = 1; i <= k; i++)
-            res = (res + helper(n - 1, k, remain - i, memo)) % 1000000007;
-        return memo[n][remain] = res;
+        vector<vector<int>> dp(n + 1, vector<int>(target + 1, 0));
+        int mod = 1000000007;
+        
+        dp[0][0] = 1;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= target; j++) {
+                for(int f = 1; f <= k; f++) {
+                    if(j >= f)
+                        dp[i][j] = ((dp[i][j] % mod) + (dp[i - 1][j - f] % mod)) % mod;
+                }
+            }
+        }
+        return dp[n][target];
     }
 };
