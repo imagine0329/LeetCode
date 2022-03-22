@@ -9,7 +9,7 @@ public:
             for(int j = 1; j <= target; j++) {
                 for(int f = 1; f <= k; f++) {
                     if(j >= f)
-                        dp[i][j] = ((dp[i][j] % mod) + (dp[i - 1][j - f] % mod)) % mod;
+                        dp[i][j] = (dp[i][j] + dp[i - 1][j - f]) % mod;
                 }
             }
         }
