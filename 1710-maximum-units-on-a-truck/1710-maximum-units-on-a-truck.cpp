@@ -1,21 +1,23 @@
+struct Compare {
+   bool operator()(vector<int>& a, vector<int>& b) {
+       return a[1] > b[1];
+   }
+};
+
 class Solution {
 public:
     int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
-        vector<int> buckets(1001, 0);
+        sort(boxTypes.begin(), boxTypes.end(), Compare());
+        
         int sum = 0;
-        for(auto b : boxTypes)
-            buckets[b[1]] += b[0];
-                
-        for(int i = 1000; i >= 0; i--) {
-            if(buckets[i] == 0)
-                continue;
-            
-            int box = min(truckSize, buckets[i]);
-            sum += box * i;
-            truckSize -= box;
-            if(truckSize == 0) break;
+        for(auto b : boxTypes) {
+            int n = min(truckSize, b[0]);
+            sum += n * b[1];
+            truckSize -= n;
+            if(truckSize == 0)
+                break;
         }
-            
+        
         return sum;
     }
 };
