@@ -1,23 +1,18 @@
 class Solution {
 public:
     int minSwaps(vector<int>& data) {
-        int ones = 0;
-        for(auto k : data)
-            ones += k & 1;
+        int ones = 0, cnt_one = 0, max_one = 0;
+        int left = 0, right = 0;
         
-        int count = 0, max_count = 0;
-        deque<int> dq;
-        for(auto i : data) {
-            dq.push_back(i);
-            count += i;
-            if(dq.size() > ones) {
-                count -= dq.front();
-                dq.pop_front();
-            }
-            
-            max_count = max(max_count, count);
+        for(auto d : data)
+            ones += d;
+        
+        while(right < data.size()) {
+            cnt_one += data[right++];
+            if(right - left > ones) cnt_one -= data[left++];
+            max_one = max(max_one, cnt_one);
         }
         
-        return ones - max_count;
+        return ones - max_one;
     }
 };
