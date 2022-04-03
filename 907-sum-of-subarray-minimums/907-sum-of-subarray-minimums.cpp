@@ -2,36 +2,17 @@ class Solution {
 public:
     int sumSubarrayMins(vector<int>& arr) {
         int n = arr.size();
-        stack<pair<int, int>> s1, s2;
-        vector<int> left(n), right(n);
-        
-        for(int i = 0; i < n; i++) {
-            int count = 1;
-            while(!s1.empty() && s1.top().first > arr[i]) {
-                count += s1.top().second;
-                s1.pop();
-            }
-            
-            s1.push({arr[i], count});
-            left[i] = count;
-        }
-        
-        
-        for(int i = n - 1; i >= 0; i--) {
-            int count = 1;
-            while(!s2.empty() && s2.top().first >= arr[i]) {
-                count += s2.top().second;
-                s2.pop();
-            }
-            
-            s2.push({arr[i], count});
-            right[i] = count;
-        }
-        
+        stack<int> s;
         int ans = 0;
-        for(int i = 0; i < n; i++)
-            ans = (ans + (long long)arr[i] * left[i] * right[i]) % 1000000007;
         
+        for(int i = 0; i <= n; i++) {
+            while(!s.empty() && arr[s.top()] > (i == n ? -1 : arr[i])) {
+                int j = s.top(); s.pop();
+                int k = s.empty() ? -1 : s.top();
+                ans = (ans + (long long)arr[j] * (i - j) * (j - k)) % 1000000007;
+            }
+            s.push(i);
+        }
         return ans;
     }
 };
