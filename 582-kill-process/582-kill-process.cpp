@@ -6,20 +6,18 @@ public:
         for(int i = 0; i < pid.size(); i++)
             graph[ppid[i]].push_back(pid[i]);
         
-        queue<int> q;
         vector<int> ans;
-        
-        q.push(kill);
-        while(!q.empty()) {
-            int n = q.size();
-            while(n--) {
-                kill = q.front(); q.pop();
-                ans.push_back(kill);
-                for(auto e : graph[kill])
-                    q.push(e);
+        ans.push_back(kill);
+        dfs(ans, graph, kill);
+        return ans;
+    }
+    
+    void dfs(vector<int>& ans, unordered_map<int, vector<int>>& graph, int kill) {
+        if(graph.find(kill) != graph.end()) {
+            for(auto e : graph[kill]) {
+                ans.push_back(e);
+                dfs(ans, graph, e);
             }
         }
-        
-        return ans;
     }
 };
