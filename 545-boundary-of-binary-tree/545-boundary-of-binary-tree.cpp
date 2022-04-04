@@ -12,7 +12,6 @@
 class Solution {
 public:
     vector<int> boundaryOfBinaryTree(TreeNode* root) {
-        if(!root) return {};
         vector<int> ans;
         
         if(root->left || root->right)
@@ -22,25 +21,23 @@ public:
         while(node) {
             if(node->left || node->right)
                 ans.push_back(node->val);
-            
             if(node->left) node = node->left;
             else node = node->right;
         }
         
         addLeaves(root, ans);
         
-        stack<TreeNode*> s;
+        stack<int> s;
         node = root->right;
         while(node) {
             if(node->left || node->right)
-                s.push(node);
-            
+                s.push(node->val);
             if(node->right) node = node->right;
             else node = node->left;
         }
         
         while(!s.empty()) {
-            ans.push_back(s.top()->val);
+            ans.push_back(s.top());
             s.pop();
         }
         
@@ -49,9 +46,10 @@ public:
     
     void addLeaves(TreeNode* root, vector<int>& ans) {
         if(!root) return;
-        
-        if(!root->left && !root->right)
+        if(!root->left && !root->right) {
             ans.push_back(root->val);
+            return;
+        }
         
         addLeaves(root->left, ans);
         addLeaves(root->right, ans);
