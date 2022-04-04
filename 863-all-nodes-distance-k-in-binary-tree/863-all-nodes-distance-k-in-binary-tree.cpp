@@ -9,45 +9,46 @@
  */
 class Solution {
 public:
+    vector<int> ans;
+    TreeNode* target;
+    int k;
+    
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        unordered_map<int, unordered_set<int>> graph;
-        preorder(root, nullptr, graph);
+        this->target = target;
+        this->k = k;
         
-        queue<int> q;
-        vector<int> ans;
-        unordered_set<int> visited;
-        
-        q.push(target->val);
-        visited.insert(target->val);
-        int dist = 0;
-        while(dist <= k && !q.empty()) {
-            int n = q.size();
-            while(n--) {
-                int u = q.front(); q.pop();
-                if(dist == k)
-                    ans.push_back(u);
-                else {
-                    for(auto v : graph[u]) {
-                        if(visited.find(v) == visited.end()) {
-                            q.push(v);
-                            visited.insert(v);
-                        }
-                    }
-                }
-            }
-            dist++;
-        }
+        dfs(root);
         return ans;
     }
     
-    void preorder(TreeNode* root, TreeNode* parent, unordered_map<int, unordered_set<int>>& graph) {
-        if(!root) return;
-        if(parent) {
-            graph[root->val].insert(parent->val);
-            graph[parent->val].insert(root->val);
+    int dfs(TreeNode* root) {
+        if(!root) return -1;
+        else if(root == target) {
+            subtree_add(root, 0);
+            return 1;
         }
-        
-        preorder(root->left, root, graph);
-        preorder(root->right, root, graph);
+        else {
+            int left = dfs(root->left), right = dfs(root->right);
+            if(left != -1) {
+                if(left == k) ans.push_back(root->val);
+                else subtree_add(root->right, left + 1);
+                return left + 1;
+            }
+            else if(right != -1) {
+                if(right == k) ans.push_back(root->val);
+                else subtree_add(root->left, right + 1);
+                return right + 1;
+            }
+            else return -1;
+        }
+    }
+    
+    void subtree_add(TreeNode* root, int dist) {
+        if(!root) return;
+        if(dist == k) ans.push_back(root->val);
+        else {
+            subtree_add(root->left, dist + 1);
+            subtree_add(root->right, dist + 1);
+        }
     }
 };
