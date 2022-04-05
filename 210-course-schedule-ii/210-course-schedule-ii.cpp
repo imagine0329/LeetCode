@@ -2,32 +2,31 @@ class Solution {
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
         vector<int> ans;
-        vector<int> visited(numCourses, -1);
         vector<vector<int>> graph(numCourses);
+        vector<int> indegree(numCourses);
         
-        for(auto pre : prerequisites)
+        for(auto pre : prerequisites) {
             graph[pre[1]].push_back(pre[0]);
-        
-        for(int i = 0 ; i < numCourses; i++) {
-            if(visited[i] != 1 && !dfs(graph, i, visited, ans))
-                return {};
+            indegree[pre[0]]++;
         }
         
-        reverse(ans.begin(), ans.end());
-        
-        return ans;
-    }
-    
-    bool dfs(vector<vector<int>>& graph, int v, vector<int>& visited, vector<int>& ans) {
-        if(visited[v] == 0) return false;
-        visited[v] = 0;
-        
-        for(auto u : graph[v]) {
-            if(visited[u] != 1 && !dfs(graph, u, visited, ans))
-                return false;
+        queue<int> q;
+        for(int i = 0; i < numCourses; i++) {
+            if(indegree[i] == 0) 
+                q.push(i);
         }
-        ans.push_back(v);
-        visited[v] = 1;
-        return true;
+        
+        if(q.empty()) return {};
+        
+        while(!q.empty()) {
+            int v = q.front(); q.pop();
+            ans.push_back(v);
+            for(auto u : graph[v]) {
+                if(--indegree[u] == 0)
+                    q.push(u);
+            }
+        }
+        
+        return ans.size() == numCourses ? ans : vector<int>();
     }
 };
