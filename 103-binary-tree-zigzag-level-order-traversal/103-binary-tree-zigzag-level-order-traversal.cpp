@@ -17,6 +17,7 @@ public:
         vector<vector<int>> ans;
         
         s1.push(root);
+        
         while(!s1.empty() || !s2.empty()) {
             vector<int> v;
             if(!s1.empty()) {
@@ -37,6 +38,7 @@ public:
             }
             ans.push_back(v);
         }
+        
         return ans;
     }
 };
