@@ -1,9 +1,9 @@
 class LRUCache {
 private:
-    int capacity;
     list<int> l;
-    unordered_map<int, list<int>::iterator> it;
-    unordered_map<int, int> cache;
+    unordered_map<int, int> val;
+    unordered_map<int, list<int>::iterator> iter;
+    int capacity;
     
 public:
     LRUCache(int capacity) {
@@ -11,27 +11,31 @@ public:
     }
     
     int get(int key) {
-        if(cache.find(key) == cache.end())
+        if(val.find(key) == val.end())
             return -1;
         
-        l.erase(it[key]);
+        list<int>::iterator it = iter[key];
+        l.erase(it);
         l.push_front(key);
-        it[key] = l.begin();
-        return cache[key];
+        iter[key] = l.begin();
+        return val[key];
     }
     
     void put(int key, int value) {
-        if(cache.find(key) == cache.end() && l.size() == capacity) {
-            cache.erase(l.back());
-            it.erase(l.back());
-            l.pop_back();
+        if(val.find(key) != val.end()) {
+            list<int>::iterator it = iter[key];
+            l.erase(it);
         }
-        else if(cache.find(key) != cache.end())
-            l.erase(it[key]);
+        else if(l.size() == capacity) {
+            int erasedKey = l.back();
+            l.pop_back();
+            val.erase(erasedKey);
+            iter.erase(erasedKey);
+        }
         
         l.push_front(key);
-        it[key] = l.begin();
-        cache[key] = value;
+        val[key] = value;
+        iter[key] = l.begin();
     }
 };
 
