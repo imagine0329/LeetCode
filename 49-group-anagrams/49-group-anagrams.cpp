@@ -5,8 +5,13 @@ public:
         unordered_map<string, vector<string>> m;
         
         for(auto str : strs) {
-            string s = str;
-            sort(s.begin(), s.end());
+            vector<int> count(26);
+            for(auto c : str)
+                count[c - 'a']++;
+            
+            string s;
+            for(auto n : count)
+                s += (n + '0');
             m[s].push_back(str);
         }
         
