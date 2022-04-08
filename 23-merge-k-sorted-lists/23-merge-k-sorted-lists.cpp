@@ -11,26 +11,43 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* ans = nullptr;
-        
-        for(auto l : lists)
-            ans = merge(ans, l);
-        
-        return ans;
+        if(lists.size() == 0) 
+            return nullptr;
+        return divideAndConquer(lists, 0, lists.size() - 1);
+    }
+    
+    ListNode* divideAndConquer(vector<ListNode*>& lists, int start, int end) {
+        if(start == end) 
+            return lists[start];
+        if(start + 1 == end)
+            return merge(lists[start], lists[end]);
+            
+        int mid = (start + end) / 2;
+        ListNode* l1 = divideAndConquer(lists, start, mid);
+        ListNode* l2 = divideAndConquer(lists, mid + 1, end);
+        return merge(l1, l2);
     }
     
     ListNode* merge(ListNode* a, ListNode* b) {
-        if(!a || !b) return a ? a : b;
+        if(!a || !b)
+            return a ? a : b;
         
-        ListNode* node = nullptr;
-        if(a->val <= b->val) {
-            node = a;
-            node->next = merge(a->next, b);
+        ListNode* dummy = new ListNode(0);
+        ListNode* node = dummy;
+        while(a && b) {
+            if(a->val <= b->val) {
+                node->next = a;
+                a = a->next;
+            }
+            else {
+                node->next = b;
+                b = b->next;
+            }
+            node = node->next;
         }
-        else {
-            node = b;
-            node->next = merge(b->next, a);
-        }
-        return node;
+        
+        if(a) node->next = a;
+        if(b) node->next = b;
+        return dummy->next;
     }
 };
