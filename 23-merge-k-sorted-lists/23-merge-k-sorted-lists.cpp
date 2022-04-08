@@ -19,9 +19,10 @@ public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         priority_queue<ListNode*, vector<ListNode*>, Compare> q;
         
-        for(auto list : lists) {
-            if(list) q.push(list);
+        for(auto l : lists) {
+            if(l) q.push(l);
         }
+            
         
         ListNode* dummy = new ListNode(0);
         ListNode* node = dummy;
