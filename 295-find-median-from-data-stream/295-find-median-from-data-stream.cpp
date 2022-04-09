@@ -15,17 +15,14 @@ public:
         if(!n)
             mid = data.begin();
         else if(num < *mid)
-            mid = n & 1 ? prev(mid) : mid;
+            mid = n & 1 ? mid : prev(mid);
         else
-            mid = n & 1 ? mid : next(mid);
+            mid = n & 1 ? next(mid) : mid;
     }
     
     double findMedian() {
         int n = data.size();
-        if(n & 1)
-            return *mid;
-        else
-            return (*mid + *next(mid)) * 0.5;
+        return (*mid + *next(mid, n % 2 - 1)) * 0.5;
     }
 };
 
