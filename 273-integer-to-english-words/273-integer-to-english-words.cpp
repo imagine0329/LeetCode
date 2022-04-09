@@ -1,11 +1,9 @@
 class Solution {
 private:
-    string digits[20] = {   "Zero", "One", "Two", "Three", "Four", "Five",
-                            "Six", "Seven", "Eight", "Nine", "Ten", "Eleven",
-                            "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-                            "Seventeen", "Eighteen", "Nineteen"};
-    string tens[10] = { "Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty",
-                        "Seventy", "Eighty", "Ninety"};
+    string digits[20] = {"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", 
+                        "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", 
+                        "Eighteen", "Nineteen"};
+    string tens[10] = {"Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
     
 public:
     string numberToWords(int num) {
