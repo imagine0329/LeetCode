@@ -1,7 +1,7 @@
 class MedianFinder {
 private:
-    multiset<int> store;
-    multiset<int>::iterator mid;
+    priority_queue<int> low;
+    priority_queue<int, vector<int>, greater<int>> high;
     
 public:
     MedianFinder() {
@@ -9,20 +9,19 @@ public:
     }
     
     void addNum(int num) {
-        int n = store.size();
-        store.insert(num);
-        
-        if(!n)
-            mid = store.begin();
-        else if(num < *mid)
-            mid = n & 1 ? mid : prev(mid);
-        else
-            mid = n & 1 ? next(mid) : mid;
+        low.push(num);
+        high.push(low.top());
+        low.pop();
+        if(high.size() > low.size()) {
+            low.push(high.top());
+            high.pop();
+        }
     }
     
     double findMedian() {
-        int n = store.size();
-        return (double)(*mid + *next(mid, n % 2 - 1)) * 0.5;
+        if(low.size() > high.size())
+            return low.top();
+        return (low.top() + high.top()) * 0.5;
     }
 };
 
