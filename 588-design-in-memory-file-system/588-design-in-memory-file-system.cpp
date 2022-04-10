@@ -1,11 +1,9 @@
 class FileSystem {
-private:
     class File {
     public:
-        bool isFile;
-        unordered_map<string, File*> m;
+        bool isFile = false;
+        unordered_map<string, File*> files;
         string content = "";
-        File() :isFile(false) {}
     };
     
     File* root;
@@ -16,68 +14,71 @@ public:
     }
     
     vector<string> ls(string path) {
+        vector<string> ans;
+        vector<string> dirs = getPath(path);
         File* node = root;
-        vector<string> files = getPath(path);
-        for(auto f : files)
-            node = node->m[f];
-        if(node->isFile) return {files.back()};
         
-        files.clear();
-        for(auto f : node->m)
-            files.push_back(f.first);
+        for(auto d : dirs)
+            node = node->files[d];
         
-        sort(files.begin(), files.end());
-        return files;
+        if(node->isFile)
+            return {dirs.back()};
+        
+        for(auto f : node->files)
+            ans.push_back(f.first);
+        
+        sort(ans.begin(), ans.end());
+        return ans;
     }
     
     void mkdir(string path) {
         File* node = root;
-        vector<string> files = getPath(path);
-        for(auto f : files) {
-            if(node->m.find(f) == node->m.end())
-                node->m[f] = new File();
-            node = node->m[f];
+        vector<string> dirs = getPath(path);
+        for(auto d : dirs) {
+            if(node->files.find(d) == node->files.end())
+                node->files[d] = new File();
+            node = node->files[d];
         }
     }
     
     void addContentToFile(string filePath, string content) {
         File* node = root;
-        vector<string> files = getPath(filePath);
-        for(auto f : files) {
-            if(node->m.find(f) == node->m.end())
-                node->m[f] = new File();
-            node = node->m[f];
+        vector<string> dirs = getPath(filePath);
+        for(auto d : dirs) {
+            if(node->files.find(d) == node->files.end())
+                node->files[d] = new File();
+            node = node->files[d];
         }
+        
         node->isFile = true;
         node->content += content;
     }
     
     string readContentFromFile(string filePath) {
         File* node = root;
-        vector<string> files = getPath(filePath);
-        for(auto f : files)
-            node = node->m[f];
+        vector<string> dirs = getPath(filePath);
+        for(auto d : dirs) {
+            if(node->files.find(d) == node->files.end())
+                return "";
+            node = node->files[d];
+        }
         return node->content;
     }
     
     vector<string> getPath(string path) {
-        vector<string> ans;
-        string str;
-        path += '/';
-        for(auto c : path) {
-            if(c == '/' && str != "") {
-                ans.push_back(str);
-                str.clear();
-            }
-            else if(c != '/')
-                str += c;
-        }
+        vector<string> ret;
+        int i = 1, j = 1;
         
-        return ans;
+        while(j <= path.length()) {
+            if(i != j && (j == path.length() || path[j] == '/')) {
+                ret.push_back(path.substr(i, j - i));
+                i = j + 1;
+            }
+            j++;
+        }
+        return ret;
     }
 };
-
-
 
 /**
  * Your FileSystem object will be instantiated and called as such:
