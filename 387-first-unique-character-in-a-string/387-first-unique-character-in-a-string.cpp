@@ -7,7 +7,8 @@ public:
             count[c]++;
         
         for(int i = 0; i < s.length(); i++) {
-            if(count[s[i]] == 1) return i;
+            if(count[s[i]] == 1)
+                return i;
         }
         return -1;
     }
