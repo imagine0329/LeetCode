@@ -23,7 +23,7 @@ class Trie {
 private:
     Trie* next[26] = {nullptr};
     bool isEnd = false;
-    vector<string> words;
+    vector<string*> words;
     
 public:
     Trie() {}
@@ -35,12 +35,12 @@ public:
             if(node->next[c] == nullptr)
                 node->next[c] = new Trie();
             node = node->next[c];
-            node->words.push_back(s);
+            node->words.push_back(&s);
         }
         node->isEnd = true;
     }
     
-    vector<string> search(string s) {
+    vector<string*> search(string s) {
         Trie* node = this;
         for(auto c : s) {
             c -= 'a';
@@ -65,11 +65,11 @@ public:
         string str;
         for(auto c : searchWord) {
             str += c;
-            vector<string> words = trie->search(str);
+            vector<string*> words = trie->search(str);
             vector<string> v;
             int n = words.size();
             for(int i = 0; i < min(3, n); i++) {
-                v.push_back(words[i]);
+                v.push_back(*words[i]);
             }
             ans.push_back(v);
         }
