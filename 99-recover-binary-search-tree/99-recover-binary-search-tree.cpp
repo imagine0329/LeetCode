@@ -10,35 +10,31 @@
  * };
  */
 class Solution {
-private:
-    TreeNode *first, *middle, *last;
-    TreeNode *prev;
-    
 public:
     void recoverTree(TreeNode* root) {
-        first = middle = last = nullptr;
-        prev = new TreeNode(INT_MIN);
-        inorder(root);
-        if(first && last)
-            swap(first->val, last->val);
-        else if(first && middle)
-            swap(first->val, middle->val);
-    }
-    
-    void inorder(TreeNode* root) {
-        if(!root)
-            return;
+        stack<TreeNode*> s;
+        TreeNode *x, *y, *prev;
+        x = y = prev = nullptr;
         
-        inorder(root->left);
-        if(prev->val > root->val) {
-            if(!first) {
-                first = prev;
-                middle = root;
+        while(!s.empty() || root) {
+            while(root) {
+                s.push(root);
+                root = root->left;
             }
-            else
-                last = root;
+            
+            root = s.top(); s.pop();
+            if(prev && prev->val > root->val) {
+                y = root;
+                if(!x)
+                    x = prev;
+                else
+                    break;
+            }
+            
+            prev = root;
+            root = root->right;
         }
-        prev = root;
-        inorder(root->right);
+        
+        swap(x->val, y->val);
     }
 };
