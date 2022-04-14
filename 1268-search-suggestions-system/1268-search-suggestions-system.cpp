@@ -23,7 +23,6 @@ class Trie {
 private:
     Trie* next[26] = {nullptr};
     bool isEnd = false;
-    vector<string*> words;
     
 public:
     Trie() {}
@@ -35,12 +34,11 @@ public:
             if(node->next[c] == nullptr)
                 node->next[c] = new Trie();
             node = node->next[c];
-            node->words.push_back(&s);
         }
         node->isEnd = true;
     }
     
-    vector<string*> search(string s) {
+    vector<string> search(string s) {
         Trie* node = this;
         for(auto c : s) {
             c -= 'a';
@@ -48,7 +46,27 @@ public:
                 return {};
             node = node->next[c];
         }
-        return node->words;
+        
+        vector<string> result;
+        dfs(node, s, result);
+        
+        return result;
+    }
+    
+    void dfs(Trie* node, string word, vector<string>& result) {
+        if(result.size() == 3)
+            return;
+        
+        if(node->isEnd)
+            result.push_back(word);
+        
+        for(int i = 0; i < 26; i++) {
+            if(node->next[i]) {
+                word += i + 'a';
+                dfs(node->next[i], word, result);
+                word.pop_back();
+            }
+        }
     }
 };
 
@@ -65,13 +83,8 @@ public:
         string str;
         for(auto c : searchWord) {
             str += c;
-            vector<string*> words = trie->search(str);
-            vector<string> v;
-            int n = words.size();
-            for(int i = 0; i < min(3, n); i++) {
-                v.push_back(*words[i]);
-            }
-            ans.push_back(v);
+            vector<string> words = trie->search(str);
+            ans.push_back(words);
         }
         
         return ans;
