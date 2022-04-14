@@ -11,18 +11,35 @@
 class Solution {
 public:
     int pairSum(ListNode* head) {
-        vector<int> v;
-        while(head) {
-            v.push_back(head->val);
-            head = head->next;
+        ListNode *slow, *fast;
+        slow = fast = head;
+        
+        while(fast->next && fast->next->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
         
+        ListNode* halfHead = reverseList(slow->next);
+        slow->next = nullptr;
         int ans = INT_MIN;
-        int n = v.size();
-        for(int i = 0; i < n / 2; i++) {
-            ans = max(ans, v[i] + v[n - i - 1]);
+        while(head) {
+            ans = max(ans, head->val + halfHead->val);
+            head = head->next;
+            halfHead = halfHead->next;
         }
         
         return ans;
+    }
+    
+    ListNode* reverseList(ListNode* head) {
+        ListNode *prev = nullptr, *curr = head, *next = nullptr;
+        while(curr) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
     }
 };
