@@ -9,35 +9,37 @@ public:
             for(int col = 0; col < n; col++) {
                 if(grid[row][col] == 2)
                     q.push({row, col});
-                else if(grid[row][col] == 1)
+                if(grid[row][col] == 1)
                     fresh++;
             }
         }
         
-        if(fresh == 0) return 0;
+        if(fresh == 0)
+            return 0;
         
-        int num = -1;
+        int step = -1;
+        vector<int> offset = {-1, 0, 1, 0, -1};
         while(!q.empty()) {
+            step++;
             int sz = q.size();
             while(sz--) {
-                int r = q.front().first, c = q.front().second;
+                int row = q.front().first, col = q.front().second;
                 q.pop();
-                
-                vector<int> offset = {-1, 0, 1, 0, -1};
                 for(int i = 0; i < 4; i++) {
-                    int adj_r = r + offset[i], adj_c = c + offset[i + 1];
-                    if(adj_r >= 0 && adj_r < m && adj_c >= 0 && adj_c < n
-                        && grid[adj_r][adj_c] == 1) {
-                        grid[adj_r][adj_c] = 2;
+                    int r = row + offset[i], c = col + offset[i + 1];
+                    if(r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == 1) {
+                        grid[r][c] = 2;
                         fresh--;
-                        q.push({adj_r, adj_c});
+                        q.push({r, c});
                     }
                 }
             }
             
-            num++;
         }
         
-        return fresh == 0 ? num : -1;
+        if(fresh != 0)
+            return -1;
+        
+        return step;
     }
 };
