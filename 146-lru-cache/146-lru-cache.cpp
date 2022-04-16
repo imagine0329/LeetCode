@@ -1,8 +1,8 @@
 class LRUCache {
 private:
+    unordered_map<int, int> cache;
+    unordered_map<int, list<int>::iterator> it;
     list<int> l;
-    unordered_map<int, int> val;
-    unordered_map<int, list<int>::iterator> iter;
     int capacity;
     
 public:
@@ -11,31 +11,31 @@ public:
     }
     
     int get(int key) {
-        if(val.find(key) == val.end())
+        if(cache.find(key) == cache.end())
             return -1;
         
-        list<int>::iterator it = iter[key];
-        l.erase(it);
+        l.erase(it[key]);
         l.push_front(key);
-        iter[key] = l.begin();
-        return val[key];
+        it[key] = l.begin();
+        return cache[key];
     }
     
     void put(int key, int value) {
-        if(val.find(key) != val.end()) {
-            list<int>::iterator it = iter[key];
-            l.erase(it);
+        if(cache.find(key) != cache.end()) {
+            l.erase(it[key]);
         }
-        else if(l.size() == capacity) {
-            int erasedKey = l.back();
-            l.pop_back();
-            val.erase(erasedKey);
-            iter.erase(erasedKey);
+        else {
+            if(!cache.empty() && cache.size() == capacity) {
+                int lruKey = l.back();
+                l.pop_back();
+                it.erase(lruKey);
+                cache.erase(lruKey);
+            }
         }
         
+        cache[key] = value;
         l.push_front(key);
-        val[key] = value;
-        iter[key] = l.begin();
+        it[key] = l.begin();
     }
 };
 
