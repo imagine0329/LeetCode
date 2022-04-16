@@ -2,17 +2,25 @@ class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
         unordered_set<string> dict(wordDict.begin(), wordDict.end());
-        vector<bool> dp(s.length() + 1, false);
-        dp[0] = true;
+        vector<int> memo(s.length(), -1);
         
-        for(int i = 1; i <= s.length(); i++) {
-            for(int j = 0; j < i; j++) {
-                if(dp[j] && dict.find(s.substr(j, i - j)) != dict.end()) {
-                    dp[i] = true;
-                    break;
-                }
+        return recur(s, dict, 0, memo);
+    }
+    
+    bool recur(string s, unordered_set<string>& dict, int start, vector<int>& memo) {
+        if(start == s.length())
+            return true;
+        
+        if(memo[start] != -1)
+            return memo[start];
+        
+        for(int end = start; end < s.length(); end++) {
+            string str = s.substr(start, end - start + 1);
+            if(dict.find(str) != dict.end()) {
+                if(recur(s, dict, end + 1, memo))
+                    return memo[start] = true;
             }
         }
-        return dp[s.length()];
+        return memo[start] = false;
     }
 };
