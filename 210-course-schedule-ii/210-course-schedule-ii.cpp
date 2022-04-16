@@ -20,15 +20,12 @@ public:
             return {};
         
         while(!q.empty()) {
-            int n = q.size();
-            while(n--) {
-                int v = q.front();
-                q.pop();
-                ans.push_back(v);
-                for(auto u : graph[v]) {
-                    if(--indegree[u] == 0)
-                        q.push(u);
-                }
+            int v = q.front();
+            q.pop();
+            ans.push_back(v);
+            for(auto u : graph[v]) {
+                if(--indegree[u] == 0)
+                    q.push(u);
             }
         }
         
