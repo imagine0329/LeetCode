@@ -1,28 +1,41 @@
+//  [key - value]
+//  num - count
+//  num - iterator
+
+//  unique num list
+//  2   3   5
+//  
+
 class FirstUnique {
 private:
-    unordered_map<int, bool> isUnique;
-    queue<int> q;
+    unordered_map<int, int> count;
+    list<int> unique;
+    unordered_map<int, list<int>::iterator> it;
     
 public:
     FirstUnique(vector<int>& nums) {
-        for(auto n : nums)
+        for(auto n : nums) {
             add(n);
+        }
     }
     
     int showFirstUnique() {
-        while(!q.empty() && !isUnique[q.front()])
-            q.pop();
-        
-        return q.empty() ? -1 : q.front();
+        if(unique.size() == 0)
+            return -1;
+        return unique.back();
     }
     
-    void add(int value) {
-        if(isUnique.find(value) == isUnique.end()) {
-            isUnique[value] = true;
-            q.push(value);
+    void add(int val) {
+        if(++count[val] > 1) {
+            if(it.find(val) != it.end()) {
+                unique.erase(it[val]);
+                it.erase(val);
+            }
         }
-        else
-            isUnique[value] = false;
+        else {
+            unique.push_front(val);
+            it[val] = unique.begin();
+        }
     }
 };
 
