@@ -6,10 +6,10 @@ public:
         for(int i = 0; i < s.length(); i++) {
             if(s[i] == '(')
                 st.push(i);
-            else if(s[i] == ')') {
-                if(st.empty()) s.erase(i--, 1);
-                else st.pop();
-            }
+            else if(s[i] == ')' && st.empty())
+                s.erase(i--, 1);
+            else if(s[i] == ')')
+                st.pop();
         }
         
         while(!st.empty()) {
