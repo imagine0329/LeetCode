@@ -2,38 +2,39 @@ class Solution {
 public:
     int trap(vector<int>& height) {
         int water = 0;
-        stack<int> s;
         
-        for(int i = 0; i < height.size(); i++) {
-            while(!s.empty() && height[s.top()] < height[i]) {
-                int curr = s.top(); s.pop();
-                if(s.empty())
-                    break;
-                
-                int h = min(height[s.top()], height[i]) - height[curr];
-                int w = i - s.top() - 1;
-                water += h * w;
+        int left_max = 0, right_max = 0;
+        int left = 0, right = height.size() - 1;
+        while(left < right) {
+            if(height[left] <= height[right]) {
+                if(left_max <= height[left])
+                    left_max = height[left];
+                else
+                    water += left_max - height[left];
+                left++;
             }
-            
-            s.push(i);
+            else {
+                if(right_max <= height[right])
+                    right_max = height[right];
+                else
+                    water += right_max - height[right];
+                right--;
+            }
         }
+        
         return water;
     }
 };
 
 /*
-                i
-height = [2,1,0,2,1,0,1,3,2,1,2,1]
+        left_max = 2
+        right_max = 2
+        h = min(l_max, r_max) - height[l]
+        
+height = [2,1,0,1,1,0,1,3,2,1,2,3]
+          m     l             r m
 
-stack
-top <---> bottom
-index:  0   1
-value:  2   1
-    
-right height = 2
-current height = 0
-left height = 1
-    
-height = min(right_h, left_h) - curr_h
-width = i - stack.top()
+           l                 r
+        [5,1,0,1,1,0,1,3,2,1,6,3]
+         m                   m
 */
