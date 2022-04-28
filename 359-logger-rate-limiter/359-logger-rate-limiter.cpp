@@ -1,6 +1,7 @@
 class Logger {
 private:
-    unordered_map<string, int> log;
+    queue<pair<string, int>> q;
+    unordered_set<string> s;
     
 public:
     Logger() {
@@ -8,12 +9,22 @@ public:
     }
     
     bool shouldPrintMessage(int timestamp, string message) {
-        if(log.find(message) == log.end() || log[message] + 10 <= timestamp) {
-            log[message] = timestamp;
-            return true;
+        while(!q.empty()) {
+            if(q.front().second + 10 <= timestamp) {
+                s.erase(q.front().first);
+                q.pop();
+            }
+            else
+                break;
         }
         
-        return false;
+        if(s.find(message) == s.end()) {
+            q.push({message, timestamp});
+            s.insert(message);
+            return true;
+        }
+        else
+            return false;
     }
 };
 
