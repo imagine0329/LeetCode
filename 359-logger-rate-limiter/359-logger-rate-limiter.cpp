@@ -1,6 +1,6 @@
 class Logger {
 private:
-    unordered_map<string, int> m;
+    unordered_map<string, int> log;
     
 public:
     Logger() {
@@ -8,14 +8,12 @@ public:
     }
     
     bool shouldPrintMessage(int timestamp, string message) {
-        if(m.find(message) != m.end()) {
-            if(timestamp < m[message] + 10)
-                return false;
+        if(log.find(message) == log.end() || log[message] + 10 <= timestamp) {
+            log[message] = timestamp;
+            return true;
         }
-            
-        m[message] = timestamp;
-
-        return true;
+        
+        return false;
     }
 };
 
