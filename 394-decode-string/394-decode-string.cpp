@@ -1,37 +1,37 @@
 class Solution {
 public:
-    string decodeString(string str) {
-        stack<char> s;
+    string decodeString(string s) {
+        stack<int> countStack;
+        stack<string> stringStack;
+        string ans;
         
-        for(auto c : str) {
-            if(c != ']')
-                s.push(c);
+        int k = 0;
+        string currentString;
+        
+        for(auto c : s) {
+            if(isdigit(c)) {
+                k = k * 10 + c - '0';
+            }
+            else if(c == '[') {
+                countStack.push(k);
+                stringStack.push(currentString);
+                currentString = "";
+                k = 0;
+            }
+            else if(c == ']') {
+                string decodedString = stringStack.top();
+                stringStack.pop();
+                for(int i = countStack.top(); i > 0; i--) {
+                    decodedString = decodedString + currentString;
+                }
+                countStack.pop();
+                currentString = decodedString;
+            }
             else {
-                string temp;
-                while(!s.empty() && s.top() != '[') {
-                    temp += s.top(); s.pop();
-                }
-                
-                s.pop();
-                string sn;
-                while(!s.empty() && isdigit(s.top())) {
-                    sn += s.top(); s.pop();
-                }
-                reverse(sn.begin(), sn.end());
-                int n = stoi(sn);
-                while(n--) {
-                    for(int i = temp.size() - 1; i >= 0; i--)
-                        s.push(temp[i]);
-                }
+                currentString += c;
             }
         }
         
-        string ans;
-        while(!s.empty()) {
-            ans += s.top(); s.pop();
-        }
-        
-        reverse(ans.begin(), ans.end());
-        return ans;
+        return currentString;
     }
 };
