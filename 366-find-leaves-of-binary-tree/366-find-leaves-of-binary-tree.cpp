@@ -19,17 +19,17 @@ public:
     }
     
     int postorder(TreeNode* root, vector<vector<int>>& ans) {
-        if(root == nullptr)
-            return 0;
+        if(!root)
+            return -1;
         
         int left = postorder(root->left, ans);
         int right = postorder(root->right, ans);
         
-        int idx = max(left, right);
-        if(ans.size() == idx)
+        int level = max(left, right) + 1;
+        if(ans.size() == level)
             ans.push_back({});
         
-        ans[idx].push_back(root->val);
-        return idx + 1;
+        ans[level].push_back(root->val);
+        return level;
     }
 };
