@@ -10,19 +10,15 @@ public:
         for(int i = 0; i < secret.length(); i++) {
             if(secret[i] == guess[i]) {
                 bulls++;
-                if(--count[secret[i]] == 0)
-                    count.erase(secret[i]);
+                if(count[secret[i]] <= 0)
+                    cows--;
             }
-        }
-        
-        for(int i = 0; i < secret.length(); i++) {
-            if(secret[i] != guess[i]) {
-                if(count.find(guess[i]) != count.end()) {
-                    if(--count[guess[i]] == 0)
-                        count.erase(guess[i]);
+            else {
+                if(count[guess[i]] > 0)
                     cows++;
-                }
             }
+            
+            count[guess[i]]--;
         }
         
         return to_string(bulls) + "A" + to_string(cows) + "B";
