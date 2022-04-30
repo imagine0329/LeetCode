@@ -4,31 +4,27 @@ public:
         int n = timePoints.size();
         int minimum = INT_MAX;
         sort(timePoints.begin(), timePoints.end());
-        
-        for(int i = 1; i < n + 1; i++) {
-            int t1_HH, t1_MM, t2_HH, t2_MM;
-            if(i == n) {
-                t1_HH = stoi(timePoints[0].substr(0, 2));
-                t1_MM = stoi(timePoints[0].substr(3, 2));
-                t2_HH = stoi(timePoints[n - 1].substr(0, 2));
-                t2_MM = stoi(timePoints[n - 1].substr(3, 2));
-            }
-            else {
-                t1_HH = stoi(timePoints[i - 1].substr(0, 2));
-                t1_MM = stoi(timePoints[i - 1].substr(3, 2));
-                t2_HH = stoi(timePoints[i].substr(0, 2));
-                t2_MM = stoi(timePoints[i].substr(3, 2));
-            }
-            
-            int t1 = t1_HH * 60 + t1_MM, t2 = t2_HH * 60 + t2_MM;
-            int firstGap = t2 - t1;
-            int secondGap = t1 + (1440 - t2);
-            minimum = min(minimum, min(firstGap, secondGap));
+        int diff;
+        for(int i = 1; i < n; i++) {
+            diff = getDiff(timePoints[i - 1], timePoints[i]);
+            minimum = min(minimum, min(diff, 1440 - diff));
         }
+        
+        diff = getDiff(timePoints[0], timePoints[n - 1]);
+        minimum = min(minimum, min(diff, 1440 - diff));
         return minimum;
     }
+    
+    int getDiff(string t1, string t2) {
+        int h1 = stoi(t1.substr(0, 2));
+        int m1 = stoi(t1.substr(3, 2));
+        int h2 = stoi(t2.substr(0, 2));
+        int m2 = stoi(t2.substr(3, 2));
+        
+        return abs((h2 - h1) * 60 + (m2 - m1));
+    }
 };
-
+    
 /*
 ["00:00","23:59","00:00"]
 sort -> ["00:00","00:00", "23:59"]
