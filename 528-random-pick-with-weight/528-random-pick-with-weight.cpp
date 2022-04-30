@@ -1,30 +1,20 @@
 class Solution {
 private:
-    vector<int> prefix;
+    vector<int> accum;
+    int size;
     
 public:
-    Solution(vector<int>& w) {
-        for(auto n : w)
-            prefix.push_back(n + (prefix.size() > 0 ? prefix.back() : 0));
+    Solution(vector<int>& w) {            
+        accum.push_back(w[0]);
+        for(int i = 1; i < w.size(); i++)
+            accum.push_back(accum[i - 1] + w[i]);
+        size = accum.back();
     }
     
     int pickIndex() {
-        int test = prefix.back();
-        float target = ((float) rand() / RAND_MAX) * prefix.back();
-        return binarySearch(target);
-    }
-    
-    int binarySearch(float target) {
-        int left = 0, right = prefix.size() - 1;
-        while(left < right) {
-            int mid = left + (right - left) / 2;
-            if(prefix[mid] < target)
-                left = mid + 1;
-            else
-                right = mid;
-        }
+        int i = rand() % size;
         
-        return left;
+        return upper_bound(accum.begin(), accum.end(), i) - accum.begin();
     }
 };
 
@@ -33,3 +23,35 @@ public:
  * Solution* obj = new Solution(w);
  * int param_1 = obj->pickIndex();
  */
+/*
+ 0  1  2
+[1, 2, 2]
+
+0:  1/5
+1:  2/5
+2:  2/5
+    
+01122
+    
+[1, 1]
+50%
+two numbers -> pick one number
+
+[1, 1, 1, 1]
+each prob = 25%
+4 numbers -> pick 1
+
+1%
+1/100
+1 ~ 20 = 0      20%
+21 ~ 60 = 1     40%
+61 ~ 100 = 2    40%
+
+[20, 30, 50]
+sum(w) = 100
+
+[20, 50, 100]
+random num = 30
+30 > 20   -> index != 0
+30 < 50   -> index = 1
+*/
