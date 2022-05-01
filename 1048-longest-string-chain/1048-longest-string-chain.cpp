@@ -7,7 +7,6 @@ struct Compare {
 class Solution {
 public:
     int longestStrChain(vector<string>& words) {
-        unordered_set<string> dict(words.begin(), words.end());
         sort(words.begin(), words.end(), Compare());
         unordered_map<string, int> dp;
         
