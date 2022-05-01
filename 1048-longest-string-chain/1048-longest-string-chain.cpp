@@ -9,27 +9,18 @@ public:
     int longestStrChain(vector<string>& words) {
         unordered_set<string> dict(words.begin(), words.end());
         sort(words.begin(), words.end(), Compare());
-        unordered_map<string, int> memo;
+        unordered_map<string, int> dp;
         
         int longest = 1;
-        for(int i = 0; i < words.size(); i++)
-            longest = max(longest, checkNext(dict, words[i], memo));
-        
-        return longest;
-    }
-    
-    int checkNext(unordered_set<string>& dict, string word, unordered_map<string, int>& memo) {    
-        if(memo.find(word) != memo.end())
-            return memo[word];
-        
-        int longest = 1;
-        for(int j = 0; j < word.length(); j++) {
-            string str = word.substr(0, j) + word.substr(j + 1);
-            if(dict.find(str) != dict.end())
-                longest = max(longest, checkNext(dict, str, memo) + 1);
+        for(int i = 0; i < words.size(); i++) {
+            for(int j = 0; j < words[i].length(); j++) {
+                string str = words[i].substr(0, j) + words[i].substr(j + 1);
+                dp[words[i]] = max(dp[words[i]], dp.find(str) != dp.end() ? dp[str] + 1 : 1);
+            }
+            longest = max(dp[words[i]], longest);
         }
-        
-        return memo[word] = longest;
+            
+        return longest;
     }
 };
 
