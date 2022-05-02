@@ -1,22 +1,21 @@
 class Solution {
 public:
     int maxScore(vector<int>& cardPoints, int k) {
-        int point = 0;
-        int maxPoint;
-        int i = 0, j = k - 1;
+        int n = cardPoints.size();
+        int maxPoint = 0;
         
-        for(int i = 0; i < k; i++)
-            point += cardPoints[i];
+        vector<int> front(k + 1, 0), rear(k + 1, 0);
         
-        maxPoint = point;
-        while(k--) {
-            i = i == 0 ? cardPoints.size() - 1 : i - 1;
-            
-            point -= cardPoints[j--];
-            point += cardPoints[i];
-            
-            maxPoint = max(maxPoint, point);
+        for(int i = 1; i <= k; i++) {
+            front[i] = front[i - 1] + cardPoints[i - 1];
+            rear[i] = rear[i - 1] + cardPoints[n - i];
         }
+        
+        for(int i = 0; i <= k; i++) {
+            int sum = front[i] + rear[k - i];
+            maxPoint = max(maxPoint, sum);
+        }
+        
         return maxPoint;
     }
 };
@@ -43,6 +42,18 @@ cardPoints = [1,2,3,4,5,6,1], k = 3
                  i     j
     []          [5, 6, 1]
     
+    [1, 2, 3, 4, 5, 6, 1]
+    
+     0  1  2  3
+    [0, 1, 3, 6]    
+    [0, 1, 7, 12]   
+    
+    i = 0   0
+    j = 3   12
 
-    [9,7,7,9,7,7,9]     k = 7
-    */
+    i = 1   1
+    j = 2   7
+    
+    i = 2   3
+    j = 1   1
+*/
