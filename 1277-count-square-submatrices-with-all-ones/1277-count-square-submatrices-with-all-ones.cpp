@@ -6,46 +6,27 @@ public:
         
         for(int row = 0; row < m; row++) {
             for(int col = 0; col < n; col++) {
-                if(matrix[row][col] == 1) {
-                    count++;
-                    int len = 1;
-                    bool flag = true;
-                    
-                    while(row + len < m && col + len < n && flag) {
-                        for(int r = row; r <= row + len; r++) {
-                            if(matrix[r][col + len] == 0) {
-                                flag = false;
-                                break;
-                            }
-                        }
-                        
-                        for(int c = col; c <= col + len; c++) {
-                            if(matrix[row + len][c] == 0) {
-                                flag = false;
-                                break;
-                            }
-                        }
-                        
-                        if(flag) {
-                            count++;
-                            len++;
-                        }
-                    }
-                }
+                if(matrix[row][col] > 0 && row > 0 && col > 0) 
+                    matrix[row][col] = min(matrix[row - 1][col - 1], min(matrix[row][col - 1], matrix[row - 1][col])) + 1;
+                count += matrix[row][col];
             }
         }
         return count;
     }
 };
 /*
-
     [0, 1, 1, 1],
     [1, 1, 1, 1],
     [0, 1, 1, 1]
     
-    [0, 1, 2, 3],
-    [1, 2, 2, 3],
-    [0, 3, 3, 3]
-len = 2, 3, ...
+       0  0  0  0
+    0 [0, 1, 1, 1],
+    0 [1, 1, 2, 2],
+    0 [0, 1, 2, 3]
+    
+    dp(i, j) = min(dp(i - 1, j - 1), dp(i - 1, j), dp(i, j - 1)) + 1
+    if(dp(i, j) > 1)
+        count++
+
 
 */
