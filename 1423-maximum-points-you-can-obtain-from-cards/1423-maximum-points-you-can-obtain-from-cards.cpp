@@ -2,20 +2,19 @@ class Solution {
 public:
     int maxScore(vector<int>& cardPoints, int k) {
         int point = 0;
+        int maxPoint;
+        int i = 0, j = k - 1;
+        
         for(int i = 0; i < k; i++)
             point += cardPoints[i];
         
-        int maxPoint = point;
-        int i = 0, j = k - 1;
+        maxPoint = point;
         while(k--) {
-            if(i == 0)
-                i = cardPoints.size() - 1;
-            else
-                i--;
+            i = i == 0 ? cardPoints.size() - 1 : i - 1;
             
-            point -= cardPoints[j];
+            point -= cardPoints[j--];
             point += cardPoints[i];
-            j--;
+            
             maxPoint = max(maxPoint, point);
         }
         return maxPoint;
