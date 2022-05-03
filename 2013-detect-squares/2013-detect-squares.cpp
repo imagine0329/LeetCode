@@ -1,37 +1,27 @@
 class DetectSquares {
 private:
-    unordered_map<int, unordered_map<int, int>> points;
+    vector<vector<int>> cntPoints;
+    vector<pair<int, int>> points;
     
 public:
     DetectSquares() {
-        
+        cntPoints = vector<vector<int>>(1001, vector<int>(1001, 0));
     }
     
     void add(vector<int> point) {
-        points[point[0]][point[1]]++;
+        cntPoints[point[0]][point[1]]++;
+        points.push_back({point[0], point[1]});
     }
     
     int count(vector<int> point) {
+        int x1 = point[0], y1 = point[1];
         int count = 0;
         for(auto p : points) {
-            int x = p.first;
-            if(x == point[0])
+            int x3 = p.first, y3 = p.second;
+            if(x1 == x3 || y1 == y3 || abs(x1 - x3) != abs(y1 - y3))
                 continue;
-            for(auto ys : p.second) {
-                int c0 = 0, c1 = 0, c2 = 0;
-                int y = ys.first;
-                if(y == point[1] || abs(x - point[0]) != abs(y - point[1]))
-                    continue;
-                
-                c0 = ys.second;
-                if(points[point[0]].find(y) != points[point[0]].end())
-                    c1 = points[point[0]][y];
-                if(points[x].find(point[1]) != points[x].end())
-                    c2 = points[x][point[1]];
-
-                count += c0 * c1 * c2;
-            }
             
+            count += cntPoints[x1][y3] * cntPoints[x3][y1];
         }
         return count;
     }
