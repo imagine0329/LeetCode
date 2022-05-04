@@ -3,19 +3,14 @@ public:
     bool removeOnes(vector<vector<int>>& grid) {
         int m = grid.size(), n = grid[0].size();
         
-        for(int i = 0; i < n; i++) {
-            if(grid[0][i] == 1) {
-                for(int j = 0; j < m; j++) {
-                    grid[j][i] = !grid[j][i];
-                }
-            }
-        }
-        
         for(int row = 1; row < m; row++) {
-            int sum = 0;
-            for(int col = 0; col < n; col++)
-                sum += grid[row][col];
-            if(sum != 0 && sum != n)
+            bool same = true, opposite = true;
+            for(int col = 0; col < n; col++) {
+                same = same && grid[0][col] == grid[row][col];
+                opposite = opposite && grid[0][col] != grid[row][col];
+            }
+            
+            if(!same && !opposite)
                 return false;
         }
         return true;
@@ -24,9 +19,14 @@ public:
 /*
 
        n
+    [0,1,0]
+ m  [1,1,1]     
     [0,0,0]
- m  [1,1,1]
-    [0,0,0]
+    
+    same    opposite
+    false   true
+    false   false
+    false   false
 
 [0,0,0]
 [0,0,0]
