@@ -1,34 +1,23 @@
 class Solution {
-private:
-    int maxLength;
-    
 public:
     vector<long long> maximumEvenSplit(long long finalSum) {
         if(finalSum % 2)
             return {};
         
         vector<long long> ans;
-        backtracking(finalSum, 2, ans);
+        long long i = 2, sum = 0;
+        
+        while((sum + i) <= finalSum) {
+            ans.push_back(i);
+            sum += i;
+            i += 2;
+        }
+        
+        int sz = ans.size();
+        ans[sz - 1] += (finalSum - sum);
         return ans;
     }
-    
-    bool backtracking(long long remain, int i, vector<long long>& ans) {
-        if(remain == 0)
-            return true;
-        
-        if(remain < i)
-            return false;
-        
-        for(int j = i; j <= remain; j += 2) {
-            ans.push_back(j);
-            if(backtracking(remain - j, j + 2, ans))
-                return true;
-            ans.pop_back();
-        }
-        return false;
-    }
 };
-
 /*
 finalSum = 28
     
