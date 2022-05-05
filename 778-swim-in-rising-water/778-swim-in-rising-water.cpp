@@ -22,30 +22,14 @@ public:
         
         vector<int> offset = {-1, 0, 1, 0, -1};
         visited[row][col] = true;
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> q;
         for(int i = 0; i < 4; i++) {
             int r = row + offset[i], c = col + offset[i + 1];
             if(r >= 0 && r < n && c >= 0 && c < n && !visited[r][c])
                 adj.push({grid[r][c], r, c});
         }
         
-        //vector<int> next = {-1, 0, 0};
         vector<int> next = adj.top();
         adj.pop();
-        /*
-        if(q.empty()) {
-            while(!adj.empty() && visited[next[1]][next[2]]) {
-                next = adj.top();
-                adj.pop();
-            }
-        }
-        else {
-            next = q.top(); q.pop();
-            while(!q.empty()) {
-                adj.push(q.top());
-                q.pop();
-            }
-        }*/
         
         if(dfs(grid, next[1], next[2], t, visited))
             return true;
