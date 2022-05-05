@@ -1,41 +1,36 @@
 class Solution {
 private:
-    priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> adj;
+    
     
 public:
     int swimInWater(vector<vector<int>>& grid) {
         int n = grid.size();
         int t = 0;
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
         vector<vector<bool>> visited(n, vector<bool>(n, false));
-        dfs(grid, 0, 0, t, visited);
-        return t;
-    }
-    
-    bool dfs(vector<vector<int>>& grid, int row, int col, int& t, vector<vector<bool>>& visited) {
-        int n = grid.size();
-         
-        if(grid[row][col] > t)
-            t = grid[row][col];
-        
-        if(row == n - 1 && col == n - 1)
-            return true;
-        
         vector<int> offset = {-1, 0, 1, 0, -1};
-        visited[row][col] = true;
-        for(int i = 0; i < 4; i++) {
-            int r = row + offset[i], c = col + offset[i + 1];
-            if(r >= 0 && r < n && c >= 0 && c < n && !visited[r][c])
-                adj.push({grid[r][c], r, c});
+        
+        pq.push({grid[0][0], 0, 0});
+        visited[0][0] = true;
+        
+        while(!pq.empty()) {
+            auto cell = pq.top(); pq.pop();
+            int row = cell[1], col = cell[2];
+            t = max(t, cell[0]);
+            
+            if(row == n - 1 && col == n - 1)
+                return t;
+            
+            for(int i = 0; i < 4; i++) {
+                int r = row + offset[i], c = col + offset[i + 1];
+                if(r >= 0 && r < n && c >= 0 && c < n && !visited[r][c]) {
+                    visited[r][c] = true;
+                    pq.push({grid[r][c], r, c});
+                }
+            }
         }
         
-        vector<int> next = adj.top();
-        adj.pop();
-        
-        if(dfs(grid, next[1], next[2], t, visited))
-            return true;
-        
-        visited[row][col] = false;
-        return false;
+        return t;
     }
 };
 /*
