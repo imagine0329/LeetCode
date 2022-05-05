@@ -6,8 +6,6 @@ public:
     vector<long long> maximumEvenSplit(long long finalSum) {
         if(finalSum % 2)
             return {};
-        if(finalSum == 2 || finalSum == 4)
-            return {finalSum};
         
         vector<long long> ans;
         backtracking(finalSum, 2, ans);
