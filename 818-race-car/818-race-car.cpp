@@ -2,22 +2,19 @@ class Solution {
 public:
     int racecar(int target) {
         vector<int> dp(target + 1, -1);
-        return racecar(target, dp);
-    }
-    
-    int racecar(int i, vector<int>& dp) {
-        if(dp[i] >= 0)
-            return dp[i];
         
-        dp[i] = INT_MAX;
-        int m = 1, j = 1;
-        for(; j < i; j = (1 << ++m) -1) {
-            for(int p = 0, q = 0; p < j; p = (1 << ++q) - 1)
-                dp[i] = min(dp[i], m + 1 + q + 1 + racecar(i - (j - p), dp));
+        for(int i = 1; i <= target; i++) {
+            dp[i] = INT_MAX;
+            int m = 1, j = 1;
+            for(; j < i; j = (1 << ++m) -1) {
+                for(int p = 0, q = 0; p < j; p = (1 << ++q) - 1)
+                    dp[i] = min(dp[i], m + 1 + q + 1 + dp[i - (j - p)]);
+            }
+
+            dp[i] = min(dp[i], m + (i == j ? 0 : 1 + dp[j - i]));
         }
         
-        dp[i] = min(dp[i], m + (i == j ? 0 : 1 + racecar(j - i, dp)));
-        return dp[i];
+        return dp[target];
     }
 };
 
