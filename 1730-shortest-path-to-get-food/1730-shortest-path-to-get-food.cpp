@@ -1,40 +1,40 @@
 class Solution {
 public:
     int getFood(vector<vector<char>>& grid) {
-        int m = grid.size(), n = grid[0].size();
+        int n = grid.size(), m = grid[0].size();
         queue<pair<int, int>> q;
+        vector<int> offset = {-1, 0, 1, 0, -1};
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
         
-        int continued = true;
-        for(int row = 0; row < m; row++) {
-            for(int col = 0; col < n; col++) {
-                if(grid[row][col] == '*') {
-                    q.push({row, col});
-                    continued = false;
+        for(int r = 0; r < n; r++) {
+            bool stop = false;
+            for(int c = 0; c < m; c++) {
+                if(grid[r][c] == '*') {
+                    q.push({r, c});
+                    visited[r][c] = true;
+                    stop = true;
                     break;
                 }
             }
-            
-            if(continued == false)
+            if(stop)
                 break;
         }
         
-        vector<int> offset = {-1, 0, 1, 0, -1};
-        int step = 0;
+        int step = -1;
         while(!q.empty()) {
             step++;
             int sz = q.size();
             while(sz--) {
-                int row = q.front().first;
-                int col = q.front().second;
-                q.pop();
+                auto cell = q.front(); q.pop();
+                int row = cell.first, col = cell.second;
+                if(grid[row][col] == '#')
+                    return step;
                 
                 for(int i = 0; i < 4; i++) {
                     int r = row + offset[i], c = col + offset[i + 1];
-                    if(r >= 0 && r < m && c >= 0 && c < n && grid[r][c] != 'X') {
-                        if(grid[r][c] == '#')
-                            return step;
-                        grid[r][c] = 'X';
+                    if(r >= 0 && r < n && c >= 0 && c < m && grid[r][c] != 'X' && !visited[r][c]) {
                         q.push({r, c});
+                        visited[r][c] = true;
                     }
                 }
             }
@@ -43,3 +43,10 @@ public:
         return -1;
     }
 };
+
+/*
+["X","X","X","X","X","X"]
+["X","*","v","v","v","X"]
+["X","v","v","#","O","X"]
+["X","X","X","X","X","X"]
+*/
