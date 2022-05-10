@@ -4,11 +4,9 @@ public:
         int n = 3;
         vector<int> rows(n, 0), cols(n, 0);
         int diagonal = 0, antiDiagonal = 0;
-        int count = 0;
-        
         int player = 1;
+        
         for(auto move : moves) {
-            count++;
             int r = move[0], c = move[1];
             rows[r] += player;
             cols[c] += player;
@@ -24,7 +22,7 @@ public:
             player *= -1;
         }
         
-        if(count == n * n)
+        if(moves.size() == n * n)
             return "Draw";
         else
             return "Pending";
