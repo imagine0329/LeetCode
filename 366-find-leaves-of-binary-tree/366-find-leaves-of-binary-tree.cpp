@@ -13,19 +13,18 @@ class Solution {
 public:
     vector<vector<int>> findLeaves(TreeNode* root) {
         vector<vector<int>> ans;
-        postorder(root, ans);
-        
+        dfs(root, ans);
         return ans;
     }
     
-    int postorder(TreeNode* root, vector<vector<int>>& ans) {
+    int dfs(TreeNode* root, vector<vector<int>>& ans) {
         if(!root)
             return -1;
         
-        int left = postorder(root->left, ans);
-        int right = postorder(root->right, ans);
-        
+        int left = dfs(root->left, ans);
+        int right = dfs(root->right, ans);
         int level = max(left, right) + 1;
+        
         if(ans.size() == level)
             ans.push_back({});
         
@@ -33,3 +32,9 @@ public:
         return level;
     }
 };
+
+/*
+        1(2)
+    2(1)       3(0)
+ 4(0)  5(0)
+*/
