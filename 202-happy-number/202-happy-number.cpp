@@ -1,28 +1,24 @@
 class Solution {
-private:
-    int getNext(int n)
-    {
-        int ret = 0;
-        while(n)
-        {
-            int x = n % 10;
-            n /= 10;
-            ret += x * x;
-        }
-        
-        return ret;
-    }
-    
 public:
     bool isHappy(int n) {
-        int slow = n, fast = getNext(getNext(n));
+        unordered_set<int> result;
         
-        while(fast != 1 && slow != fast)
-        {
-            slow = getNext(slow);
-            fast = getNext(getNext(fast));
+        while(n != 1) {
+            int x = n;
+            int sum = 0;
+            while(x > 0) {
+                int r = x % 10;
+                sum += r * r;
+                x /= 10;
+            }
+            
+            if(result.find(sum) != result.end())
+                return false;
+            
+            result.insert(sum);
+            n = sum;
         }
         
-        return fast == 1;
+        return true;
     }
 };
