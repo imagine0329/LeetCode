@@ -3,16 +3,13 @@ public:
     bool isHappy(int n) {
         unordered_set<int> result;
         
-        while(n != 1) {
+        while(n != 1 && result.find(n) == result.end()) {
+            result.insert(n);
             int sum = getNext(n);
-            if(result.find(sum) != result.end())
-                return false;
-            
-            result.insert(sum);
             n = sum;
         }
         
-        return true;
+        return n == 1;
     }
     
     int getNext(int n) {
